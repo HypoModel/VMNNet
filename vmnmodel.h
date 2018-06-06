@@ -2,8 +2,7 @@
  *  vmnmodel.h
  *
  *  Created by Duncan MacGregor
- *  University of Edinburgh 2018
- *  Released under MIT license, see https://opensource.org/licenses/MIT
+ *  University of Edinburgh 2016
  *
  */
 
@@ -125,6 +124,7 @@ public:
 	wxCheckBox *seedcheck;
 	wxCheckBox *unicheck;
 	wxTextCtrl *storetag;
+	//wxCheckBox *synccheck;        // moved to parent ParamBox
 	wxToolBar *toolbar;
 	wxPanel *toolpanel;
 	
@@ -153,6 +153,60 @@ public:
 	void NetworkSum();      // network spiking analysis, generate summed spike rates and ISI analysis 
 	
 	virtual wxToolBar* OnCreateToolBar(long style, wxWindowID id, const wxString &name); 	
+};
+
+
+class VMNNetBox_Basic: public ParamBox
+{
+public:
+	VMNNeuron *neurons;
+	SpikeDat *netdat;
+	VMNModel *mod;
+	
+	int vmhneurons;
+	int layer1, layer2, layer3;
+	int neuroindex;
+	int sumflag;
+	
+	wxStaticText *spikes;
+	wxStaticText *esyn;
+	wxStaticText *vrest;
+	wxStaticText *kHAP;
+	wxStaticText *tauHAP;
+	wxTextCtrl *datneuron;
+	wxStaticText *freqL1, *freqL2, *freqL3;
+	
+	wxSpinButton *datspin;
+	wxCheckBox *netcheck;
+	wxCheckBox *cellcheck;
+	wxCheckBox *seedcheck;
+	wxCheckBox *unicheck;
+	wxTextCtrl *storetag;
+	//wxPanel *toolpanel;
+	
+	VMNNetBox_Basic(VMNModel *, const wxString& title, const wxPoint& pos, const wxSize& size);
+	
+	void ModData(VMNNeuron *);
+	void OnNeuroNext(wxSpinEvent& event);
+	void OnNeuroPrev(wxSpinEvent& event);
+	void OnSpin(wxSpinEvent& event);
+	void OnRun(wxCommandEvent& event);
+	void OnSum(wxCommandEvent& event);
+	void OffSum();
+	void NeuroData();
+	void OnStore(wxCommandEvent& event);
+	void OnLoad(wxCommandEvent& event);
+	void OnParamStore(wxCommandEvent& event);
+	void OnParamLoad(wxCommandEvent& event);
+	void OnOutput(wxCommandEvent& event);
+	void OnSynQueue(wxCommandEvent& event);
+	void OnParamMenu(wxCommandEvent& event);
+	void OnModelMenu(wxCommandEvent& event);
+	void OnControlsMenu(wxCommandEvent& event);
+	void netcalcvmh(SpikeDat *);
+	void netcalcvmn(SpikeDat *, int layer=1);
+	void SetNeuroCount();
+	void NetworkSum();      // network spiking analysis, generate summed spike rates and ISI analysis 
 };
 
 
@@ -294,10 +348,10 @@ public:
 	double ae[numtypes], ai[numtypes], ve, vi;
 	double pspmag;
 	double ire, iratio;
-	double halflife;
+	double psphalflife;
 	double kHAP[numtypes], kAHP[numtypes], kDAP[numtypes];
 	double tauHAP[numtypes], tauAHP[numtypes], tauDAP[numtypes];
-	double gamma;
+	double psptau;
 	double emax;                // New March 2015
 	
 	// VMH Net parameters
@@ -384,7 +438,6 @@ public:
 	virtual void *Entry();
 	
 	void spikegen(int, int, int *);
-	//void spikegen_basic(int, int, int *);
 	void initialise();
 	void networkgen();	
 	void networkdisp();
@@ -444,68 +497,6 @@ public:
 	void EvoRun();
 };
 
-
-// Attempted parallel version - not in use
-
-/*
-class VMHspikegen : public wxThread
-{
-public:
-	double runtime;
-	int vmhneurons;
-	int nfirst, nlast;
-	VMNNeuron *vmhneuron;
-	SpikeDat *netdat;
-	VMNNetBox *vmhbox;
-	VMNNeuroBox *igfbox;
-	datint *activity;
-	VMNMod *vmhmod;
-	int threadID;
-	
-	wxMutex *actmutex;
-	wxMessageQueue<int> *synapse;
-	
-	// IGF parameters
-	double numspikes;
-	double hstep;
-	double vthre, vrest;
-	double ae, ai, ve, vi;
-	double pspmag;
-	double ire, iratio;
-	double halflife;
-	double kHAP, kAHP, kDAP;
-	double tauHAP, tauAHP, tauDAP;
-	double gamma;
-	
-	// VMH Net parameters
-	double vmhconnect;
-	double vmhmaxcon;
-	double vmhinput1;
-	double synweight;
-	double maxsyn;
-	double syndelay;
-	double inputcycle;
-	double absref; 
-	double waveamp;
-	double esyn;
-	double isyn;
-	
-	double vrestsd;
-	double kHAPsd;
-	double tauHAPsd;
-	
-	double input0, input1;
-	double memtau;
-	double th0;
-	double re0, re1, ri0, ri1;
-	double epsph, ipsph;
-	double esynsum, isynsum;
-	
-	VMHspikegen(int, int, datint *, VMNMod *, int);
-	virtual void *Entry();
-	void spikegen();
-	void actsynch(int);
-};*/
 
 #endif
 

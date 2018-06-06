@@ -5,7 +5,6 @@
 *
 *  Created by Duncan MacGregor
 *  University of Edinburgh 2016
-*  Released under MIT license, see https://opensource.org/licenses/MIT
 *
 */
 
@@ -19,8 +18,6 @@ VMNDat::VMNDat(int size)
 	input1.setsize(size);
 	input2.setsize(size);
 	noisig.setsize(size);
-	osmo.setsize(size);
-	heat.setsize(size);
 }
 
 
@@ -95,6 +92,7 @@ VMNModel::VMNModel(int type, wxString name, HypoMain *main)
 	signalbox = new SignalBox(this, "Signal Box", wxPoint(0, 300), wxSize(400, 500));
 	protobox = new VMNProtoBox(this, "Protocol", wxPoint(0, 0), wxSize(320, 500));
 	outbox = new OutBox(this, "Data Output", wxPoint(0, 0), wxSize(320, 500), 2000, 200);
+	//cellbox = new CellBox(this, "Cell Data", wxPoint(0, 0), wxSize(320, 500));
 	neurobox = new VMNNeuroBox(this, "VMN Neuron", wxPoint(0, 0), wxSize(320, 700));
 	diagbox = mainwin->diagbox;
 	modbox = netbox;
@@ -110,6 +108,7 @@ VMNModel::VMNModel(int type, wxString name, HypoMain *main)
 	modtools.AddBox(signalbox, true);
 	modtools.AddBox(protobox, true);
 	modtools.AddBox(outbox, true);
+	//modtools.AddBox(cellbox, true);
 	modtools.AddBox(diagbox, false, true);
 	modtools.AddBox(fitbox);
 
@@ -125,8 +124,8 @@ VMNModel::VMNModel(int type, wxString name, HypoMain *main)
 	GraphData();
 	EvoGraphs();
 
-	graphbase->GetGraph("vmnhaz5ms")->ylabelplaces = 2;
-	graphbase->GetGraph("exphaz5ms")->ylabelplaces = 2;
+	graphbase->GetGraph("vmnhaz5ms")->ylabelplaces  = 2;
+	graphbase->GetGraph("exphaz5ms")->ylabelplaces  = 2;
 
 	gsync = 0;
 

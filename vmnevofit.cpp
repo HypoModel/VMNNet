@@ -56,11 +56,6 @@ void EvoFitVMN::Evaluate(int start, int popcount, double dualfit)
 		chromearray[14 * popsize + i] = chrome->Val("syndelrange");  
 	}
 
-	//diagbox->Write(text.Format("halflifeSyn %.4f\n", chrome->Val("halflifeSyn")));
-	//diagbox->Write(text.Format("Vthresh %.4f\n", chrome->Val("Vthresh")));
-	//diagbox->Write(text.Format("Vrest %.4f\n", (*params)["vrest"]));
-	//diagbox->Write(text.Format("halflifeHAP %.4f\n", chrome->Val("halflifeHAP")));
-
 	diagbox->Write(text.Format("esynL1 %.2f\n", chrome->Val("esynL1")));
 	diagbox->Write(text.Format("Vthresh %.4f\n", chrome->Val("Vthresh")));
 	diagbox->Write(text.Format("Vrest %.4f\n", (*params)["vrest"]));
@@ -68,7 +63,6 @@ void EvoFitVMN::Evaluate(int start, int popcount, double dualfit)
 
 	diagbox->Write("Evaluate, Chrome Array OK\n");
 	
-
 	//for(i=0; i<gpuparams; i++) diagbox->Write(text.Format("param %d : %.4f\n", i, chromearray[i * popsize]));
 
 	if(!runmode) {
@@ -92,8 +86,6 @@ void EvoFitVMN::Evaluate(int start, int popcount, double dualfit)
 			fitbox->spikefitdata->Ints, fitbox->spikefitdata->ISIs, fitbox->spikefitdata->SpikeCounts);
 		diagbox->Write(text.Format("GPU Fit OK, POP %d to %d\n", start, popcount + start));
 	}
-
-	
 
 	for(i=0; i<popcount; i++) {
 		for(j=0; j<512; j++) {

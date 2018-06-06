@@ -574,21 +574,6 @@ __global__ void spikevmnnetGPU(
 	for(i=0; i<numcells; i++) d_oSpikeCounts[i + tid*128 + bid*num_threads*128] = Spikes[i];
 	
 	__syncthreads();	
-
-
-
-	/*
-	// curand test code
-
-	curandState_t state;
-
-	curand_init(0, 0, 0, &state);
-
-	for(int i=0; i<10; i++) d_oInts[i + tid*16384 + bid*num_threads*16384] = curand(&state)*(1.0/UINT_MAX);
-	d_oSpikeCounts[tid + bid*num_threads] = 10;
-
-	__syncthreads();	
-	*/
 }
 
 
@@ -835,21 +820,6 @@ __global__ void spikegenvmnGPU(
 	d_oSpikeCounts[tid + bid*num_threads] = Spikes;
 	
 	__syncthreads();	
-
-
-
-	/*
-	// curand test code
-
-	curandState_t state;
-
-	curand_init(0, 0, 0, &state);
-
-	for(int i=0; i<10; i++) d_oInts[i + tid*16384 + bid*num_threads*16384] = curand(&state)*(1.0/UINT_MAX);
-	d_oSpikeCounts[tid + bid*num_threads] = 10;
-
-	__syncthreads();	
-	*/
 }
 
 
@@ -954,14 +924,7 @@ void spikevmnnetCPU(
 	unsigned int RandExcit = 234248430 - tid + bid*num_threads;
 	unsigned int RandInhib = 936753243 - tid + bid*num_threads;
 
-	//numcells = 1;
-
-	// Network Data
-	//float esynL1 = 0.6;
 	float esyntrans = 0.5;
-	//float syndelay = 5;
-	//float syndelrange = 0;
-	//float esynweight = 1;
 
 	unsigned char econnect[50];
 	unsigned char enetwork[50][50];
@@ -1136,7 +1099,6 @@ void spikevmnnetCPU(
 
 			}
 			else {
-				//Spike = 0;
 				activity[i] = 0;
 			}		
 		}
@@ -1171,8 +1133,6 @@ void spikevmnnetCPU(
 		d_oTemp[i + tid*512 + bid*num_threads*512] = Div;
 	}
 
-	//__syncthreads();
-
 	if(NumBinnedEvents > 0.0f) {
 		for(i = 0; i < 512; i++)
 			d_oISI[i + tid*512 + bid*num_threads*512] = d_oTemp[i + tid*512 + bid*num_threads*512]/NumBinnedEvents;
@@ -1180,9 +1140,6 @@ void spikevmnnetCPU(
 	else {
 		for(i = 0; i < 512; i++) d_oISI[i + tid*512 + bid*num_threads*512] = 0.0f;
 	}
-
-	
-	//__syncthreads();
 
 	//If there are too many events... clean the Exp
 	if(Spikes[0] > MaxSpikes) {
@@ -1192,8 +1149,6 @@ void spikevmnnetCPU(
 
 
 	for(i=0; i<numcells; i++) d_oSpikeCounts[i + tid*128 + bid*num_threads*128] = Spikes[i];
-	
-	//__syncthreads();	
 	
 	//fprintf(ofp, "\nesyn %d  isyn %d\n", esyncount/1000, isyncount/1000);
 	fprintf(ofp, "\nSpikes %d\n", Spikes[0]);
