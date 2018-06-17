@@ -95,6 +95,8 @@ public:
 	VMNNeuroBox(VMNModel *mod, const wxString& title, const wxPoint& pos, const wxSize& size);
 	
 	void OnBox(wxCommandEvent& event);
+	void PanelFull();
+	void PanelBasic();
 };
 
 
@@ -151,62 +153,11 @@ public:
 	void netcalcvmn(SpikeDat *, int layer=1);
 	void SetNeuroCount();
 	void NetworkSum();      // network spiking analysis, generate summed spike rates and ISI analysis 
+
+	void PanelFull();
+	void PanelBasic();
 	
 	virtual wxToolBar* OnCreateToolBar(long style, wxWindowID id, const wxString &name); 	
-};
-
-
-class VMNNetBox_Basic: public ParamBox
-{
-public:
-	VMNNeuron *neurons;
-	SpikeDat *netdat;
-	VMNModel *mod;
-	
-	int vmhneurons;
-	int layer1, layer2, layer3;
-	int neuroindex;
-	int sumflag;
-	
-	wxStaticText *spikes;
-	wxStaticText *esyn;
-	wxStaticText *vrest;
-	wxStaticText *kHAP;
-	wxStaticText *tauHAP;
-	wxTextCtrl *datneuron;
-	wxStaticText *freqL1, *freqL2, *freqL3;
-	
-	wxSpinButton *datspin;
-	wxCheckBox *netcheck;
-	wxCheckBox *cellcheck;
-	wxCheckBox *seedcheck;
-	wxCheckBox *unicheck;
-	wxTextCtrl *storetag;
-	//wxPanel *toolpanel;
-	
-	VMNNetBox_Basic(VMNModel *, const wxString& title, const wxPoint& pos, const wxSize& size);
-	
-	void ModData(VMNNeuron *);
-	void OnNeuroNext(wxSpinEvent& event);
-	void OnNeuroPrev(wxSpinEvent& event);
-	void OnSpin(wxSpinEvent& event);
-	void OnRun(wxCommandEvent& event);
-	void OnSum(wxCommandEvent& event);
-	void OffSum();
-	void NeuroData();
-	void OnStore(wxCommandEvent& event);
-	void OnLoad(wxCommandEvent& event);
-	void OnParamStore(wxCommandEvent& event);
-	void OnParamLoad(wxCommandEvent& event);
-	void OnOutput(wxCommandEvent& event);
-	void OnSynQueue(wxCommandEvent& event);
-	void OnParamMenu(wxCommandEvent& event);
-	void OnModelMenu(wxCommandEvent& event);
-	void OnControlsMenu(wxCommandEvent& event);
-	void netcalcvmh(SpikeDat *);
-	void netcalcvmn(SpikeDat *, int layer=1);
-	void SetNeuroCount();
-	void NetworkSum();      // network spiking analysis, generate summed spike rates and ISI analysis 
 };
 
 
@@ -234,8 +185,6 @@ public:
 	datdouble input1;
 	datdouble input2;
 	datdouble noisig;
-	datdouble osmo;
-	datdouble heat;
 };
 
 
@@ -284,10 +233,6 @@ public:
 
 	datint *activity;
 	int *active;
-	wxMutex *actmutex;
-	wxMutex *synchmutex[10];
-	wxCondition *synchcond[10];
-	wxSemaphore *synchsemaphore;
 	FILE *ofp;
 	wxString text;
 
@@ -303,12 +248,6 @@ public:
 	VMNProtoBox *protobox;
 	ScaleBox *scalebox;
 	
-	// Parallel
-	VMHspikegen *genthread0;
-	VMHspikegen *genthread1;
-	VMHspikegen *genthread2;
-	VMHspikegen *genthread3;
-
 	// Model Flags
 	bool revpots;
 	bool iratioflag;
@@ -452,8 +391,9 @@ public:
 class VMNModel : public NeuroMod
 {
 public:
+	int basicmode;
+
 	VMNDat *vmndata;
-	//VMNBox *vmnbox;
 	VMNNetBox *netbox;
 	VMNNeuroBox *neurobox;
 	SignalBox *signalbox;

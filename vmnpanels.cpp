@@ -313,9 +313,17 @@ VMNNeuroBox::VMNNeuroBox(VMNModel *vmnmodel, const wxString& title, const wxPoin
 	column = 0;
 	mod = vmnmodel;
 	boxname = "VMNNeuro";
-	int buttonwidth = 50;
+	buttonwidth = 50;
 
 	InitMenu();
+	
+	if(mod->basicmode) PanelBasic();
+	else PanelFull();
+}
+
+
+void VMNNeuroBox::PanelFull()
+{
 	SetModFlag(ID_revpots, "revpots", "Reversal Potentials", 1); 
 	SetModFlag(ID_DAPcap, "DAPcapflag", "DAP cap", 0); 
 	SetModFlag(ID_DAP2, "DAP2flag", "Old DAP2", 0); 
@@ -363,6 +371,85 @@ VMNNeuroBox::VMNNeuroBox(VMNModel *vmnmodel, const wxString& title, const wxPoin
 
 	parambox->Add(vbox[0], 0);
 	parambox->Add(vbox[1], 0);
+
+	runbutton = new wxButton(panel, ID_Run, "RUN", wxDefaultPosition, wxSize(70, buttonheight));  //50
+	runbutton->SetFont(confont);
+	resetbutton = new wxButton(panel, ID_Reset, "RESET", wxDefaultPosition, wxSize(70, buttonheight));  //50
+	resetbutton->SetFont(confont);
+	wxBoxSizer *runbox = new wxBoxSizer(wxHORIZONTAL);
+	runbox->Add(runbutton);
+	runbox->AddSpacer(20);
+	runbox->Add(resetbutton);
+
+	wxSizer *paramfilebox = StoreBox("n0fitb8");
+
+	buttonbox = new wxBoxSizer(wxHORIZONTAL);
+
+	AddButton(ID_Signal, "SIGNAL", buttonwidth, buttonbox);
+	buttonbox->AddSpacer(5);
+	buttonbox->AddStretchSpacer();
+
+	AddButton(ID_Protocol, "PROTO", buttonwidth, buttonbox);
+	buttonbox->AddSpacer(5);
+	buttonbox->AddStretchSpacer();
+
+	AddButton(ID_Output, "OUTPUT", 55, buttonbox);
+	SetPanel(ID_Output, mod->outbox); 
+
+	mainbox->AddSpacer(5);
+	mainbox->Add(parambox, 1, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 0);
+	mainbox->AddStretchSpacer(5);
+	mainbox->Add(runbox, 1, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 5);	
+	mainbox->AddStretchSpacer(5);
+	mainbox->Add(paramfilebox, 1, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 0);	
+	mainbox->AddStretchSpacer(5);
+	mainbox->Add(buttonbox, 1, wxALIGN_CENTRE_HORIZONTAL | wxALIGN_CENTRE_VERTICAL | wxALL, 5);
+	mainbox->AddSpacer(2);
+
+	panel->Layout();
+
+	Connect(ID_paramstore, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(VMNNeuroBox::OnParamStore));
+	Connect(ID_paramload, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(VMNNeuroBox::OnParamLoad));
+	Connect(ID_Signal, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(VMNNeuroBox::OnBox));
+	Connect(ID_Protocol, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(VMNNeuroBox::OnBox));
+}
+
+
+void VMNNeuroBox::PanelBasic()
+{
+	//SetModFlag(ID_revpots, "revpots", "Reversal Potentials", 1); 
+	//SetModFlag(ID_DAPcap, "DAPcapflag", "DAP cap", 0); 
+	//SetModFlag(ID_DAP2, "DAP2flag", "Old DAP2", 0); 
+	SetModFlag(ID_vsyn, "vsynflag", "V Syn", 1); 
+	SetModFlag(ID_runtime, "runtimeflag", "Runtime", 1); 
+	//SetModFlag(ID_DAP, "DAPflag", "IKleak DAP", 0); 
+	//SetModFlag(ID_vDAP, "vDAPflag", "IKleak vDAP", 0); 
+	//SetModFlag(ID_Dyno, "Dynoflag", "IKleak Dyno", 0); 
+	//SetModFlag(ID_vIKleak, "vIKleakflag", "IKleak V", 0); 
+	SetModFlag(ID_Iratio, "Iratioflag", "Use Iratio", 1); 
+	//SetModFlag(ID_artspikes, "artspikesflag", "Artificial Spikes", 0); 
+
+	paramset->AddCon("numspikes", "Num Spikes", 1000, 1, 0);
+	paramset->AddCon("hstep", "h Step", 1, 0.1, 1);
+	paramset->AddCon("vthre", "V Threshold", -50, 0.1, 2);
+	paramset->AddCon("vrest", "V Rest", -62, 0.1, 2);
+	paramset->AddCon("pspmag", "PSP mag", 4, 0.1, 2);
+	//paramset->AddCon("ve", "EPSP ve", 20, 1, 2);
+	//paramset->AddCon("vi", "IPSP vi", -110, 1, 2);
+	paramset->AddCon("iratio", "IPSP ratio", 1, 0.1, 2);
+	paramset->AddCon("ire", "EPSP freq", 300, 10, 1);
+	paramset->AddCon("halflife", "half-life", 7.5, 0.1, 2);
+	//paramset->AddCon("emax", "EPSP max", 0, 0.1, 2);
+
+	paramset->AddCon("kHAP", "HAP k", 60, 1, 2);
+	paramset->AddCon("halflifeHAP", "HAP HL", 7, 0.1, 2);
+	paramset->AddCon("kAHP", "AHP k", 0.0, 1, 2);
+	paramset->AddCon("halflifeAHP", "AHP HL", 350, 1, 2);
+	paramset->AddCon("kDAP", "DAP k", 0, 1, 2);
+	paramset->AddCon("halflifeDAP", "DAP HL", 150, 1, 2);
+	//paramset->AddCon("iri", "IPSP freq", 300, 10, 1);
+
+	ParamLayout(2);
 
 	runbutton = new wxButton(panel, ID_Run, "RUN", wxDefaultPosition, wxSize(70, buttonheight));  //50
 	runbutton->SetFont(confont);

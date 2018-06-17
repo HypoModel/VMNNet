@@ -51,6 +51,8 @@ VMNModel::VMNModel(int type, wxString name, HypoMain *main)
 {
 	int i;
 
+	basicmode = 1;
+
 	evodata = NULL;
 	spikefitdata = NULL;
 	fitboxdata = NULL;

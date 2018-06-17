@@ -3,8 +3,7 @@
 *  HypoModel
 *
 *  Created by Duncan MacGregor
-*  University of Edinburgh 2018
-*
+*  University of Edinburgh 2016
 *
 */
 
@@ -24,17 +23,30 @@ VMNMod::VMNMod(VMNModel *vmnmodel)
 	protobox = mod->protobox;
 
 	vmhneuron = mod->vmhneuron;
+	actmutex = NULL;
 
-	vmndiag = false;
+	vmndiag = true;
+
+	//parallel = para;
+	parallel = 0;
+	synchcall = 0;
+	synchOK = 0;
+	spikecall = 0;
 	queuelength = 20;
 
 	active = new int[1000];
+	activity = new datint();
+	activity->data.resize(1000);
+	synapse = new wxMessageQueue<int>;
 }
 
 
 VMNMod::~VMNMod()
 {
-	delete []active;
+	if(actmutex) delete actmutex;
+	delete [] active;
+	delete activity;
+	delete synapse;
 }
 
 
@@ -42,12 +54,18 @@ void *VMNMod::Entry()
 {
 	int i, spiketotal = 0;
 	int inprate, runcount, layers;
+	int numthreads = 2;
+	int alloc;
+	VMHspikegen *genthread[4];
 
 	initialise();
+	alloc = vmhneurons / numthreads;
 
 	layers = 1;
 	if(vmhL2) layers = 2;
 	if(vmhL3) layers = 3;
+	
+	//if(vmndiag) ofp = fopen("synchlog.txt", "w");
 
 	if(prototype == range) {
 		runcount = 0;
@@ -72,12 +90,75 @@ void *VMNMod::Entry()
 		mod->RangeOut(layers);
 	}
 	else {
+
 		for(i=0; i<vmhneurons; i++) spikecount[i] = 0;
+
 		spikegen(0, vmhneurons, active);
-		if(autosum && !mod->basicmode) netbox->NetworkSum();
+
+		/*if(parallel) {
+			for(i=0; i<numthreads; i++) {
+				genthread[i] = new VMHspikegen(alloc*i, alloc * i + alloc - 1, activity, this, i);
+				genthread[i]->Create();
+				synchflag[i] = 0;
+				synchmutex[i] = new wxMutex;
+				synchcond[i] = new wxCondition(*(synchmutex[i]));
+				synchmutex[i]->Lock();
+				//synchsemaphore = new wxSemaphore(0, 0);
+				done = 0;
+			}
+			for(i=0; i<numthreads; i++) genthread[i]->Run(); 
+
+			int donecheck = 0;
+			while(donecheck < numthreads) {
+				synchcount = 0;
+				synchmutex[0]->Lock();
+				synchmutex[1]->Lock();
+				synchcond[0]->Signal();
+				synchcond[1]->Signal();
+				synchmutex[0]->Unlock();
+				synchmutex[1]->Unlock();
+				//while(synchcount < numthreads) {
+				//	synchcond[0]->Wait();
+				//	synchcount++;
+				//}
+				synchmutex[0]->Unlock();
+				actmutex->Lock();
+				donecheck = done;
+				actmutex->Unlock();
+				//fprintf(ofp, "Start wait", synchcall);
+				//fflush(ofp);
+
+				//synchcond[0]->Wait();
+				//fprintf(ofp, "  Wait OK\n", synchcall);
+				//fflush(ofp);
+			}
+			fprintf(ofp, "call %d\t Done.\n", synchcall);
+			//fflush(ofp);
+
+			//for(i=0; i<numthreads; i++) genthread[i]->Wait(); 
+
+		}
+		else*/ 
+
+		mainwin->SetStatusText("Process Done");
+		//scalebox->mainwin->currvmh->neurocalc(&(vmhneuron[vmhbox->neuroindex]));
+		//vmhbox->ModData(vmhneuron[vmhbox->neuroindex]);
+		//scalebox->VMHswitch(10);
+		if(autosum) netbox->NetworkSum();
 		netbox->NeuroData();
 	}
 
+	if(vmndiag) {
+		ofp = fopen("vmhnetspikes.txt", "w");
+		fprintf(ofp, "Synch %d\tSpikes %d\n\n", synchcall, spikecall);
+		for(i=0; i<vmhneurons; i++) {
+			fprintf(ofp, "Neuron %d fired %d spikes\n", i, spikecount[i]);
+			spiketotal = spiketotal + spikecount[i];
+		}
+		for(i=0; i<1000; i++) fprintf(ofp, "Synch %d\tThread %d\n", i, synchrecord[i]);
+		fprintf(ofp, "\nSpikes %d\n", spiketotal);
+		fclose(ofp);
+	}
 	return NULL;
 }
 
@@ -87,14 +168,16 @@ void VMNMod::initialise()
 	int i, celltype;
 	FILE *ofp;
 
+	actmutex = new wxMutex();
+
 	//IGF parameters
 	ParamStore *igfparams = neurobox->GetParams();
 	numspikes = (*igfparams)["numspikes"];
 	hstep = (*igfparams)["hstep"];
 	vthre[0] = (*igfparams)["vthre"];
 	vrest[0] = (*igfparams)["vrest"];
-	//ve = (*igfparams)["ve"];
-	//vi = (*igfparams)["vi"];
+	ve = (*igfparams)["ve"];
+	vi = (*igfparams)["vi"];
 	pspmag = (*igfparams)["pspmag"];
 	iratio = (*igfparams)["iratio"];
 	ire = (*igfparams)["ire"];
@@ -109,6 +192,7 @@ void VMNMod::initialise()
 	emax = (*igfparams)["emax"];
 
 	// VMH Network parameters
+
 	ParamStore *netparams = netbox->GetParams();
 	vmhL1 = (*netparams)["neuronsL1"];
 	vmhL2 = (*netparams)["neuronsL2"];
@@ -116,7 +200,6 @@ void VMNMod::initialise()
 	vmhneurons = vmhL1 + vmhL2 + vmhL3;
 	vmhconnect = (*netparams)["vmhconnect"];
 	vmhinput[0] = (*netparams)["vmhinput1"];
-
 	esynweightL1 = (*netparams)["synweightL1"];
 	isynweightL1 = esynweightL1;
 	esynweightL2 = (*netparams)["synweightL2"];
@@ -129,11 +212,10 @@ void VMNMod::initialise()
 	esynweightL23 = (*netparams)["synweightL23"];
 
 	absref = (*netparams)["absref"];
-	//inputcycle = (*netparams)["inputcycle"];
-	//waveamp = (*netparams)["waveamp"];
+	inputcycle = (*netparams)["inputcycle"];
+	waveamp = (*netparams)["waveamp"];
 	syndelay = (*netparams)["syndelay"];
 	syndelrange = (*netparams)["syndelrange"];
-
 	esynL1 = (*netparams)["esynL1"];
 	isynL1 = (*netparams)["isynL1"];
 	esynsd = (*netparams)["esynsd"];
@@ -194,7 +276,9 @@ void VMNMod::initialise()
 	iratioflag = (*neurobox->modflags)["Iratioflag"];
 
 	autosum = (*netbox->conflags)["autosum"];
+
 	modseed = (*netparams)["modseed"];
+
 
 	// Signal Parameters  - input signal and output signal simulation
 	ParamStore *sigparams = mod->signalbox->GetParams();
@@ -241,6 +325,19 @@ void VMNMod::initialise()
 
 		mainwin->diagbox->Write(text.Format("ramp proto %d  base %d  step %.4f\n", i, rampbase[i], rampstep[i]));
 	}
+
+	/*
+	for(i=0; i<mod->prototypes; i++) {
+		tag[i].Printf("%d", i);
+		pulsebase[i] = (*protoparams)["pulsebase" + tag[i]];
+		pulsestart[i] = (*protoparams)["pulsestart" + tag[i]];
+		pulsestop[i] = (*protoparams)["pulsestop" + tag[i]];
+		pulseinit[i] = (*protoparams)["pulseinit" + tag[i]];
+		pulsetau[i] = 1 / (log((double)2) / ((*protoparams)["pulsehl" + tag[i]]) / 1000);
+
+		mainwin->diagbox->Write(text.Format("pulse proto %d  base %d  tau %.4f\n", i, pulsebase[i], pulsetau[i]));
+	}*/
+
 
 	pulseprotocount = 2;
 	celltype = 0;
@@ -356,7 +453,7 @@ void VMNMod::networkdisp2()
 }
 
 
-void VMNMod::networkgen()           // Out Of Use
+void VMNMod::networkgen()
 {
 	int i, con, syn, n;
 	double d;
@@ -633,6 +730,7 @@ void VMNMod::spikegen(int nstart, int nstop, int *activity)
 		
 		if(unigen) vmhneuron[i].vrest = (vrest[celltype] - vrestsd[celltype]) + (vrestsd[celltype] * 2 * vmhneuron[i].vrestsdgen);
 
+		//r2 = (mean - range) + (range * 2 * r1);
 		vmhneuron[i].kHAP = kHAP[celltype] + vmhneuron[i].kHAPsdgen * kHAPsd[celltype];
 		vmhneuron[i].tauHAP = tauHAP[celltype] + vmhneuron[i].tauHAPsdgen * tauHAPsd[celltype];
 
@@ -770,6 +868,26 @@ void VMNMod::spikegen(int nstart, int nstop, int *activity)
 			}
 		}
 
+		/*
+		for(celltype=0; celltype<mod->prototypes; celltype++) {
+			pulseinput[celltype] = 0;
+
+			//mod->diagbox->Write(text.Format("\nprototype %d\n", prototype)); 
+
+			if(prototype == pulse) {
+				//mod->diagbox->Write("set ramp\n"); 
+				if(nettime < pulsestart[celltype]*1000) pulseinput[celltype] = pulsebase[celltype];
+				if(nettime >= pulsestart[celltype]*1000 && nettime < pulsestop[celltype]*1000) { 
+					pulseinput[celltype] = pulsebase[celltype] + pulsemag[celltype];
+					if(pulsetau[celltype] > 1) pulsemag[celltype] = pulsemag[celltype] - hstep * pulsemag[celltype] / pulsetau[celltype]; 
+				}
+				if(nettime >= pulsestop[celltype]*1000) pulseinput[celltype] = pulsebase[celltype];
+				vmhinput[celltype] = pulseinput[celltype];
+				if(vmhinput[celltype] < 0) vmhinput[celltype] = 0;
+			}
+		}*/
+
+		//mod->diagbox->Write(text.Format("\nprototype %d\n", prototype)); 
 		
 		for(celltype=0; celltype<mod->prototypes; celltype++) pulseinput[celltype] = 0;
 
@@ -787,6 +905,15 @@ void VMNMod::spikegen(int nstart, int nstop, int *activity)
 			}
 			if(modstep%1000 == 0 && pulseinput[celltype] > 0) mod->diagbox->Write(text.Format("Type 0 Pulse Input %.2f\n", pulseinput[celltype]));
 		}
+
+		//if(noisemode) {   
+		//	synsig = noisig + wavesig;
+		//	//mod->diagbox->Write("noise mode on\n");// independent noise signal   February 2018
+		//	//vmhneuron[i].dend1e = synsig; 
+		//	//vmhneuron[i].dend1i = synsig * iratio1;
+		//	//mod->diagbox->Write("dend1e set\n");
+		//}
+
 
 		//fprintf(tofp, "Inputs: neuron %d vmhconnect = %.2f synweight = %.2f dendsum1 = %.2f\n", i, vmhconnect, synweight, dendsum1);
 
@@ -979,7 +1106,10 @@ void VMNMod::spikegen(int nstart, int nstop, int *activity)
 			}
 
 
-			if(vmhneuron[i].v >= vmhneuron[i].th && vmhneuron[i].ttime >= absref) {          // Spike Fired
+			if(vmhneuron[i].v >= vmhneuron[i].th && vmhneuron[i].ttime >= absref) {
+				//fprintf(tofp, "spike fired\n");
+				//netisi[i][s[i]] = vmhneuron[i].ttime;
+				//vmhneuron[i].isis[s[i]] = vmhneuron[i].ttime;
 
 				if(s[i] < maxspikes) {
 					vmhneuron[i].times[s[i]] = nettime;
@@ -1022,4 +1152,507 @@ void VMNMod::spikegen(int nstart, int nstop, int *activity)
 	for(i=0; i<maxcells; i++) delete[] enetwork[i];
 	delete[] enetwork;
 }
+
+
+
+
+/*void VMNMod::spikegen_basic(int nstart, int nstop, int *activity)
+{			
+	int i, j, tmax = 0, n, tstep, c;
+	int nepsp0, nipsp0, nepsp1, nipsp1;
+	int numconnect, con;
+	int modstep;
+	int modeltime;
+	int syndel;
+	int celltype, pulseproto;
+	int maxcells = 500;
+	int maxspikes = 100000;
+
+	int s[1000];
+	double maxtime, nettime;
+	double maxdap = 50;
+
+	double ire1 = ire;
+	double iratio1 = iratio;
+	double dend0e, dend0i, dend1e, dend1i;
+	double connectsum;
+	double dendsum0, dendsum1, endosum;
+	double esynsum, isynsum;
+	double esyninput, isyninput, sinput;
+	double suckstim;
+	double waveinput, noiseinput;
+	double noisig;
+	double pi = 3.14159265;
+	double esynh;
+	double synrand;
+
+	float **weights = new float*[maxcells];
+	for(i=0; i<maxcells; i++) weights[i] = new float[maxcells];
+
+	float **esynqueue = new float*[maxcells];
+	for(i=0; i<maxcells; i++) esynqueue[i] = new float[25];
+
+	int **enetwork = new int*[maxcells];
+	for(i=0; i<maxcells; i++) enetwork[i] = new int[maxcells];
+
+	FILE *ofp;
+	FILE *tofp, *inputofp;
+	if(vmndiag) tofp = fopen("vmhtest.txt", "w");
+	if(vmndiag) inputofp = fopen("vmninput.txt", "w");
+
+	/// Param copy for testing
+
+	th0 = vthre[0];
+	v_rest = vrest[0];
+
+	maxtime = numspikes * 1000;
+
+	memtau = 1 / (log((double)2) / halflife);
+
+	dend0e = vmhinput[0] / 1000;
+	dend0i = dend0e * iratio;
+
+	dend1e = vmhinput[1] / 1000;
+	dend1i = dend1e * iratio1;
+
+	if(vmndiag) {
+		ofp = fopen("vmhdatanet.txt", "w");
+		fprintf(ofp, "Model run parameters\n\n");
+		fprintf(ofp, "Generating spikes on %d neurons, %.0fms\n\n", vmhneurons, maxtime);
+		fprintf(ofp, "Type 0 %d neurons, Type 1 %d neurons\n", vmhL1, vmhL2);
+		fprintf(ofp, "Type 0 HAP k = %.2f  tau = %.4f\n", kHAP[0], tauHAP[0]);
+		fprintf(ofp, "Type 1 HAP k = %.2f  tau = %.4f\n", kHAP[1], tauHAP[1]);
+		fprintf(ofp, "AHP k = %.2f  tau = %.4f\n", kAHP[0], tauAHP[0]);
+		fprintf(ofp, "DAP k = %.2f  tau = %.4f\n", kDAP[0], tauDAP[0]);
+		fprintf(ofp, "EPSP rate = %.2f   ISP ratio = %.2f\n", ire, iratio);
+		//fprintf(ofp, "revpots = %d  newVth = %d   memtau = %.4f\n", revpots, newVth, memtau);
+		//fprintf(ofp, "dend0e = %.2f, dend0i = %.2f, dend1e = %.2f, dend1i = %.2f\n", dend0e, dend0i, dend1e, dend1i);
+		fprintf(ofp, "vrest0 = %.2f, thresh0 = %.2f\n", vrest[0], vthre[0]); 
+		fprintf(ofp, "vrest1 = %.2f, thresh1 = %.2f\n", vrest[1], vthre[1]); 
+		fprintf(ofp, "input0 = %.2f, input1 = %.2f\n", vmhinput[0], vmhinput[1]); 
+		//fprintf(ofp, "ae %.2f  ai %.2f  ve %.2f  vi %.2f\n\n", ae, ai, ve, vi);
+		fprintf(ofp, "ve %.2f  vi %.2f\n\n", ve, vi);
+		fprintf(ofp, "vmhconnect %.2f synweight %.2f\n", vmhconnect, esynweightL1);
+		fprintf(ofp, "absref %.2f syndelay %.2f\n", absref, syndelay);
+		fprintf(ofp, "noimean %.2f  noitau %.2f  noiamp %.2f\n", noimean, noitau, noiamp);
+		fclose(ofp);
+	}
+
+
+	// Protocol
+	double rampstep1ms[2]; 
+
+	rampstep1ms[0] = (double)rampstep[0] / 1000;
+	rampstep1ms[1] = (double)rampstep[1] / 1000;
+
+	celltype = 0;
+	pulsemag[celltype][0] = pulseinit[celltype][0];
+	pulsemag[celltype][1] = pulseinit[celltype][1];
+
+
+	// initial values
+
+	for(i=0; i<vmhneurons; i++) {
+
+		// Select and set neuron type
+		if(i < vmhL1) {
+			celltype = 0; 
+			vmhneuron[i].type = 0;
+		}
+		if(i >= vmhL1 && i < vmhL1 + vmhL2) {
+			celltype = 1;
+			vmhneuron[i].type = 1;
+		}
+		if(i >= vmhL1 + vmhL2) {
+			celltype = 2;
+			vmhneuron[i].type = 2;
+		}
+
+
+		// Random parameter generation
+		if(cellgen) {
+			vmhneuron[i].vrestsdgen = gaussian(0, 1);
+			if(unigen) vmhneuron[i].vrestsdgen = mrand01();
+			vmhneuron[i].kHAPsdgen = gaussian(0, 1);
+			vmhneuron[i].tauHAPsdgen = gaussian(0, 1);
+			vmhneuron[i].inputsdgen = gaussian(0, 1);
+		}
+		vmhneuron[i].vrest = vrest[celltype] + vmhneuron[i].vrestsdgen * vrestsd[celltype];
+		
+		if(unigen) vmhneuron[i].vrest = (vrest[celltype] - vrestsd[celltype]) + (vrestsd[celltype] * 2 * vmhneuron[i].vrestsdgen);
+
+		//r2 = (mean - range) + (range * 2 * r1);
+		vmhneuron[i].kHAP = kHAP[celltype] + vmhneuron[i].kHAPsdgen * kHAPsd[celltype];
+		vmhneuron[i].tauHAP = tauHAP[celltype] + vmhneuron[i].tauHAPsdgen * tauHAPsd[celltype];
+
+		//vmhneuron[i].input = vmhinput[type] + vmhneuron[i].inputsdgen * inputsd[type];
+		vmhneuron[i].inputdensity = 1 + vmhneuron[i].inputsdgen * inputsd[celltype];            // new Feb 2014
+
+		vmhneuron[i].input = vmhinput[celltype] * vmhneuron[i].inputdensity;                    // new Feb 2014
+		vmhneuron[i].dend0e = vmhneuron[i].input / 1000;
+		vmhneuron[i].dend0i = vmhneuron[i].dend0e * iratio;
+
+		vmhneuron[i].ae = pspmag / (ve - vmhneuron[i].vrest);
+		vmhneuron[i].ai = pspmag / (vmhneuron[i].vrest - vi);
+		vmhneuron[i].aesyn = synmag / (ve - vmhneuron[i].vrest);
+		vmhneuron[i].inputv = 0;
+		vmhneuron[i].synv = 0;
+
+		//vmhneuron[i].vrest = gaussian(vrest, vrestsd);
+		//vmhneuron[i].vrest = uniform(vrest, vrestsd);
+		vmhneuron[i].th0 = gaussian(vthre[celltype], 0);
+		//vmhneuron[i].kHAP = gaussian(kHAP, kHAPsd);
+		vmhneuron[i].kAHP = gaussian(kAHP[celltype], 0);
+		vmhneuron[i].kDAP = gaussian(kDAP[celltype], 0);
+		//vmhneuron[i].tauHAP = gaussian(tauHAP, tauHAPsd);
+		vmhneuron[i].tauAHP = gaussian(tauAHP[celltype], 0);
+		vmhneuron[i].tauDAP = gaussian(tauDAP[celltype], 0);
+
+		vmhneuron[i].ttime = 0;
+
+		vmhneuron[i].v = vmhneuron[i].vrest;
+		vmhneuron[i].tHAP = vmhneuron[i].kHAP;
+		vmhneuron[i].tAHP = vmhneuron[i].kAHP;
+		vmhneuron[i].tDAP = vmhneuron[i].kDAP;
+		vmhneuron[i].epspt0 = -log(1 - mrand01()) / dend0e;
+		vmhneuron[i].ipspt0 = -log(1 - mrand01()) / dend0i;
+		vmhneuron[i].epspt1 = -log(1 - mrand01()) / dend1e;
+		vmhneuron[i].ipspt1 = -log(1 - mrand01()) / dend1i;
+		s[i] = 0;
+		vmhneuron[i].neurotime = 0;
+		activity[i] = 0;
+		
+		if(celltype == 1) {
+			vmhneuron[i].inputrec.data.resize(110000);
+			vmhneuron[i].inputrec.max = 100000;
+		}
+		if(celltype == 0) {
+			vmhneuron[i].inputrec.data.resize(110000);
+			vmhneuron[i].inputrec.max = 100000;
+		}
+
+		for(c=0; c<vmhneuron[i].econnect; c++) {
+			weights[i][c] = vmhneuron[i].eweight[c];
+			enetwork[i][c] = vmhneuron[i].enetwork[c];
+		}	
+		for(j=0; j<queuelength; j++) esynqueue[i][j] = 0;
+	}
+
+	noisig = noimean;
+
+	modeltime = 0;
+	nettime = 0;
+	modstep = 0;
+
+	if(vmndiag) fprintf(tofp, "Start spike gen, run for %.0fms\n", maxtime);
+
+	i = 0;
+	for(i=0; i<vmhneurons; i++) {
+		vmhneuron[i].th = vmhneuron[i].th0 + vmhneuron[i].tHAP + vmhneuron[i].tAHP - vmhneuron[i].tDAP;
+		if(vmndiag) fprintf(tofp, "neuron %d  time %.1f  v %.2f  vrest %.2f  vthresh %.2f\n\n", i, nettime, vmhneuron[i].v, vmhneuron[i].vrest, vmhneuron[i].th); 
+		//fprintf(tofp, "dendinput %.2f  sinput %.2f\n", dendinput[i][1], sinput);
+		//fprintf(tofp, "sinput %.2f\n", sinput);
+		//fprintf(tofp, "nepsp %d  epsph %.2f  nipsp %d  ipsph %.2f\n\n", nepsp0, epsph, nipsp0, ipsph);
+	}
+
+
+	////////////////////////
+
+	mod->diagbox->Write(text.Format("\nprototype %d\n", prototype)); 
+
+	for(pulseproto=0; pulseproto<pulseprotocount; pulseproto++) {
+		mod->diagbox->Write(text.Format("Type 0 Proto %d Start %d Stop %d Step %.2f\n", pulseproto, pulsestart[0][pulseproto], pulsestop[0][pulseproto], pulsemag[0][pulseproto]));
+	}
+
+
+	netbox->countmark = 0;
+
+	while(nettime<maxtime) {
+
+		modstep++;
+		nettime = nettime + hstep;
+		if((int)nettime%1000 == 0) netbox->SetCount(floor(nettime)/maxtime*100);
+		//if(int(runtime / 10) % (int)tmax == 0) parambox->SetCount(runtime / 10 / tmax);
+
+		//fprintf(tofp, "time %.2f\n", nettime);
+
+		// Protocol /////////////////////////
+
+
+		// Noise Input         new 9/3/17
+
+		noisig = noisig + (noimean - noisig) / noitau + noiamp * sqrt(hstep) * gaussian(0, 1); 
+
+
+		// double noisediff = (noimean - noise) * noidecay + noiamp * sqrt(stepsize) * gaussian(0, 1);
+
+		// Wave Input
+
+		waveinput = 0;
+		if(inputcycle) waveinput = waveamp * 0.5 * (1 + sin(nettime*2*pi/inputcycle));
+
+		// Ramp Input
+
+		//mod->diagbox->Write(text.Format("\n proto types %d\n", mod->numtypes)); 
+
+		for(celltype=0; celltype<mod->prototypes; celltype++) {
+			rampinput[celltype] = 0;
+
+			//mod->diagbox->Write(text.Format("\nprototype %d\n", prototype)); 
+
+			if(prototype == ramp) {
+				//mod->diagbox->Write("set ramp\n"); 
+				if(nettime < rampstart[celltype]*1000) rampinput[celltype] = rampbase[celltype];
+				if(nettime >= rampstart[celltype]*1000 && nettime < rampstop[celltype]*1000) 
+					rampinput[celltype] = rampinit[celltype] + (nettime - rampstart[celltype]*1000) * rampstep1ms[celltype] * hstep;
+				if(nettime >= rampstop[celltype]*1000) rampinput[celltype] = rampbase[celltype];
+				vmhinput[celltype] = rampinput[celltype];
+				if(vmhinput[celltype] < 0) vmhinput[celltype] = 0;
+			}
+		}
+
+		
+		//for(celltype=0; celltype<mod->prototypes; celltype++) {
+		//	pulseinput[celltype] = 0;
+
+		//	//mod->diagbox->Write(text.Format("\nprototype %d\n", prototype)); 
+
+		//	if(prototype == pulse) {
+		//		//mod->diagbox->Write("set ramp\n"); 
+		//		if(nettime < pulsestart[celltype]*1000) pulseinput[celltype] = pulsebase[celltype];
+		//		if(nettime >= pulsestart[celltype]*1000 && nettime < pulsestop[celltype]*1000) { 
+		//			pulseinput[celltype] = pulsebase[celltype] + pulsemag[celltype];
+		//			if(pulsetau[celltype] > 1) pulsemag[celltype] = pulsemag[celltype] - hstep * pulsemag[celltype] / pulsetau[celltype]; 
+		//		}
+		//		if(nettime >= pulsestop[celltype]*1000) pulseinput[celltype] = pulsebase[celltype];
+		//		vmhinput[celltype] = pulseinput[celltype];
+		//		if(vmhinput[celltype] < 0) vmhinput[celltype] = 0;
+		//	}
+		//}
+
+		//mod->diagbox->Write(text.Format("\nprototype %d\n", prototype)); 
+		
+		for(celltype=0; celltype<mod->prototypes; celltype++) pulseinput[celltype] = 0;
+
+		celltype = 0;
+		if(prototype == pulse) {
+			for(pulseproto=0; pulseproto<pulseprotocount; pulseproto++) {
+				//if(nettime < pulsestart[celltype][pulseproto]*1000) pulseinput[celltype] = pulsebase[celltype][pulseproto];
+				if(nettime >= pulsestart[celltype][pulseproto]*1000 && nettime < pulsestop[celltype][pulseproto]*1000) { 
+					pulseinput[celltype] = pulsemag[celltype][pulseproto];
+					if(pulsetau[celltype][pulseproto] > 1) pulsemag[celltype][pulseproto] = pulsemag[celltype][pulseproto] - hstep * pulsemag[celltype][pulseproto] / pulsetau[celltype][pulseproto]; 
+				}
+				if(nettime >= pulsestop[celltype][pulseproto]*1000) pulseinput[celltype] = 0;
+				//vmhinput[celltype] = pulseinput[celltype];
+				//if(pulseinput[celltype] < 0) pulseinput[celltype] = 0;
+			}
+			//if(modstep%1000 == 0 && pulseinput[celltype] > 0) mod->diagbox->Write(text.Format("Type 0 Pulse Input %.2f\n", pulseinput[celltype]));
+		}
+
+		//if(noisemode) vmhinput[1] = noisig; 
+
+
+		//fprintf(tofp, "Inputs: neuron %d vmhconnect = %.2f synweight = %.2f dendsum1 = %.2f\n", i, vmhconnect, synweight, dendsum1);
+
+		// Monitor
+
+		if(modstep%mod->datsample == 0 && modstep<mod->storesize*datsample) {
+			mod->vmndata->input1[modstep/datsample] = vmhinput[0];
+			mod->vmndata->input2[modstep/datsample] = vmhinput[1];
+			mod->vmndata->noisig[modstep/datsample] = noisig;
+		}
+
+
+		for(i=0; i<vmhneurons; i++) {
+
+			vmhneuron[i].ttime = vmhneuron[i].ttime + hstep;
+			vmhneuron[i].neurotime = vmhneuron[i].neurotime + hstep;
+
+			esynsum = 0;
+
+			if(!synqueue) {
+				for(c=0; c<vmhneuron[i].econnect; c++) 
+					if(activity[enetwork[i][c]] == 1) {
+						esynsum = esynsum + weights[i][c];
+					}
+					vmhneuron[i].esynsum = esynsum;
+			}
+			else {
+				for(c=0; c<vmhneuron[i].econnect; c++) 
+					if(activity[enetwork[i][c]] == 1) {
+						synrand = mrand01();
+						if(esyntrans >= synrand) { 
+							syndel = (syndelay - 1) + (syndelrange + 1) * (synrand * (1/esyntrans));
+							esynqueue[i][syndel] = esynqueue[i][syndel] + weights[i][c];	
+							if(vmndiag && i == 0) fprintf(tofp, "time %.1f syndel %d\n", nettime, syndel);
+						}
+					}
+			}
+		}
+
+		for(i=0; i<vmhneurons; i++) {
+
+			celltype = vmhneuron[i].type;
+			vmhneuron[i].dend0e = (vmhneuron[i].inputdensity * (vmhinput[celltype] + pulseinput[celltype])) / 1000;
+			if(iratioflag) vmhneuron[i].dend0i = vmhneuron[i].dend0e * iratio;
+			if(i == 0) mod->raterec[modstep] = vmhneuron[i].dend0e * 1000;
+			if(i == vmhL1) mod->raterec2[modstep] = vmhneuron[i].dend0e * 1000;
+
+			if(activity[i]) activity[i] = activity[i] - 1;
+
+			if(synqueue) {
+				vmhneuron[i].esynsum = esynqueue[i][0];
+				for(j=0; j<queuelength-1; j++) esynqueue[i][j] = esynqueue[i][j+1];
+				esynqueue[i][queuelength-1] = 0;
+			}
+
+			isynsum = 0;
+		
+			esyninput = vmhneuron[i].esynsum;
+			//isyninput = vmhneuron[i].isynsum;
+			isyninput = 0;
+
+			//neudex = i;
+
+			if((int)modstep%1000 == 0) vmhneuron[i].raterec[modstep/1000] = vmhneuron[i].dend0e * 1000; 
+
+			nepsp0 = 0;
+			if(vmhneuron[i].dend0e > 0) {
+				while(vmhneuron[i].epspt0 < hstep) {
+					nepsp0++;
+					vmhneuron[i].epspt0 = -log(1 - mrand01()) / vmhneuron[i].dend0e + vmhneuron[i].epspt0;
+				}
+				vmhneuron[i].epspt0 = vmhneuron[i].epspt0 - hstep;
+			}
+
+			nipsp0 = 0;
+			if(vmhneuron[i].dend0i > 0) {
+				while(vmhneuron[i].ipspt0 < hstep) {
+					nipsp0++;
+					vmhneuron[i].ipspt0 = -log(1 - mrand01()) / vmhneuron[i].dend0i + vmhneuron[i].ipspt0;
+				}
+				vmhneuron[i].ipspt0 = vmhneuron[i].ipspt0 - hstep;
+			}
+
+			nepsp1 = 0;
+			if(vmhneuron[i].dend1e > 0) {
+				while(vmhneuron[i].epspt1 < hstep) {
+					nepsp1++;
+					vmhneuron[i].epspt1 = -log(1 - mrand01()) / vmhneuron[i].dend1e + vmhneuron[i].epspt1;
+				}
+				vmhneuron[i].epspt1 = vmhneuron[i].epspt1 - hstep;
+			}
+
+			nipsp1 = 0;
+			if(vmhneuron[i].dend1i > 0) {
+				while(vmhneuron[i].ipspt1 < hstep) {
+					nipsp1++;
+					vmhneuron[i].ipspt1 = -log(1 - mrand01()) / vmhneuron[i].dend1i + vmhneuron[i].ipspt1;
+				}
+				vmhneuron[i].ipspt1 = vmhneuron[i].ipspt1 - hstep;
+			}
+
+
+			//revpots = true;
+
+			//fprintf(tofp, "psps generated\n");
+			if(revpots) {
+				epsph = vmhneuron[i].ae * (ve - vmhneuron[i].v);
+				ipsph = vmhneuron[i].ai * (vmhneuron[i].v - vi);
+			}
+			else {
+				epsph = pspmag;
+				ipsph = pspmag;
+			}
+
+			input0 = epsph * nepsp0 - ipsph * nipsp0; 
+		
+			sinput = synmag * esyninput - synmag * isyninput;
+
+			if(maxsyn && sinput > maxsyn) sinput = maxsyn;
+			vmhneuron[i].synv = vmhneuron[i].synv - hstep * vmhneuron[i].synv / syntau + sinput;
+			if(emax && vmhneuron[i].synv > emax) vmhneuron[i].synv = emax;
+
+			vmhneuron[i].inputv = vmhneuron[i].inputv - hstep * vmhneuron[i].inputv / memtau + input0 + waveinput + sinput;
+			vmhneuron[i].v = vmhneuron[i].vrest + vmhneuron[i].inputv;
+
+			if(nettime < 100000 && i < vmhL1) vmhneuron[i].inputrec[modstep] = vmhneuron[i].inputv;
+
+			vmhneuron[i].tHAP = vmhneuron[i].tHAP - hstep * vmhneuron[i].tHAP / vmhneuron[i].tauHAP;
+
+			vmhneuron[i].tAHP = vmhneuron[i].tAHP - hstep * vmhneuron[i].tAHP / vmhneuron[i].tauAHP;  
+
+			vmhneuron[i].tDAP = vmhneuron[i].tDAP - hstep * vmhneuron[i].tDAP / vmhneuron[i].tauDAP;  
+
+			vmhneuron[i].th = vmhneuron[i].th0 + vmhneuron[i].tHAP + vmhneuron[i].tAHP - vmhneuron[i].tDAP;
+
+			if(vmndiag && nettime < 1000 && i == 0) {
+				fprintf(tofp, "neuron %d  time %.1f  input0 %.2f  sinput %.2f  v %.2f  thresh %.2f\n", 
+					i, nettime, input0, sinput, vmhneuron[i].v, vmhneuron[i].th); 
+
+				//fprintf(tofp, "dendinput %.2f  sinput %.2f\n", dendinput[i][1], sinput);
+				fprintf(tofp, "esyninput %.2f  esynqueue %.2f isyninput %.2f\n", esyninput, esynqueue[i][0], isyninput);
+				fprintf(tofp, "inputv %.2f  synv %.2f\n", vmhneuron[i].inputv, vmhneuron[i].synv);
+				fprintf(tofp, "nepsp %d  epsph %.2f  nipsp %d  ipsph %.2f\n\n", nepsp0, epsph, nipsp0, ipsph);
+			}
+
+			if(vmndiag && nettime < 5000 && i == 0) {
+				fprintf(inputofp, "%.4f %.4f %.4f %.4f\n", nettime, vmhneuron[i].inputv, input0, waveinput);
+			}
+
+			// Monitor Neuron 0
+			if(nettime < 10000 && i == 0) {
+				mod->neurodata->V[nettime] = vmhneuron[i].v;
+				mod->neurodata->HAP[nettime] = vmhneuron[i].tHAP;
+				mod->neurodata->AHP[nettime] = vmhneuron[i].tAHP;
+				//mod->neurodata->netsyn[nettime] = vmhneuron[i].synv;
+				mod->neurodata->netsyn[nettime] = noisig;
+				//mod->neurodata->netsyn[nettime] = waveinput;
+				mod->neurodata->inpsyn[nettime] = input0;
+				mod->neurodata->memsyn[nettime] = vmhneuron[i].inputv;
+			}
+
+			if(vmhneuron[i].v >= vmhneuron[i].th && vmhneuron[i].ttime >= absref) {
+				//fprintf(tofp, "spike fired\n");
+				//netisi[i][s[i]] = vmhneuron[i].ttime;
+				//vmhneuron[i].isis[s[i]] = vmhneuron[i].ttime;
+
+				if(s[i] < maxspikes) {
+					vmhneuron[i].times[s[i]] = nettime;
+					s[i]++;	
+				}
+
+				//if(i == 0) mod->diagbox->Write(text.Format("N%d spike %d  time %.2f  int %.2f\n", i, s[i], nettime/1000, vmhneuron[i].ttime));
+				if(synqueue) activity[i] = 1;
+				else activity[i] = syndelay * (double)1/hstep;
+
+				vmhneuron[i].tHAP = vmhneuron[i].tHAP + vmhneuron[i].kHAP;
+				vmhneuron[i].tAHP = vmhneuron[i].tAHP + vmhneuron[i].kAHP;
+				vmhneuron[i].tDAP = vmhneuron[i].tDAP + vmhneuron[i].kDAP;
+				if(vmhneuron[i].tDAP > maxdap) vmhneuron[i].tDAP = maxdap;
+
+				vmhneuron[i].ttime = 0;
+			}
+		}
+	}
+
+	for(i=0; i<vmhneurons; i++) {
+		vmhneuron[i].spikecount = s[i];
+		if(vmndiag) fprintf(tofp, "neuron %d fired %d spikes at %.2fHz, time %.2f\n", i, s[i], s[i]/(maxtime/1000), vmhneuron[i].neurotime);
+	}	
+
+	if(vmndiag) fclose(tofp);
+	if(vmndiag) fclose(inputofp);
+	//networkdisp();
+	//inputoutput(0);
+
+	for(i=0; i<maxcells; i++) delete[] weights[i];
+	delete[] weights;
+
+	for(i=0; i<maxcells; i++) delete[] esynqueue[i];
+	delete[] esynqueue;
+
+	for(i=0; i<maxcells; i++) delete[] enetwork[i];
+	delete[] enetwork;
+}*/
 
