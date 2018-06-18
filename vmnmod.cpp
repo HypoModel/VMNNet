@@ -107,6 +107,7 @@ void VMNMod::initialise()
 	tauDAP[0] = 1 / (log((double)2) / (*igfparams)["halflifeDAP"]);
 	psptau = log((double)2) / psphalflife;
 	emax = (*igfparams)["emax"];
+	absref = (*igfparams)["absref"];
 
 	// VMH Network parameters
 	ParamStore *netparams = netbox->GetParams();
@@ -114,7 +115,7 @@ void VMNMod::initialise()
 	vmhL2 = (*netparams)["neuronsL2"];
 	vmhL3 = (*netparams)["neuronsL3"];
 	vmhneurons = vmhL1 + vmhL2 + vmhL3;
-	vmhconnect = (*netparams)["vmhconnect"];
+	//vmhconnect = (*netparams)["vmhconnect"];
 	vmhinput[0] = (*netparams)["vmhinput1"];
 
 	esynweightL1 = (*netparams)["synweightL1"];
@@ -128,7 +129,7 @@ void VMNMod::initialise()
 	esynweightL3 = (*netparams)["synweightL3"];
 	esynweightL23 = (*netparams)["synweightL23"];
 
-	absref = (*netparams)["absref"];
+	
 	//inputcycle = (*netparams)["inputcycle"];
 	//waveamp = (*netparams)["waveamp"];
 	syndelay = (*netparams)["syndelay"];

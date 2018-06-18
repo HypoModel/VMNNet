@@ -243,7 +243,7 @@ SignalBox::SignalBox(VMNModel *vmnmodel, const wxString& title, const wxPoint& p
 
 	InitMenu();
 
-	SetModFlag(ID_revpots, "revpots", "Reversal Potentials", 0); 
+	//SetModFlag(ID_revpots, "revpots", "Reversal Potentials", 0); 
 	SetModFlag(ID_noise, "noiseflag", "Noise Signal", 0); 
 	SetModFlag(ID_L1L2, "layerflag", "Layer L2", 0); 
 
@@ -263,13 +263,15 @@ SignalBox::SignalBox(VMNModel *vmnmodel, const wxString& title, const wxPoint& p
 	
 	paramset->AddCon("sigIratio", "Iratio", 0, 0.1, 2);
 
-	paramset->AddCon("synwaveamp", "Wave Amp", 0, 1, 2);
-	paramset->AddCon("synwavecycle", "Wave Cycle", 1000, 1, 2);
-	paramset->AddCon("synwaveshift", "Wave Shift", 0, 0.1, 2);
+	if(!mod->basicmode) {
+		paramset->AddCon("synwaveamp", "Wave Amp", 0, 1, 2);
+		paramset->AddCon("synwavecycle", "Wave Cycle", 1000, 1, 2);
+		paramset->AddCon("synwaveshift", "Wave Shift", 0, 0.1, 2);
 
-	paramset->AddCon("kB", "kB", 0, 1, 4);
-	paramset->AddCon("halflifeB", "halflifeB", 100, 1, 2);
-	paramset->AddCon("timerange", "timerange", 100, 1, 0);
+		paramset->AddCon("kB", "kB", 0, 1, 4);
+		paramset->AddCon("halflifeB", "halflifeB", 100, 1, 2);
+		paramset->AddCon("timerange", "timerange", 100, 1, 0);
+	}
 
 	ParamLayout(2);
 
@@ -340,6 +342,7 @@ void VMNNeuroBox::PanelFull()
 	paramset->AddCon("hstep", "h Step", 1, 0.1, 1);
 	paramset->AddCon("vthre", "V Threshold", -50, 0.1, 2);
 	paramset->AddCon("vrest", "V Rest", -62, 0.1, 2);
+	paramset->AddCon("absref", "Abs Ref", 5, 1, 1);
 	paramset->AddCon("pspmag", "PSP mag", 4, 0.1, 2);
 	paramset->AddCon("ve", "EPSP ve", 20, 1, 2);
 	paramset->AddCon("vi", "IPSP vi", -110, 1, 2);
@@ -433,12 +436,13 @@ void VMNNeuroBox::PanelBasic()
 	paramset->AddCon("hstep", "h Step", 1, 0.1, 1);
 	paramset->AddCon("vthre", "V Threshold", -50, 0.1, 2);
 	paramset->AddCon("vrest", "V Rest", -62, 0.1, 2);
+	paramset->AddCon("absref", "Abs Ref", 5, 1, 1);
 	paramset->AddCon("pspmag", "PSP mag", 4, 0.1, 2);
 	//paramset->AddCon("ve", "EPSP ve", 20, 1, 2);
 	//paramset->AddCon("vi", "IPSP vi", -110, 1, 2);
 	paramset->AddCon("iratio", "IPSP ratio", 1, 0.1, 2);
-	paramset->AddCon("ire", "EPSP freq", 300, 10, 1);
-	paramset->AddCon("halflife", "half-life", 7.5, 0.1, 2);
+	//paramset->AddCon("ire", "EPSP freq", 300, 10, 1);
+	paramset->AddCon("halflife", "PSP HL", 7.5, 0.1, 2);
 	//paramset->AddCon("emax", "EPSP max", 0, 0.1, 2);
 
 	paramset->AddCon("kHAP", "HAP k", 60, 1, 2);

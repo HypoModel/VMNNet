@@ -55,7 +55,7 @@ void VMNNetBox::PanelFull()
 	SetModFlag(ID_formfilter, "formfilter", "Mean Spike Filter", 0); 
 
 	paramset->AddCon("neuronsL1", "Neurons L1", vmhneurons, 1, 0, labelwidth);
-	paramset->AddCon("vmhconnect", "Synapse", 0, 1, 0, labelwidth);
+	//paramset->AddCon("vmhconnect", "Synapse", 0, 1, 0, labelwidth);
 	paramset->AddCon("vmhinput1", "Input L1", 300, 1, 1, labelwidth);
 	paramset->AddCon("synweightL1", "Synaptic L1", 1.0, 1, 2, labelwidth);
 	paramset->AddCon("absref", "Abs Ref", 5, 1, 1, labelwidth);
@@ -303,10 +303,9 @@ void VMNNetBox::PanelBasic()
 	SetModFlag(ID_formfilter, "formfilter", "Mean Spike Filter", 0); 
 
 	paramset->AddCon("neuronsL1", "Neurons L1", vmhneurons, 1, 0, labelwidth);
-	paramset->AddCon("vmhconnect", "Synapse", 0, 1, 0, labelwidth);
+	//paramset->AddCon("vmhconnect", "Synapse", 0, 1, 0, labelwidth);
 	paramset->AddCon("vmhinput1", "Input L1", 300, 1, 1, labelwidth);
 	paramset->AddCon("synweightL1", "Synaptic L1", 1.0, 1, 2, labelwidth);
-	paramset->AddCon("absref", "Abs Ref", 5, 1, 1, labelwidth);
 	//paramset->AddCon("inputcycle", "Inp Cycle", 0, 1, 1, labelwidth);
 	//paramset->AddCon("waveamp", "Inp Amp", 0, 1, 1, labelwidth);
 	paramset->AddCon("syndelay", "Syn Delay", 3, 1, 1, labelwidth);
