@@ -103,7 +103,8 @@ VMNModel::VMNModel(int type, wxString name, HypoMain *main)
 	mainwin->ToolLoad();				// Load universal model tools
 
 	EvoInit();
-	fitchrome->Output("chrometext.txt");
+
+	//fitchrome->Output("chrometext.txt");
 	
 	modtools.AddBox(neurobox);
 	modtools.AddBox(netbox);
@@ -112,7 +113,12 @@ VMNModel::VMNModel(int type, wxString name, HypoMain *main)
 	modtools.AddBox(outbox, true);
 	//modtools.AddBox(cellbox, true);
 	modtools.AddBox(diagbox, false, true);
-	modtools.AddBox(fitbox);
+	modtools.AddBox(fitbox, true);
+
+	neurobox->SetPanel(ID_EvoFit, fitbox); 
+	neurobox->canclose = false;
+	netbox->canclose = false;
+	//conbox->SetWindowStyleFlag(wxFRAME_FLOAT_ON_PARENT | wxFRAME_TOOL_WINDOW | wxCAPTION | wxRESIZE_BORDER);
 
 	ModLoad();
 	for(i=0; i<modtools.numtools; i++) {
@@ -288,6 +294,7 @@ void VMNModel::RunModel()
 
 VMNModel::~VMNModel()
 {
+	/*
 	delete vmndata;
 	delete[] vmhneuron;
 	delete currvmn; 
@@ -301,7 +308,7 @@ VMNModel::~VMNModel()
 	if(spikefitdata) delete spikefitdata;
 	if(fitboxdata) delete fitboxdata;
 	//if(evodata) delete evodata;
-	delete fitchrome;
+	delete fitchrome;*/
 }
 
 

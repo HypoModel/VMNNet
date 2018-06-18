@@ -399,6 +399,9 @@ void VMNNeuroBox::PanelFull()
 	AddButton(ID_Output, "OUTPUT", 55, buttonbox);
 	SetPanel(ID_Output, mod->outbox); 
 
+	AddButton(ID_EvoFit, "FIT", 55, buttonbox);
+	SetPanel(ID_EvoFit, mod->fitbox); 
+
 	mainbox->AddSpacer(5);
 	mainbox->Add(parambox, 1, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 0);
 	mainbox->AddStretchSpacer(5);
@@ -415,6 +418,7 @@ void VMNNeuroBox::PanelFull()
 	Connect(ID_paramload, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(VMNNeuroBox::OnParamLoad));
 	Connect(ID_Signal, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(VMNNeuroBox::OnBox));
 	Connect(ID_Protocol, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(VMNNeuroBox::OnBox));
+	//Connect(ID_EvoFit, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(VMNNeuroBox::OnBox));
 }
 
 
@@ -478,6 +482,10 @@ void VMNNeuroBox::PanelBasic()
 
 	AddButton(ID_Output, "OUTPUT", 55, buttonbox);
 	SetPanel(ID_Output, mod->outbox); 
+	buttonbox->AddSpacer(5);
+	buttonbox->AddStretchSpacer();
+
+	AddButton(ID_EvoFit, "FIT", 55, buttonbox);
 
 	mainbox->AddSpacer(5);
 	mainbox->Add(parambox, 1, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 0);
