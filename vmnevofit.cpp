@@ -197,6 +197,11 @@ void *EvoFitVMN::Entry()
 	else if(netmode) runmode = 2;
 	else runmode = 1;
 
+	char checkdata[1000];
+	if(!GPU_Check(checkdata)) runmode = 0;
+	diagbox->Write(wxString::FromUTF8(checkdata));
+	
+
 	evoseed = (*evoparams)["evoseed"];
 	seedgen = (*evoflags)["seedgen"];
 	if(seedgen) {
@@ -333,6 +338,9 @@ void EvoFitVMN::Evolve()
 			ofp.WriteLine(text.Format("generation %d", gen));
 		}
 		diagbox->Write(text.Format("Generation %d...\n", gen));
+
+		// Update fitbox run display
+		fitbox->runstatus->SetLabel(text.Format("%d", gen)); 
 
 		// Generate new generation
 

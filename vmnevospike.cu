@@ -1158,6 +1158,26 @@ void spikevmnnetCPU(
 }
 
 
+int GPU_Check(char *check)
+{
+	int i;
+	int nDevices;
+
+	cudaGetDeviceCount(&nDevices);
+	for(i=0; i<nDevices; i++) {
+		cudaDeviceProp prop;
+		cudaGetDeviceProperties(&prop, i);
+		sprintf(check + strlen(check), "Device Number: %d\n", i);
+		sprintf(check + strlen(check), "  Device name: %s\n", prop.name);
+		sprintf(check + strlen(check), "  Memory Clock Rate (KHz): %d\n", prop.memoryClockRate);
+		sprintf(check + strlen(check), "  Memory Bus Width (bits): %d\n", prop.memoryBusWidth);
+		sprintf(check + strlen(check), "  Peak Memory Bandwidth (GB/s): %f\n\n", 2.0 * prop.memoryClockRate * (prop.memoryBusWidth / 8) / 1.0e6);
+	}
+
+	return nDevices;
+}
+
+
 void EvoFitVMN_GPU(int runmode, int numcells, float *chromepop, int paramcount, int threadcount, int blocksize, float runtime, float *Ints, float *ISIs, float *SpikeCounts)
 {
 	float *d_chromepop;

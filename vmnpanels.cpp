@@ -440,7 +440,7 @@ void VMNNeuroBox::PanelBasic()
 	paramset->AddCon("hstep", "h Step", 1, 0.1, 1);
 	paramset->AddCon("vthre", "V Threshold", -50, 0.1, 2);
 	paramset->AddCon("vrest", "V Rest", -62, 0.1, 2);
-	paramset->AddCon("absref", "Abs Ref", 5, 1, 1);
+	paramset->AddCon("absref", "Abs Ref", 2, 1, 1);
 	paramset->AddCon("pspmag", "PSP mag", 4, 0.1, 2);
 	//paramset->AddCon("ve", "EPSP ve", 20, 1, 2);
 	//paramset->AddCon("vi", "IPSP vi", -110, 1, 2);

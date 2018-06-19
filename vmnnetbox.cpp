@@ -331,8 +331,8 @@ void VMNNetBox::PanelBasic()
 	paramset->AddCon("vrest2", "V Rest L2", -62, 0.1, 2, labelwidth);
 	paramset->AddCon("kHAP2", "HAP k L2", 60, 0.1, 2, labelwidth);
 	paramset->AddCon("halflifeHAP2", "HAP HL L2", 5, 0.1, 2, labelwidth);
-	paramset->AddCon("kDAP2", "L2 DAP k", 0, 0.1, 2, labelwidth);
-	paramset->AddCon("halflifeDAP2", "L2 DAP HL", 500, 10, 2, labelwidth);
+	paramset->AddCon("kDAP2", "DAP k L2", 0, 0.1, 2, labelwidth);
+	paramset->AddCon("halflifeDAP2", "DAP HL L2", 500, 10, 2, labelwidth);
 	paramset->AddCon("synhl", "Syn HL", 2.5, 0.1, 2, labelwidth);
 	paramset->AddCon("synmag", "Syn Mag", 4, 0.1, 2, labelwidth);
 

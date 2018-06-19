@@ -51,7 +51,7 @@ VMNModel::VMNModel(int type, wxString name, HypoMain *main)
 {
 	int i;
 
-	basicmode = 1;
+	if(mainwin->user || mainwin->basic) basicmode = 1;
 
 	evodata = NULL;
 	spikefitdata = NULL;
@@ -166,10 +166,12 @@ void VMNModel::EvoInit()
 	fitchrome->AddParam("halflifeDAP", neurobox->GetCon("halflifeDAP"), 50, 500, false, "DAP HL");
 	fitchrome->AddParam("kAHP", neurobox->GetCon("kAHP"), 0, 0.001, false, "AHP k");
 	fitchrome->AddParam("halflifeAHP", neurobox->GetCon("halflifeAHP"), 100, 20000, false, "AHP HL");
-	fitchrome->AddParam("esynL1", netbox->GetCon("esynL1"), 0, 1, false, "esynL1");
-	fitchrome->AddParam("esynweight", netbox->GetCon("synweightL1"), 0, 2, false, "weightL1");
-	fitchrome->AddParam("syndelay", netbox->GetCon("syndelay"), 0, 10, false, "syndelay");
-	fitchrome->AddParam("syndelrange", netbox->GetCon("syndelrange"), 0, 20, false, "sdrange");
+	if(!basicmode) {
+		fitchrome->AddParam("esynL1", netbox->GetCon("esynL1"), 0, 1, false, "esynL1");
+		fitchrome->AddParam("esynweight", netbox->GetCon("synweightL1"), 0, 2, false, "weightL1");
+		fitchrome->AddParam("syndelay", netbox->GetCon("syndelay"), 0, 10, false, "syndelay");
+		fitchrome->AddParam("syndelrange", netbox->GetCon("syndelrange"), 0, 20, false, "sdrange");
+	}
 	fitchrome->Output("chrometest.txt");
 
 	fitchrome->Diagnostic();
