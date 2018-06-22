@@ -483,17 +483,17 @@ void VMNNetBox::PanelBasic()
 	popdatabox->AddSpacer(5);
 	popdatabox->Add(popdatagrid, 0, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 2);*/
 
-	//freqL1 = NumPanel(50, wxALIGN_RIGHT, "0");
-	//freqL2 = NumPanel(50, wxALIGN_RIGHT, "0");
+	freqL1 = NumPanel(50, wxALIGN_RIGHT, "0");
+	freqL2 = NumPanel(50, wxALIGN_RIGHT, "0");
 	//freqL3 = NumPanel(50, wxALIGN_RIGHT, "0");
 
-	/*wxGridSizer *laydatagrid = new wxFlexGridSizer(2, 3, 3);
+	wxGridSizer *laydatagrid = new wxFlexGridSizer(2, 3, 3);
 	laydatagrid->Add(TextLabel("Freq L1"), 0, wxALIGN_CENTRE);
 	laydatagrid->Add(freqL1);
 	laydatagrid->Add(TextLabel("Freq L2"), 0, wxALIGN_CENTRE);
 	laydatagrid->Add(freqL2);
-	laydatagrid->Add(TextLabel("Freq L3"), 0, wxALIGN_CENTRE);
-	laydatagrid->Add(freqL3);
+	//laydatagrid->Add(TextLabel("Freq L3"), 0, wxALIGN_CENTRE);
+	//laydatagrid->Add(freqL3);
 
 	wxStaticBoxSizer *laydatabox = new wxStaticBoxSizer(wxVERTICAL, panel, "Layer Data");
 	laydatabox->AddSpacer(5);
@@ -501,7 +501,7 @@ void VMNNetBox::PanelBasic()
 
 	rightbox->AddStretchSpacer(5);
 	rightbox->Add(laydatabox, 1, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL);
-	rightbox->AddSpacer(5);*/
+	rightbox->AddSpacer(5);
 
 	leftbox->Add(footbox, 1, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL);
 
@@ -523,7 +523,7 @@ void VMNNetBox::PanelBasic()
 
 	Connect(ID_Run, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(VMNNetBox::OnRun));
 	//Connect(ID_pararun, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(VMNNetBox::OnRun));
-	//Connect(ID_sum, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(VMNNetBox::OnSum));
+	Connect(ID_sum, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(VMNNetBox::OnSum));
 	//Connect(ID_netstore, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(VMNNetBox::OnStore));
 	//Connect(ID_netload, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(VMNNetBox::OnLoad));
 	//Connect(ID_output, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(VMNNetBox::OnOutput));
@@ -616,9 +616,14 @@ void VMNNetBox::NetworkSum()
 	netcalcvmn(mod->netdat2, 2);
 	netcalcvmn(mod->netdat3, 3);
 
+	if(!mod->basicmode) {
+		freqL1->SetLabel(text.Format("%.2f", mod->netdat1->freq));
+		freqL2->SetLabel(text.Format("%.2f", mod->netdat2->freq));
+		freqL3->SetLabel(text.Format("%.2f", mod->netdat3->freq));
+	}
+
 	freqL1->SetLabel(text.Format("%.2f", mod->netdat1->freq));
 	freqL2->SetLabel(text.Format("%.2f", mod->netdat2->freq));
-	freqL3->SetLabel(text.Format("%.2f", mod->netdat3->freq));
 }
 
 
@@ -760,6 +765,8 @@ void VMNNetBox::netcalcvmn(SpikeDat *spikedata, int layer)
 	vmnL2 = (*modparams)["neuronsL2"];
 	vmnL3 = (*modparams)["neuronsL3"];
 	stepmax = (*mod->neurobox->modparams)["numspikes"];
+
+	if(mod->basicmode) vmnL3 = 0;
 
 	if(layer == 2) {
 		cellfrom = vmnL1;

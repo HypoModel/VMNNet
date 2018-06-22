@@ -74,7 +74,7 @@ void *VMNMod::Entry()
 	else {
 		for(i=0; i<vmhneurons; i++) spikecount[i] = 0;
 		spikegen(0, vmhneurons, active);
-		if(autosum && !mod->basicmode) netbox->NetworkSum();
+		if(autosum) netbox->NetworkSum();
 		netbox->NeuroData();
 	}
 
@@ -114,7 +114,7 @@ void VMNMod::initialise()
 	vmhL1 = (*netparams)["neuronsL1"];
 	vmhL2 = (*netparams)["neuronsL2"];
 	vmhL3 = (*netparams)["neuronsL3"];
-	vmhneurons = vmhL1 + vmhL2 + vmhL3;
+
 	//vmhconnect = (*netparams)["vmhconnect"];
 	vmhinput[0] = (*netparams)["vmhinput1"];
 
@@ -185,6 +185,18 @@ void VMNMod::initialise()
 	vrestsd[1] = 0;
 	inputsd[1] = 0;
 
+	if(mod->basicmode) {
+		emax = 0;
+		maxsyn = 0;
+		vmhL3 = 0;
+		vrestsd[0] = 0;
+		kHAPsd[0] = 0;
+		tauHAPsd[0] = 0;
+		inputsd[0] = 0;
+	}
+
+	vmhneurons = vmhL1 + vmhL2 + vmhL3;
+
 	// Flags
 	netgen = (*netbox->modflags)["netgen"];
 	cellgen = (*netbox->modflags)["cellgen"];
@@ -221,6 +233,10 @@ void VMNMod::initialise()
 	halflifeB = (*sigparams)["halflifeB"];
 	tauB = 1 / (log((double)2) / halflifeB);
 
+	if(mod->basicmode) {
+		synwaveamp = 0;
+		kB = 0;
+	}
 
 	mod->diagbox->Write(text.Format("Signal kB %.4f halflifeB %.2f tauB %.4f\n", kB, halflifeB, tauB));
 
