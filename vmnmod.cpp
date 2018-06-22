@@ -130,8 +130,8 @@ void VMNMod::initialise()
 	esynweightL23 = (*netparams)["synweightL23"];
 
 	
-	//inputcycle = (*netparams)["inputcycle"];
-	//waveamp = (*netparams)["waveamp"];
+	inputcycle = (*netparams)["inputcycle"];
+	waveamp = (*netparams)["waveamp"];
 	syndelay = (*netparams)["syndelay"];
 	syndelrange = (*netparams)["syndelrange"];
 
@@ -193,6 +193,7 @@ void VMNMod::initialise()
 		kHAPsd[0] = 0;
 		tauHAPsd[0] = 0;
 		inputsd[0] = 0;
+		inputcycle = 0;
 	}
 
 	vmhneurons = vmhL1 + vmhL2 + vmhL3;
@@ -592,6 +593,7 @@ void VMNMod::spikegen(int nstart, int nstop, int *activity)
 		fprintf(ofp, "Type 1 HAP k = %.2f  tau = %.4f\n", kHAP[1], tauHAP[1]);
 		fprintf(ofp, "AHP k = %.2f  tau = %.4f\n", kAHP[0], tauAHP[0]);
 		fprintf(ofp, "DAP k = %.2f  tau = %.4f\n", kDAP[0], tauDAP[0]);
+		fprintf(ofp, "memtau = %.2f\n", memtau);
 		fprintf(ofp, "EPSP rate = %.2f   ISP ratio = %.2f\n", ire, iratio);
 		//fprintf(ofp, "revpots = %d  newVth = %d   memtau = %.4f\n", revpots, newVth, memtau);
 		//fprintf(ofp, "dend0e = %.2f, dend0i = %.2f, dend1e = %.2f, dend1i = %.2f\n", dend0e, dend0i, dend1e, dend1i);
@@ -719,7 +721,18 @@ void VMNMod::spikegen(int nstart, int nstop, int *activity)
 	i = 0;
 	for(i=0; i<vmhneurons; i++) {
 		vmhneuron[i].th = vmhneuron[i].th0 + vmhneuron[i].tHAP + vmhneuron[i].tAHP - vmhneuron[i].tDAP;
-		if(vmndiag) fprintf(tofp, "neuron %d  time %.1f  v %.2f  vrest %.2f  vthresh %.2f\n\n", i, nettime, vmhneuron[i].v, vmhneuron[i].vrest, vmhneuron[i].th); 
+		if(vmndiag) {
+			fprintf(tofp, "neuron %d  time %.1f  v %.2f  vrest %.2f  vthresh %.2f\n\n", i, nettime, vmhneuron[i].v, vmhneuron[i].vrest, vmhneuron[i].th); 
+			fprintf(tofp, "inputv %.2f  synv %.2f\n", vmhneuron[i].inputv, vmhneuron[i].synv);
+			/*fprintf(tofp, "neuron %d  time %.1f  input0 %.2f  input1 %.2f  sinput %.2f  v %.2f  thresh %.2f\n", 
+					i, nettime, input0, input1, sinput, vmhneuron[i].v, vmhneuron[i].th); 
+
+			//fprintf(tofp, "dendinput %.2f  sinput %.2f\n", dendinput[i][1], sinput);
+			fprintf(tofp, "esyninput %.2f  esynqueue %.2f isyninput %.2f\n", esyninput, esynqueue[i][0], isyninput);
+			fprintf(tofp, "inputv %.2f  synv %.2f\n", vmhneuron[i].inputv, vmhneuron[i].synv);
+			fprintf(tofp, "nepsp %d  epsph %.2f  nipsp %d  ipsph %.2f\n", nepsp0, epsph, nipsp0, ipsph);
+			fprintf(tofp, "dend1e %.2f  dend1i %.2f\n\n", vmhneuron[i].dend1e, vmhneuron[i].dend1i);*/
+		}
 		//fprintf(tofp, "dendinput %.2f  sinput %.2f\n", dendinput[i][1], sinput);
 		//fprintf(tofp, "sinput %.2f\n", sinput);
 		//fprintf(tofp, "nepsp %d  epsph %.2f  nipsp %d  ipsph %.2f\n\n", nepsp0, epsph, nipsp0, ipsph);
@@ -755,7 +768,8 @@ void VMNMod::spikegen(int nstart, int nstop, int *activity)
 
 		// Wave Signal (synaptic)          new 13/3/18
 
-		wavesig = synwaveamp * 0.5 * (1 + sin((nettime + synwaveshift) * 2 * pi / synwavecycle)); 
+		wavesig = 0;
+		if(synwavecycle) wavesig = synwaveamp * 0.5 * (1 + sin((nettime + synwaveshift) * 2 * pi / synwavecycle)); 
 
 		synsig = noisig + wavesig;
 
@@ -961,14 +975,14 @@ void VMNMod::spikegen(int nstart, int nstop, int *activity)
 			vmhneuron[i].tB = vmhneuron[i].tB - hstep * vmhneuron[i].tB / tauB;  
 
 			if(vmndiag && nettime < 1000 && i == 0) {
-				fprintf(tofp, "neuron %d  time %.1f  input0 %.2f  input1 %.2f  sinput %.2f  v %.2f  thresh %.2f\n", 
-					i, nettime, input0, input1, sinput, vmhneuron[i].v, vmhneuron[i].th); 
+				fprintf(tofp, "neuron %d  time %.1f  input0 %.2f  input1 %.2f  waveinput %.2f  sinput %.2f  v %.2f  thresh %.2f\n", 
+					i, nettime, input0, input1, waveinput, sinput, vmhneuron[i].v, vmhneuron[i].th); 
 
 				//fprintf(tofp, "dendinput %.2f  sinput %.2f\n", dendinput[i][1], sinput);
 				fprintf(tofp, "esyninput %.2f  esynqueue %.2f isyninput %.2f\n", esyninput, esynqueue[i][0], isyninput);
 				fprintf(tofp, "inputv %.2f  synv %.2f\n", vmhneuron[i].inputv, vmhneuron[i].synv);
 				fprintf(tofp, "nepsp %d  epsph %.2f  nipsp %d  ipsph %.2f\n", nepsp0, epsph, nipsp0, ipsph);
-				fprintf(tofp, "dend1e %.2f  dend1i %.2f\n\n", vmhneuron[i].dend1e, vmhneuron[i].dend1i);
+				fprintf(tofp, "noisig %.2f  wavesig %.2f  synsig %.2f  dend1e %.2f  dend1i %.2f\n\n", noisig, wavesig, synsig, vmhneuron[i].dend1e, vmhneuron[i].dend1i);
 			}
 
 			if(vmndiag && nettime < 5000 && i == 0) {
