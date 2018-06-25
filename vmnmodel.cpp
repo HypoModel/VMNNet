@@ -296,11 +296,11 @@ void VMNModel::RunModel()
 
 VMNModel::~VMNModel()
 {
-	/*
+	
 	delete vmndata;
 	delete[] vmhneuron;
 	delete currvmn; 
-	delete netdat;
+	//delete netdat;
 	delete netdat1; 
 	delete netdat2;
 	delete netdat3;
@@ -310,7 +310,7 @@ VMNModel::~VMNModel()
 	if(spikefitdata) delete spikefitdata;
 	if(fitboxdata) delete fitboxdata;
 	//if(evodata) delete evodata;
-	delete fitchrome;*/
+	//delete fitchrome;
 }
 
 
