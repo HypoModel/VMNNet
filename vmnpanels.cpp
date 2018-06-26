@@ -436,7 +436,7 @@ void VMNNeuroBox::PanelBasic()
 	SetModFlag(ID_Iratio, "Iratioflag", "Use Iratio", 1); 
 	//SetModFlag(ID_artspikes, "artspikesflag", "Artificial Spikes", 0); 
 
-	paramset->AddCon("numspikes", "Num Spikes", 1000, 1, 0);
+	paramset->AddCon("numspikes", "Run Time", 1000, 1, 0);
 	paramset->AddCon("hstep", "h Step", 1, 0.1, 1);
 	paramset->AddCon("vthre", "V Threshold", -50, 0.1, 2);
 	paramset->AddCon("vrest", "V Rest", -62, 0.1, 2);
