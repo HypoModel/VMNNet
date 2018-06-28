@@ -2,7 +2,8 @@
  *  vmnmodel.h
  *
  *  Created by Duncan MacGregor
- *  University of Edinburgh 2016
+ *  University of Edinburgh 2018
+ *  Released under MIT license, see https://opensource.org/licenses/MIT
  *
  */
 

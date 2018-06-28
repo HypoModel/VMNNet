@@ -1,4 +1,19 @@
 
+/*
+*  evospikegen.cu
+*  
+*  Created by Tom Clayton and Duncan MacGregor.
+*  University of Edinburgh 2017
+*  Released under MIT license, see https://opensource.org/licenses/MIT
+*
+*/
+
+
+// CPU version of CUDA spike model code, used to run GA with network model
+//
+// Currently not fully working
+
+
 #include "vmnevofit.h"
 
 
@@ -31,7 +46,6 @@ void *EvoFitVMN_CPU::Entry()
 
 	return NULL;
 }
-
 
 
 void EvoFitVMN_CPU::SpikeGen()
