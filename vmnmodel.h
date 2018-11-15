@@ -23,7 +23,8 @@ enum {
 	ID_gpunetmode,
 	ID_cpumode,
 	ID_autosum,
-	ID_L1L2
+	ID_L1L2,
+	ID_fixeddelay
 };
 
 
@@ -65,6 +66,7 @@ public:
 	int inetwork[1000];
 	double eweight[1000];
 	double iweight[1000];
+	double edelay[1000];
 	double esynqueue[100];
 	double isynqueue[100];
 	int econnect;
@@ -238,6 +240,7 @@ public:
 	wxString text;
 
 	bool vmndiag;
+	bool fixeddelay;  // flag for fixed connection delay, generated with network
 
 	int spikecount[1000];
 	wxMessageQueue <int> *synapse;

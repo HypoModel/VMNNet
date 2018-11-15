@@ -204,7 +204,10 @@ void VMNMod::initialise()
 	cellgen = (*netbox->modflags)["cellgen"];
 	unigen = (*netbox->modflags)["unigen"];
 	seedgen = (*netbox->modflags)["seedgen"];
+
 	synqueue = (*netbox->modflags)["synqueue"];
+	fixeddelay = (*netbox->modflags)["fixeddelay"];
+
 	revpots = (*neurobox->modflags)["revpots"];
 	iratioflag = (*neurobox->modflags)["Iratioflag"];
 
@@ -432,7 +435,9 @@ void VMNMod::networkgen2()
 			d = mrand01();
 			if(d <= vmhneuron[i].esynL1 && i != j) {
 				vmhneuron[i].eweight[vmhneuron[i].econnect] = esynweightL1;
+				vmhneuron[i].edelay[vmhneuron[i].econnect] = (syndelrange + 1) * mrand01();   // new November 2018 - fixed connection delay
 				vmhneuron[i].enetwork[vmhneuron[i].econnect++] = j;
+
 			}			
 			d = mrand01();
 			if(d <= isynL1 && i != j) {
@@ -445,6 +450,7 @@ void VMNMod::networkgen2()
 			d = mrand01();
 			if(d <= esynL21 && i != j) {
 				vmhneuron[i].eweight[vmhneuron[i].econnect] = esynweightL21;
+				vmhneuron[i].edelay[vmhneuron[i].econnect] = (syndelrange + 1) * mrand01();   // new November 2018 - fixed connection delay
 				vmhneuron[i].enetwork[vmhneuron[i].econnect++] = j;
 			}
 			d = mrand01();
@@ -466,6 +472,7 @@ void VMNMod::networkgen2()
 			d = mrand01();
 			if(d <= esynL12 && i != j) {
 				vmhneuron[i].eweight[vmhneuron[i].econnect] = esynweightL12;
+				vmhneuron[i].edelay[vmhneuron[i].econnect] = (syndelrange + 1) * mrand01();   // new November 2018 - fixed connection delay
 				vmhneuron[i].enetwork[vmhneuron[i].econnect++] = j;
 			}
 			d = mrand01();
@@ -479,6 +486,7 @@ void VMNMod::networkgen2()
 			d = mrand01();
 			if(d <= esynL2 && i != j) {
 				vmhneuron[i].eweight[vmhneuron[i].econnect] = esynweightL2;
+				vmhneuron[i].edelay[vmhneuron[i].econnect] = (syndelrange + 1) * mrand01();   // new November 2018 - fixed connection delay
 				vmhneuron[i].enetwork[vmhneuron[i].econnect++] = j;
 			}
 			d = mrand01();
@@ -564,6 +572,9 @@ void VMNMod::spikegen(int nstart, int nstop, int *activity)
 
 	int **enetwork = new int*[maxcells];
 	for(i=0; i<maxcells; i++) enetwork[i] = new int[maxcells];
+
+	float **delays = new float*[maxcells];
+	for(i=0; i<maxcells; i++) delays[i] = new float[maxcells];
 
 	FILE *ofp;
 	FILE *tofp, *inputofp;
@@ -704,8 +715,9 @@ void VMNMod::spikegen(int nstart, int nstop, int *activity)
 			vmhneuron[i].inputrec.max = 100000;
 		}
 
-		for(c=0; c<vmhneuron[i].econnect; c++) {
+		for(c=0; c<vmhneuron[i].econnect; c++) {            // copy to local arrays for speed
 			weights[i][c] = vmhneuron[i].eweight[c];
+			delays[i][c] = vmhneuron[i].edelay[c];
 			enetwork[i][c] = vmhneuron[i].enetwork[c];
 		}	
 		for(j=0; j<queuelength; j++) esynqueue[i][j] = 0;
@@ -852,7 +864,8 @@ void VMNMod::spikegen(int nstart, int nstop, int *activity)
 					if(activity[enetwork[i][c]] == 1) {
 						synrand = mrand01();
 						if(esyntrans >= synrand) { 
-							syndel = (syndelay - 1) + (syndelrange + 1) * (synrand * (1/esyntrans));
+							if(!fixeddelay) syndel = (syndelay - 1) + (syndelrange + 1) * (synrand * (1/esyntrans));    // scaled use of synrand (max value = esyntrans) allows second use for random delay
+							else syndel = (syndelay - 1) + delays[i][c];
 							esynqueue[i][syndel] = esynqueue[i][syndel] + weights[i][c];	
 							if(vmndiag && i == 0) fprintf(tofp, "time %.1f syndel %d\n", nettime, syndel);
 						}
@@ -1047,6 +1060,9 @@ void VMNMod::spikegen(int nstart, int nstop, int *activity)
 
 	for(i=0; i<maxcells; i++) delete[] weights[i];
 	delete[] weights;
+
+	for(i=0; i<maxcells; i++) delete[] delays[i];
+	delete[] delays;
 
 	for(i=0; i<maxcells; i++) delete[] esynqueue[i];
 	delete[] esynqueue;

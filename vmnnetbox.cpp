@@ -302,6 +302,7 @@ void VMNNetBox::PanelBasic()
 	SetModFlag(ID_cpumode, "cpumode", "CPU Fit Mode", 0); 
 	SetModFlag(ID_Diag, "GPUdiagnostic", "GPU Diagnostic", 0); 
 	SetModFlag(ID_formfilter, "formfilter", "Mean Spike Filter", 0); 
+	SetModFlag(ID_fixeddelay, "fixeddelay", "Fixed Connect Delay", 0);
 
 	paramset->AddCon("neuronsL1", "Neurons L1", vmhneurons, 1, 0, labelwidth);
 	//paramset->AddCon("vmhconnect", "Synapse", 0, 1, 0, labelwidth);
