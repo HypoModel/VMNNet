@@ -53,6 +53,7 @@ VMNModel::VMNModel(int type, wxString name, HypoMain *main)
 	int i;
 
 	if(mainwin->user || mainwin->basic) basicmode = 1;
+	revisionmode = 1;
 
 	evodata = NULL;
 	spikefitdata = NULL;

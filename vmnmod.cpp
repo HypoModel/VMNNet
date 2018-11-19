@@ -26,7 +26,7 @@ VMNMod::VMNMod(VMNModel *vmnmodel)
 
 	vmhneuron = mod->vmhneuron;
 
-	vmndiag = true;
+	vmndiag = false;
 	queuelength = 20;
 
 	active = new int[1000];
@@ -196,6 +196,11 @@ void VMNMod::initialise()
 		inputsd[0] = 0;
 		inputcycle = 0;
 	}
+
+	if(mod->revisionmode) {
+		emax = (*igfparams)["emax"];
+	}
+
 
 	vmhneurons = vmhL1 + vmhL2 + vmhL3;
 

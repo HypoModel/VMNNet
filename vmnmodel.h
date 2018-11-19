@@ -396,6 +396,7 @@ class VMNModel : public NeuroMod
 {
 public:
 	int basicmode;
+	int revisionmode;
 
 	VMNDat *vmndata;
 	VMNNetBox *netbox;
