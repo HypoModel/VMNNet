@@ -425,7 +425,7 @@ void VMNNeuroBox::PanelFull()
 
 void VMNNeuroBox::PanelBasic()
 {
-	//SetModFlag(ID_revpots, "revpots", "Reversal Potentials", 1); 
+	if(mod->revisionmode) SetModFlag(ID_revpots, "revpots", "Reversal Potentials", 1); 
 	//SetModFlag(ID_DAPcap, "DAPcapflag", "DAP cap", 0); 
 	//SetModFlag(ID_DAP2, "DAP2flag", "Old DAP2", 0); 
 	SetModFlag(ID_vsyn, "vsynflag", "V Syn", 1); 
@@ -443,8 +443,10 @@ void VMNNeuroBox::PanelBasic()
 	paramset->AddCon("vrest", "V Rest", -62, 0.1, 2);
 	paramset->AddCon("absref", "Abs Ref", 2, 1, 1);
 	paramset->AddCon("pspmag", "PSP mag", 4, 0.1, 2);
-	//paramset->AddCon("ve", "EPSP ve", 20, 1, 2);
-	//paramset->AddCon("vi", "IPSP vi", -110, 1, 2);
+	if(mod->revisionmode) {
+		paramset->AddCon("ve", "EPSP ve", 20, 1, 2);
+		paramset->AddCon("vi", "IPSP vi", -110, 1, 2);
+	}
 	paramset->AddCon("iratio", "IPSP ratio", 1, 0.1, 2);
 	//paramset->AddCon("ire", "EPSP freq", 300, 10, 1);
 	paramset->AddCon("halflife", "PSP HL", 7.5, 0.1, 2);

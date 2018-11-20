@@ -963,16 +963,18 @@ void VMNMod::spikegen(int nstart, int nstop, int *activity)
 			if(revpots) {
 				epsph = vmhneuron[i].ae * (ve - vmhneuron[i].v);
 				ipsph = vmhneuron[i].ai * (vmhneuron[i].v - vi);
+				synh = vmhneuron[i].aesyn * (ve - vmhneuron[i].v);
 			}
 			else {
 				epsph = pspmag;
 				ipsph = pspmag;
+				synh = synmag;
 			}
 
 			input0 = epsph * nepsp0 - ipsph * nipsp0; 
 			input1 = epsph * nepsp1 - ipsph * nipsp1;
 		
-			sinput = synmag * esyninput - synmag * isyninput;
+			sinput = synh * esyninput - synmag * isyninput;
 
 			if(maxsyn && sinput > maxsyn) sinput = maxsyn;
 			vmhneuron[i].synv = vmhneuron[i].synv - hstep * vmhneuron[i].synv / syntau + sinput;

@@ -368,6 +368,7 @@ public:
 	double th0;
 	double re0, re1, ri0, ri1;
 	double epsph, ipsph;
+	double synh;
 	
 	int network[1000][50];
 	int connect[1000];
