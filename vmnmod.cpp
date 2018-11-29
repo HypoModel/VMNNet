@@ -27,7 +27,7 @@ VMNMod::VMNMod(VMNModel *vmnmodel)
 	vmhneuron = mod->vmhneuron;
 
 	vmndiag = false;
-	queuelength = 20;
+	queuelength = 100;
 
 	active = new int[1000];
 }
@@ -573,7 +573,7 @@ void VMNMod::spikegen(int nstart, int nstop, int *activity)
 	for(i=0; i<maxcells; i++) weights[i] = new float[maxcells];
 
 	float **esynqueue = new float*[maxcells];
-	for(i=0; i<maxcells; i++) esynqueue[i] = new float[25];
+	for(i=0; i<maxcells; i++) esynqueue[i] = new float[queuelength];
 
 	int **enetwork = new int*[maxcells];
 	for(i=0; i<maxcells; i++) enetwork[i] = new int[maxcells];
@@ -782,7 +782,7 @@ void VMNMod::spikegen(int nstart, int nstop, int *activity)
 
 		// Noise Input         new 9/3/17
 
-		noisig = noisig + (noimean - noisig) / noitau + noiamp * sqrt(hstep) * gaussian(0, 1); 
+		noisig = noisig + hstep * ((noimean - noisig) / noitau) + noiamp * sqrt(hstep) * gaussian(0, 1); 
 
 		// Wave Signal (synaptic)          new 13/3/18
 
@@ -871,11 +871,24 @@ void VMNMod::spikegen(int nstart, int nstop, int *activity)
 						if(esyntrans >= synrand) { 
 							if(!fixeddelay) syndel = (syndelay - 1) + (syndelrange + 1) * (synrand * (1/esyntrans));    // scaled use of synrand (max value = esyntrans) allows second use for random delay
 							else syndel = (syndelay - 1) + delays[i][c];
+							syndel = (double)syndel/hstep;
 							esynqueue[i][syndel] = esynqueue[i][syndel] + weights[i][c];	
 							if(vmndiag && i == 0) fprintf(tofp, "time %.1f connect %d syndel %d\n", nettime, c, syndel);
 						}
 					}
 			}
+			/*else {
+				for(c=0; c<vmhneuron[i].econnect; c++) 
+					if(activity[enetwork[i][c]] == 1) {
+						synrand = mrand01();
+						if(esyntrans >= synrand) { 
+							if(!fixeddelay) syndel = (syndelay - 1) + (syndelrange + 1) * (synrand * (1/esyntrans));    // scaled use of synrand (max value = esyntrans) allows second use for random delay
+							else syndel = (syndelay - 1) + delays[i][c];
+							esynqueue[i][syndel] = esynqueue[i][syndel] + weights[i][c];	
+							if(vmndiag && i == 0) fprintf(tofp, "time %.1f connect %d syndel %d\n", nettime, c, syndel);
+						}
+					}
+			}*/
 		}
 
 		// Spiking model

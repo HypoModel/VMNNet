@@ -324,13 +324,13 @@ void VMNNetBox::PanelBasic()
 
 	paramset->AddCon("neuronsL2", "Neurons L2", 10, 1, 0, labelwidth);
 	if(mod->revisionmode) {
-		paramset->AddCon("esynL2", "E Syn L2", 0.5, 0.01, 2, labelwidth);
+		paramset->AddCon("esynL2", "E Syn L2", 0, 0.01, 2, labelwidth);
 		paramset->AddCon("synweightL2", "Synaptic L2", 1.0, 1, 1, labelwidth);
 	}
 	paramset->AddCon("esynL12", "E Syn L12", 0.35, 0.01, 2, labelwidth);
 	paramset->AddCon("synweightL12", "Synap L12", 1, 0.1, 1, labelwidth);
 	if(mod->revisionmode) {
-		paramset->AddCon("esynL21", "E Syn L21", 0.5, 0.01, 2, labelwidth);
+		paramset->AddCon("esynL21", "E Syn L21", 0, 0.01, 2, labelwidth);
 		paramset->AddCon("synweightL21", "Synap L21", 1.0, 0.1, 1, labelwidth);
 	}
 	paramset->AddCon("vmhinput2", "Input L2", 100, 1, 1, labelwidth);
