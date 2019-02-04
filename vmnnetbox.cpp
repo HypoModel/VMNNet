@@ -74,7 +74,7 @@ void VMNNetBox::PanelFull()
 	paramset->AddCon("esyntrans", "E Syn Trans", 0.5, 0.01, 2, labelwidth);
 	paramset->AddCon("inputsd", "Input SD", 0, 0.01, 2, labelwidth);
 
-	paramset->AddCon("neuronsL2", "Neurons L2", 10, 1, 0, labelwidth);
+	paramset->AddCon("neuronsL2", "Neurons L2", 0, 1, 0, labelwidth);
 	paramset->AddCon("esynL2", "E Syn L2", 0.5, 0.01, 2, labelwidth);
 	paramset->AddCon("synweightL2", "Synaptic L2", 1.0, 1, 1, labelwidth);
 	paramset->AddCon("esynL12", "E Syn L12", 0.35, 0.01, 2, labelwidth);
@@ -90,7 +90,7 @@ void VMNNetBox::PanelFull()
 	paramset->AddCon("synhl", "Syn HL", 2.5, 0.1, 2, labelwidth);
 	paramset->AddCon("synmag", "Syn Mag", 4, 0.1, 2, labelwidth);
 
-	paramset->AddCon("neuronsL3", "Neurons L3", 10, 1, 0, labelwidth);
+	paramset->AddCon("neuronsL3", "Neurons L3", 0, 1, 0, labelwidth);
 	paramset->AddCon("esynL3", "E Syn L3", 0.5, 0.01, 2, labelwidth);
 	paramset->AddCon("synweightL3", "Synaptic L3", 1.0, 1, 1, labelwidth);
 	paramset->AddCon("esynL23", "E Syn L23", 0.35, 0.01, 2, labelwidth);
@@ -316,8 +316,10 @@ void VMNNetBox::PanelBasic()
 	//paramset->AddCon("esynsd", "E Syn SD", 0, 0.01, 2, labelwidth);
 	//paramset->AddCon("isynL1", "I Syn L1", 0, 0.01, 2, labelwidth);
 	//paramset->AddCon("vrestsd", "Vrest SD", 0, 0.1, 2, labelwidth);
-	//paramset->AddCon("kHAPsd", "kHAP SD", 0, 0.1, 2, labelwidth);
-	//paramset->AddCon("tauHAPsd", "tauHAP SD", 0, 0.1, 2, labelwidth);
+	if(mod->revisionmode) {
+		paramset->AddCon("kHAPsd", "kHAP SD", 0, 0.1, 2, labelwidth);
+		paramset->AddCon("tauHAPsd", "tauHAP SD", 0, 0.1, 2, labelwidth);
+	}
 	//paramset->AddCon("maxsyn", "Max Syn", 0, 1, 0, labelwidth);
 	paramset->AddCon("esyntrans", "E Syn Trans", 0.5, 0.01, 2, labelwidth);
 	//paramset->AddCon("inputsd", "Input SD", 0, 0.01, 2, labelwidth);
