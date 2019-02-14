@@ -114,6 +114,7 @@ void VMNNetBox::PanelFull()
 	vrest = new wxStaticText(panel, -1, wxT("0"), wxDefaultPosition, wxSize(datwidth, -1), wxALIGN_RIGHT|wxBORDER_RAISED|wxST_NO_AUTORESIZE);
 	kHAP = new wxStaticText(panel, -1, wxT("0"), wxDefaultPosition, wxSize(datwidth, -1), wxALIGN_RIGHT|wxBORDER_RAISED|wxST_NO_AUTORESIZE);
 	tauHAP = new wxStaticText(panel, -1, wxT("0"), wxDefaultPosition, wxSize(datwidth, -1), wxALIGN_RIGHT|wxBORDER_RAISED|wxST_NO_AUTORESIZE);
+	input = new wxStaticText(panel, -1, "0", wxDefaultPosition, wxSize(datwidth, -1), wxALIGN_RIGHT|wxBORDER_RAISED|wxST_NO_AUTORESIZE);
 
 	wxGridSizer *datagrid = new wxGridSizer(2, 5, 5);
 	datagrid->Add(new wxStaticText(panel, -1, "Spikes"), 0, wxALIGN_CENTRE);
@@ -124,8 +125,8 @@ void VMNNetBox::PanelFull()
 	datagrid->Add(mean);
 	datagrid->Add(new wxStaticText(panel, -1, "Std Dev"), 0, wxALIGN_CENTRE|wxST_NO_AUTORESIZE);
 	datagrid->Add(sd);
-	datagrid->AddSpacer(5);
-	datagrid->AddSpacer(5);
+	datagrid->AddSpacer(2);
+	datagrid->AddSpacer(2);
 	datagrid->Add(new wxStaticText(panel, -1, "E Syn"), 0, wxALIGN_CENTRE|wxST_NO_AUTORESIZE);
 	datagrid->Add(esyn);
 	datagrid->Add(new wxStaticText(panel, -1, "Vrest"), 0, wxALIGN_CENTRE|wxST_NO_AUTORESIZE);
@@ -134,6 +135,8 @@ void VMNNetBox::PanelFull()
 	datagrid->Add(kHAP);
 	datagrid->Add(new wxStaticText(panel, -1, "tauHAP"), 0, wxALIGN_CENTRE|wxST_NO_AUTORESIZE);
 	datagrid->Add(tauHAP);
+	datagrid->Add(new wxStaticText(panel, -1, "Input"), 0, wxALIGN_CENTRE|wxST_NO_AUTORESIZE);
+	datagrid->Add(input);
 
 	datneuron = new wxTextCtrl(panel, ID_datneuro, "---", wxDefaultPosition, wxSize(50, -1), wxALIGN_LEFT|wxBORDER_SUNKEN|wxST_NO_AUTORESIZE|wxTE_PROCESS_ENTER);
 	datspin = new wxSpinButton(panel, wxID_ANY, wxDefaultPosition, wxSize(40, 17), wxSP_HORIZONTAL|wxSP_ARROW_KEYS);
@@ -614,6 +617,8 @@ void VMNNetBox::ModData(VMNNeuron *data)
 		kHAP->SetLabel(snum);
 		snum.Printf("%.2f", data->tauHAP);
 		tauHAP->SetLabel(snum);
+		snum.Printf("%.2f", data->input);
+		input->SetLabel(snum);
 	}
 }
 

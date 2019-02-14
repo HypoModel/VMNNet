@@ -120,6 +120,7 @@ public:
 	wxStaticText *vrest;
 	wxStaticText *kHAP;
 	wxStaticText *tauHAP;
+	wxStaticText *input;
 	wxTextCtrl *datneuron;
 	wxStaticText *freqL1, *freqL2, *freqL3;
 	

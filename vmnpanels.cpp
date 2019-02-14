@@ -327,7 +327,7 @@ VMNNeuroBox::VMNNeuroBox(VMNModel *vmnmodel, const wxString& title, const wxPoin
 
 void VMNNeuroBox::PanelFull()
 {
-	SetModFlag(ID_revpots, "revpots", "Reversal Potentials", 1); 
+	SetModFlag(ID_revpots, "revpots", "Reversal Potentials", 0); 
 	SetModFlag(ID_DAPcap, "DAPcapflag", "DAP cap", 0); 
 	SetModFlag(ID_DAP2, "DAP2flag", "Old DAP2", 0); 
 	SetModFlag(ID_vsyn, "vsynflag", "V Syn", 1); 
