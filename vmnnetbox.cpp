@@ -944,8 +944,8 @@ void VMNNetBox::OnStore(wxCommandEvent& event)
 	cellfile.AddLine("");
 
 	for(i=0; i<vmhneurons; i++) {
-		outline.Printf("N%d: vrestsd %.4f khapsd %.4f tauhapsd %.4f", 
-			i, neurons[i].vrestsdgen, neurons[i].kHAPsdgen, neurons[i].tauHAPsdgen);
+		outline.Printf("N%d: vrestsd %.4f khapsd %.4f tauhapsd %.4f inputsd %.4f esynsd %.4f", 
+			i, neurons[i].vrestsdgen, neurons[i].kHAPsdgen, neurons[i].tauHAPsdgen, neurons[i].inputsdgen, neurons[i].esynsdgen);
 		cellfile.AddLine(outline);
 	}
 	cellfile.Write();
@@ -1034,17 +1034,31 @@ void VMNNetBox::OnLoad(wxCommandEvent& event)
 
 	for(i=0; i<numcells; i++) {
 		readline = cellfile.GetLine(i+4);
+
 		readline = readline.AfterFirst('d');
 		sdat = readline.BeforeFirst('k');
 		sdat.Trim();
 		sdat.ToDouble(&neurons[i].vrestsdgen);
+
 		readline = readline.AfterFirst('d');
 		sdat = readline.BeforeFirst('t');
 		sdat.Trim();
 		sdat.ToDouble(&neurons[i].kHAPsdgen);
+
+		readline = readline.AfterFirst('d');
+		sdat = readline.BeforeFirst('i');
+		sdat.Trim();
+		sdat.ToDouble(&neurons[i].tauHAPsdgen);
+
+		readline = readline.AfterFirst('d');
+		sdat = readline.BeforeFirst('e');
+		sdat.Trim();
+		sdat.ToDouble(&neurons[i].inputsdgen);
+
 		readline = readline.AfterFirst('d');
 		sdat = readline.Trim();
-		sdat.ToDouble(&neurons[i].tauHAPsdgen);
+		sdat.ToDouble(&neurons[i].esynsdgen);
+
 		neurons[i].vrest = -62 + 10 * neurons[i].vrestsdgen;
 	}
 
