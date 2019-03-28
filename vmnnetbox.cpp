@@ -665,7 +665,7 @@ void VMNNetBox::OffSum()
 }
 
 
-void VMNNetBox::NeuroData()
+void VMNNetBox::NeuroData(bool dispupdate)
 {
 	mod->currvmn->neurocalc(&(neurons[neuroindex]));
 	//mod->analysisdata->autocalc(mod->currvmh);
@@ -678,8 +678,10 @@ void VMNNetBox::NeuroData()
 
 	mod->currvmn->MeanSpikeForm(mod->neurodata->V, timerange, (*modflags)["formfilter"]);
 
-	ModData(&(neurons[neuroindex]));
-	mainwin->scalebox->GraphUpdate();
+	if(dispupdate) {
+		ModData(&(neurons[neuroindex]));
+		mainwin->scalebox->GraphUpdate();
+	}
 }
 
 

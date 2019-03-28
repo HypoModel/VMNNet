@@ -143,6 +143,13 @@ VMNModel::VMNModel(int type, wxString name, HypoMain *main)
 }
 
 
+void VMNModel::SetCell(int cellindex)
+{
+	netbox->neuroindex = cellindex;
+	netbox->NeuroData(true);
+}
+
+
 void VMNModel::EvoInit()
 {
 	// Evo Fit Data Storage

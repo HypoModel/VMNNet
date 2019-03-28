@@ -143,7 +143,7 @@ public:
 	void OnRun(wxCommandEvent& event);
 	void OnSum(wxCommandEvent& event);
 	void OffSum();
-	void NeuroData();
+	void NeuroData(bool dispupdate = true);
 	void OnStore(wxCommandEvent& event);
 	void OnLoad(wxCommandEvent& event);
 	void OnParamStore(wxCommandEvent& event);
@@ -442,6 +442,7 @@ public:
 	void Output();
 	void EvoInit();
 	void EvoRun();
+	void SetCell(int);
 };
 
 
