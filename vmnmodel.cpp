@@ -128,7 +128,7 @@ VMNModel::VMNModel(int type, wxString name, HypoMain *main)
 		modtools.box[i]->Show(modtools.box[i]->visible);
 	}
 	modbox->ParamLoad("default");
-	graphload = true;
+	graphload = false;
 
 	graphbase->initpath = path;
 	GraphData();
@@ -146,7 +146,7 @@ VMNModel::VMNModel(int type, wxString name, HypoMain *main)
 void VMNModel::SetCell(int cellindex)
 {
 	netbox->neuroindex = cellindex;
-	netbox->NeuroData(true);
+	netbox->NeuroData(false);
 }
 
 
