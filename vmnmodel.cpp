@@ -69,7 +69,7 @@ VMNModel::VMNModel(int type, wxString name, HypoMain *main)
 	path = "VMN";
 	oldhist = false;
 
-	vmhneuron = new VMNNeuron[1101];   // 500
+	vmhneuron = new VMNNeuron[201];   // 500   // 1101
 	numtypes = 3;
 	prototypes = 2;
 
