@@ -442,7 +442,8 @@ public:
 	void Output();
 	void EvoInit();
 	void EvoRun();
-	void SetCell(int);
+	void SetCell(int, GraphDat *);
+	int GetCellIndex();
 };
 
 

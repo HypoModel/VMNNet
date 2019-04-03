@@ -143,10 +143,17 @@ VMNModel::VMNModel(int type, wxString name, HypoMain *main)
 }
 
 
-void VMNModel::SetCell(int cellindex)
+void VMNModel::SetCell(int cellindex, GraphDat *graph)
 {
 	netbox->neuroindex = cellindex;
+	(*graph).gname.Printf("n%d", cellindex);
 	netbox->NeuroData(false);
+}
+
+
+int VMNModel::GetCellIndex()
+{
+	return netbox->neuroindex;
 }
 
 

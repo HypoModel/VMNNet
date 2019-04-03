@@ -656,6 +656,7 @@ void VMNMod::spikegen(int nstart, int nstop, int *activity)
 			vmhneuron[i].type = 2;
 		}
 
+		double min_tauHAP = 5;
 
 		// Random parameter generation
 		if(cellgen) {
@@ -671,6 +672,7 @@ void VMNMod::spikegen(int nstart, int nstop, int *activity)
 
 		vmhneuron[i].kHAP = kHAP[celltype] + vmhneuron[i].kHAPsdgen * kHAPsd[celltype];
 		vmhneuron[i].tauHAP = tauHAP[celltype] + vmhneuron[i].tauHAPsdgen * tauHAPsd[celltype];
+		if(vmhneuron[i].tauHAP < min_tauHAP) vmhneuron[i].tauHAP = min_tauHAP;      // new April 2019
 
 		//vmhneuron[i].input = vmhinput[type] + vmhneuron[i].inputsdgen * inputsd[type];
 		vmhneuron[i].inputdensity = 1 + vmhneuron[i].inputsdgen * inputsd[celltype];            // new Feb 2014
