@@ -141,10 +141,14 @@ void VMNMod::initialise()
 	esynsd = (*netparams)["esynsd"];
 	esynL2 = (*netparams)["esynL2"];
 	isynL2 = 0;
+	esynL2sd = (*netparams)["esynL2sd"];
 	esynL12 = (*netparams)["esynL12"];
 	isynL12 = 0;
+	esynL12sd = (*netparams)["esynL12sd"];
 	esynL21 = (*netparams)["esynL21"];
 	isynL21 = 0;
+	esynL21sd = (*netparams)["esynL21sd"];
+
 	vrestsd[0] = (*netparams)["vrestsd"];
 	kHAPsd[0] = (*netparams)["kHAPsd"];
 	tauHAPsd[0] = (*netparams)["tauHAPsd"];
@@ -158,6 +162,8 @@ void VMNMod::initialise()
 	tauHAP[1] = 1 / (log((double)2) / (*netparams)["halflifeHAP2"]);
 	kDAP[1] = (*netparams)["kDAP2"];
 	tauDAP[1] = 1 / (log((double)2) / (*netparams)["halflifeDAP2"]);
+	tauHAPsd[1] = (*netparams)["tauHAP2sd"];
+
 	syntau = 1 / (log((double)2) / (*netparams)["synhl"]);
 	synmag = (*netparams)["synmag"];
 
@@ -182,9 +188,9 @@ void VMNMod::initialise()
 	kAHP[1] = kAHP[0];
 	tauAHP[1] = tauAHP[0];
 	kHAPsd[1] = 0;
-	tauHAPsd[1] = 0;
+	//tauHAPsd[1] = 0;
 	vrestsd[1] = 0;
-	inputsd[1] = 0;
+	inputsd[1] = inputsd[0];
 
 	if(mod->basicmode) {
 		emax = 0;
@@ -193,6 +199,7 @@ void VMNMod::initialise()
 		vrestsd[0] = 0;
 		kHAPsd[0] = 0;
 		tauHAPsd[0] = 0;
+		tauHAPsd[1] = 0;
 		inputsd[0] = 0;
 		inputcycle = 0;
 	}
@@ -207,6 +214,7 @@ void VMNMod::initialise()
 	// Flags
 	netgen = (*netbox->modflags)["netgen"];
 	cellgen = (*netbox->modflags)["cellgen"];
+	cellgen2 = (*netbox->modflags)["cellgen"];
 	unigen = (*netbox->modflags)["unigen"];
 	seedgen = (*netbox->modflags)["seedgen"];
 
@@ -451,9 +459,13 @@ void VMNMod::networkgen2()
 			}
 		}
 
+		if(cellgen2) vmhneuron[i].esynL21sdgen = gaussian(0, 1); 
+		else vmhneuron[i].esynL21sdgen = 0;
+		vmhneuron[i].esynL21 = esynL21 + vmhneuron[i].esynL21sdgen * esynL21sd;
+
 		for(j=vmhL1; j<vmhL1+vmhL2; j++) {
 			d = mrand01();
-			if(d <= esynL21 && i != j) {
+			if(d <= vmhneuron[i].esynL21 && i != j) {
 				vmhneuron[i].eweight[vmhneuron[i].econnect] = esynweightL21;
 				vmhneuron[i].edelay[vmhneuron[i].econnect] = (syndelrange + 1) * mrand01();   // new November 2018 - fixed connection delay
 				vmhneuron[i].enetwork[vmhneuron[i].econnect++] = j;
@@ -473,9 +485,13 @@ void VMNMod::networkgen2()
 		vmhneuron[i].econnect = 0;
 		vmhneuron[i].iconnect = 0;
 
+		if(cellgen2) vmhneuron[i].esynL12sdgen = gaussian(0, 1); 
+		else vmhneuron[i].esynL12sdgen = 0;
+		vmhneuron[i].esynL12 = esynL12 + vmhneuron[i].esynL12sdgen * esynL12sd;
+
 		for(j=0; j<vmhL1; j++) {
 			d = mrand01();
-			if(d <= esynL12 && i != j) {
+			if(d <= vmhneuron[i].esynL12 && i != j) {
 				vmhneuron[i].eweight[vmhneuron[i].econnect] = esynweightL12;
 				vmhneuron[i].edelay[vmhneuron[i].econnect] = (syndelrange + 1) * mrand01();   // new November 2018 - fixed connection delay
 				vmhneuron[i].enetwork[vmhneuron[i].econnect++] = j;
@@ -487,9 +503,13 @@ void VMNMod::networkgen2()
 			}
 		}
 
+		if(cellgen2) vmhneuron[i].esynL2sdgen = gaussian(0, 1); 
+		else vmhneuron[i].esynL2sdgen = 0;
+		vmhneuron[i].esynL2 = esynL2 + vmhneuron[i].esynL2sdgen * esynL2sd;
+
 		for(j=vmhL1; j<vmhL1+vmhL2; j++) {
 			d = mrand01();
-			if(d <= esynL2 && i != j) {
+			if(d <= vmhneuron[i].esynL2 && i != j) {
 				vmhneuron[i].eweight[vmhneuron[i].econnect] = esynweightL2;
 				vmhneuron[i].edelay[vmhneuron[i].econnect] = (syndelrange + 1) * mrand01();   // new November 2018 - fixed connection delay
 				vmhneuron[i].enetwork[vmhneuron[i].econnect++] = j;
@@ -666,6 +686,7 @@ void VMNMod::spikegen(int nstart, int nstop, int *activity)
 			vmhneuron[i].tauHAPsdgen = gaussian(0, 1);
 			vmhneuron[i].inputsdgen = gaussian(0, 1);
 		}
+
 		vmhneuron[i].vrest = vrest[celltype] + vmhneuron[i].vrestsdgen * vrestsd[celltype];
 		
 		if(unigen) vmhneuron[i].vrest = (vrest[celltype] - vrestsd[celltype]) + (vrestsd[celltype] * 2 * vmhneuron[i].vrestsdgen);

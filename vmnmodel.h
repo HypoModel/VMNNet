@@ -42,6 +42,9 @@ public:
 	double dend1e, dend1i;
 	double ae, ai, aesyn;
 	double esynL1;
+
+	double esynL12, esynL21, esynL2;
+	double esynL12sdgen, esynL21sdgen, esynL2sdgen;
 	
 	double v, th;
 	double ttime, neurotime;
@@ -56,6 +59,7 @@ public:
 	double tauHAPsdgen;
 	double inputsdgen;
 	double esyn, esynsdgen;
+
 	
 	datdouble inputrec;
 	datdouble raterec;
@@ -160,6 +164,7 @@ public:
 
 	void PanelFull();
 	void PanelBasic();
+	void PanelPLoS();
 	
 	virtual wxToolBar* OnCreateToolBar(long style, wxWindowID id, const wxString &name); 	
 };
@@ -284,6 +289,7 @@ public:
 	// Network Flags
 	int cellgen;
 	int netgen;
+	int cellgen2;   // extra flag for PLoS Hetero
 	
 	// IGF parameters
 	double numspikes;
@@ -329,6 +335,11 @@ public:
 	double synmag;
 	double syndelrange;
 	double esynsd;
+
+	// PLoS Hetero
+	double esynL2sd;
+	double esynL12sd;
+	double esynL21sd;
 
 	// 3rd Layer                                          17/7/14
 	double esynL3, isynL3;
