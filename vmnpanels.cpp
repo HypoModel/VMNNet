@@ -443,14 +443,10 @@ void VMNNeuroBox::PanelBasic()
 	paramset->AddCon("vrest", "V Rest", -62, 0.1, 2);
 	paramset->AddCon("absref", "Abs Ref", 2, 1, 1);
 	paramset->AddCon("pspmag", "PSP mag", 4, 0.1, 2);
-	if(mod->revisionmode) {
-		paramset->AddCon("ve", "EPSP ve", 20, 1, 2);
-		paramset->AddCon("vi", "IPSP vi", -110, 1, 2);
-	}
 	paramset->AddCon("iratio", "IPSP ratio", 1, 0.1, 2);
 	//paramset->AddCon("ire", "EPSP freq", 300, 10, 1);
 	paramset->AddCon("halflife", "PSP HL", 7.5, 0.1, 2);
-	if(mod->revisionmode) paramset->AddCon("emax", "EPSP max", 0, 0.1, 2);
+	//if(mod->revisionmode) paramset->AddCon("emax", "EPSP max", 0, 0.1, 2);
 
 	paramset->AddCon("kHAP", "HAP k", 60, 1, 2);
 	paramset->AddCon("halflifeHAP", "HAP HL", 7, 0.1, 2);
