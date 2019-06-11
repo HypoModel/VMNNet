@@ -101,13 +101,13 @@ void VMNNetBox::PanelPLoS()
 
 	runcount = new wxStaticText(panel, -1, wxT("---"), wxDefaultPosition, wxSize(40, -1), wxALIGN_CENTRE|wxBORDER_RAISED|wxST_NO_AUTORESIZE);
 
-	mean = new wxStaticText(panel, -1, wxT("0"), wxDefaultPosition, wxSize(datwidth, -1), wxALIGN_RIGHT|wxBORDER_RAISED|wxST_NO_AUTORESIZE);
+	//mean = new wxStaticText(panel, -1, wxT("0"), wxDefaultPosition, wxSize(datwidth, -1), wxALIGN_RIGHT|wxBORDER_RAISED|wxST_NO_AUTORESIZE);
 	freq = new wxStaticText(panel, -1, wxT("0"), wxDefaultPosition, wxSize(datwidth, -1), wxALIGN_RIGHT|wxBORDER_RAISED|wxST_NO_AUTORESIZE);
-	sd = new wxStaticText(panel, -1, wxT("0"), wxDefaultPosition, wxSize(datwidth, -1), wxALIGN_RIGHT|wxBORDER_RAISED|wxST_NO_AUTORESIZE);
+	//sd = new wxStaticText(panel, -1, wxT("0"), wxDefaultPosition, wxSize(datwidth, -1), wxALIGN_RIGHT|wxBORDER_RAISED|wxST_NO_AUTORESIZE);
 	spikes = new wxStaticText(panel, -1, wxT("0"), wxDefaultPosition, wxSize(datwidth, -1), wxALIGN_RIGHT|wxBORDER_RAISED|wxST_NO_AUTORESIZE);
 	esyn = new wxStaticText(panel, -1, wxT("0"), wxDefaultPosition, wxSize(datwidth, -1), wxALIGN_RIGHT|wxBORDER_RAISED|wxST_NO_AUTORESIZE);
-	vrest = new wxStaticText(panel, -1, wxT("0"), wxDefaultPosition, wxSize(datwidth, -1), wxALIGN_RIGHT|wxBORDER_RAISED|wxST_NO_AUTORESIZE);
-	kHAP = new wxStaticText(panel, -1, wxT("0"), wxDefaultPosition, wxSize(datwidth, -1), wxALIGN_RIGHT|wxBORDER_RAISED|wxST_NO_AUTORESIZE);
+	//vrest = new wxStaticText(panel, -1, wxT("0"), wxDefaultPosition, wxSize(datwidth, -1), wxALIGN_RIGHT|wxBORDER_RAISED|wxST_NO_AUTORESIZE);
+	//kHAP = new wxStaticText(panel, -1, wxT("0"), wxDefaultPosition, wxSize(datwidth, -1), wxALIGN_RIGHT|wxBORDER_RAISED|wxST_NO_AUTORESIZE);
 	tauHAP = new wxStaticText(panel, -1, wxT("0"), wxDefaultPosition, wxSize(datwidth, -1), wxALIGN_RIGHT|wxBORDER_RAISED|wxST_NO_AUTORESIZE);
 	input = new wxStaticText(panel, -1, "0", wxDefaultPosition, wxSize(datwidth, -1), wxALIGN_RIGHT|wxBORDER_RAISED|wxST_NO_AUTORESIZE);
 
@@ -116,18 +116,18 @@ void VMNNetBox::PanelPLoS()
 	datagrid->Add(spikes);
 	datagrid->Add(new wxStaticText(panel, -1, "Freq"), 0, wxALIGN_CENTRE|wxST_NO_AUTORESIZE);
 	datagrid->Add(freq);
-	datagrid->Add(new wxStaticText(panel, -1, "Mean"), 0, wxALIGN_CENTRE|wxST_NO_AUTORESIZE);
-	datagrid->Add(mean);
-	datagrid->Add(new wxStaticText(panel, -1, "Std Dev"), 0, wxALIGN_CENTRE|wxST_NO_AUTORESIZE);
-	datagrid->Add(sd);
-	datagrid->AddSpacer(2);
-	datagrid->AddSpacer(2);
+	//datagrid->Add(new wxStaticText(panel, -1, "Mean"), 0, wxALIGN_CENTRE|wxST_NO_AUTORESIZE);
+	//datagrid->Add(mean);
+	//datagrid->Add(new wxStaticText(panel, -1, "Std Dev"), 0, wxALIGN_CENTRE|wxST_NO_AUTORESIZE);
+	//datagrid->Add(sd);
+	//datagrid->AddSpacer(2);
+	//datagrid->AddSpacer(2);
 	datagrid->Add(new wxStaticText(panel, -1, "E Syn"), 0, wxALIGN_CENTRE|wxST_NO_AUTORESIZE);
 	datagrid->Add(esyn);
-	datagrid->Add(new wxStaticText(panel, -1, "Vrest"), 0, wxALIGN_CENTRE|wxST_NO_AUTORESIZE);
-	datagrid->Add(vrest);
-	datagrid->Add(new wxStaticText(panel, -1, "kHAP"), 0, wxALIGN_CENTRE|wxST_NO_AUTORESIZE);
-	datagrid->Add(kHAP);
+	//datagrid->Add(new wxStaticText(panel, -1, "Vrest"), 0, wxALIGN_CENTRE|wxST_NO_AUTORESIZE);
+	//datagrid->Add(vrest);
+	//datagrid->Add(new wxStaticText(panel, -1, "kHAP"), 0, wxALIGN_CENTRE|wxST_NO_AUTORESIZE);
+	//datagrid->Add(kHAP);
 	datagrid->Add(new wxStaticText(panel, -1, "tauHAP"), 0, wxALIGN_CENTRE|wxST_NO_AUTORESIZE);
 	datagrid->Add(tauHAP);
 	datagrid->Add(new wxStaticText(panel, -1, "Input"), 0, wxALIGN_CENTRE|wxST_NO_AUTORESIZE);
@@ -170,7 +170,7 @@ void VMNNetBox::PanelPLoS()
 	seedcheck = SetModCheck(ID_seedcheck, "seedgen", "Seed", true);
 	seedbox->Add(seedcheck, 0, wxALIGN_CENTRE_VERTICAL|wxLEFT, 5);
 
-	wxStaticBoxSizer *netbox = new wxStaticBoxSizer(wxVERTICAL, panel, "Network Generation");
+	/*wxStaticBoxSizer *netbox = new wxStaticBoxSizer(wxVERTICAL, panel, "Network Generation");
 	netcheck = new wxCheckBox(panel, ID_netcheck, "Network");
 	netcheck->SetValue(true);
 	cellcheck = new wxCheckBox(panel, ID_cellcheck, "Cells");
@@ -193,7 +193,7 @@ void VMNNetBox::PanelPLoS()
 	netbox->Add(storetag, 0, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 2);
 	netbuttons->Add(storebutton, 1, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 2); 
 	netbuttons->Add(loadbutton, 1, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 2); 
-	netbox->Add(netbuttons, 0, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 2);
+	netbox->Add(netbuttons, 0, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 2);*/
 
 	//wxBoxSizer *paramfilebox = StoreBox("ref2b");
 	//synccheck = new wxCheckBox(panel, wxID_ANY, "Sync");
@@ -203,8 +203,8 @@ void VMNNetBox::PanelPLoS()
 	wxBoxSizer *storebox = StoreBoxSync();
 
 	wxBoxSizer *rightbox = new wxBoxSizer(wxVERTICAL);
-	rightbox->Add(netbox, 0, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 5);
-	rightbox->AddStretchSpacer(10);
+	//rightbox->Add(netbox, 0, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 5);
+	//rightbox->AddStretchSpacer(10);
 	rightbox->Add(buttonbox, 0, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 5);
 	rightbox->Add(runbox, 0, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 5);
 	rightbox->AddStretchSpacer(10);
@@ -236,15 +236,15 @@ void VMNNetBox::PanelPLoS()
 
 	freqL1 = NumPanel(50, wxALIGN_RIGHT, "0");
 	freqL2 = NumPanel(50, wxALIGN_RIGHT, "0");
-	freqL3 = NumPanel(50, wxALIGN_RIGHT, "0");
+	//freqL3 = NumPanel(50, wxALIGN_RIGHT, "0");
 
 	wxGridSizer *laydatagrid = new wxFlexGridSizer(2, 3, 3);
 	laydatagrid->Add(TextLabel("Freq L1"), 0, wxALIGN_CENTRE);
 	laydatagrid->Add(freqL1);
 	laydatagrid->Add(TextLabel("Freq L2"), 0, wxALIGN_CENTRE);
 	laydatagrid->Add(freqL2);
-	laydatagrid->Add(TextLabel("Freq L3"), 0, wxALIGN_CENTRE);
-	laydatagrid->Add(freqL3);
+	//laydatagrid->Add(TextLabel("Freq L3"), 0, wxALIGN_CENTRE);
+	//laydatagrid->Add(freqL3);
 
 	wxStaticBoxSizer *laydatabox = new wxStaticBoxSizer(wxVERTICAL, panel, "Layer Data");
 	laydatabox->AddSpacer(5);
@@ -454,7 +454,7 @@ void VMNNetBox::PanelFull()
 	wxBoxSizer *storebox = StoreBoxSync();
 
 	wxBoxSizer *rightbox = new wxBoxSizer(wxVERTICAL);
-	rightbox->Add(netbox, 0, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 5);
+	//rightbox->Add(netbox, 0, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 5);
 	rightbox->AddStretchSpacer(10);
 	rightbox->Add(buttonbox, 0, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 5);
 	rightbox->Add(runbox, 0, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 5);
@@ -849,22 +849,23 @@ void VMNNetBox::ModData(VMNNeuron *data)
 	spikes->SetLabel(snum);
 	snum.Printf("%.2f", data->freq);
 	freq->SetLabel(snum);
-	snum.Printf("%.1f", data->meanisi);
-	mean->SetLabel(snum);
-	snum.Printf("%.2f", data->isivar);
-	sd->SetLabel(snum);
+
+	snum.Printf("%.2f", data->esynL1);
+	esyn->SetLabel(snum);
+	snum.Printf("%.2f", data->tauHAP);
+	tauHAP->SetLabel(snum);
+	snum.Printf("%.2f", data->input);
+	input->SetLabel(snum);
 
 	if(!mod->basicmode) {
-		snum.Printf("%.2f", data->esynL1);
-		esyn->SetLabel(snum);
+		snum.Printf("%.1f", data->meanisi);
+		mean->SetLabel(snum);
+		snum.Printf("%.2f", data->isivar);
+		sd->SetLabel(snum);
 		snum.Printf("%.2f", data->vrest);
 		vrest->SetLabel(snum);
 		snum.Printf("%.1f", data->kHAP);
 		kHAP->SetLabel(snum);
-		snum.Printf("%.2f", data->tauHAP);
-		tauHAP->SetLabel(snum);
-		snum.Printf("%.2f", data->input);
-		input->SetLabel(snum);
 	}
 }
 
