@@ -425,7 +425,7 @@ void VMNNeuroBox::PanelFull()
 
 void VMNNeuroBox::PanelBasic()
 {
-	if(mod->revisionmode) SetModFlag(ID_revpots, "revpots", "Reversal Potentials", 0); 
+	//if(mod->revisionmode) SetModFlag(ID_revpots, "revpots", "Reversal Potentials", 0); 
 	//SetModFlag(ID_DAPcap, "DAPcapflag", "DAP cap", 0); 
 	//SetModFlag(ID_DAP2, "DAP2flag", "Old DAP2", 0); 
 	SetModFlag(ID_vsyn, "vsynflag", "V Syn", 1); 

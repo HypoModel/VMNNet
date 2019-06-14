@@ -194,18 +194,20 @@ void VMNMod::initialise()
 
 	if(mod->basicmode) {
 		emax = 0;
-		maxsyn = 0;
+		//maxsyn = 0;
 		vmhL3 = 0;
 		vrestsd[0] = 0;
 		kHAPsd[0] = 0;
-		tauHAPsd[0] = 0;
-		tauHAPsd[1] = 0;
-		inputsd[0] = 0;
+		//tauHAPsd[0] = 0;
+		//tauHAPsd[1] = 0;
+		//inputsd[0] = 0;
 		inputcycle = 0;
+		kDAP[1] = 0;
+		tauDAP[1] = tauDAP[0];
 	}
 
 	if(mod->revisionmode) {
-		emax = (*igfparams)["emax"];
+		//emax = (*igfparams)["emax"];
 	}
 
 
@@ -628,8 +630,10 @@ void VMNMod::spikegen(int nstart, int nstop, int *activity)
 		fprintf(ofp, "Type 0 %d neurons, Type 1 %d neurons\n", vmhL1, vmhL2);
 		fprintf(ofp, "Type 0 HAP k = %.2f  tau = %.4f\n", kHAP[0], tauHAP[0]);
 		fprintf(ofp, "Type 1 HAP k = %.2f  tau = %.4f\n", kHAP[1], tauHAP[1]);
-		fprintf(ofp, "AHP k = %.2f  tau = %.4f\n", kAHP[0], tauAHP[0]);
-		fprintf(ofp, "DAP k = %.2f  tau = %.4f\n", kDAP[0], tauDAP[0]);
+		fprintf(ofp, "Type 0 AHP k = %.2f  tau = %.4f\n", kAHP[0], tauAHP[0]);
+		fprintf(ofp, "Type 1 AHP k = %.2f  tau = %.4f\n", kAHP[1], tauAHP[1]);
+		fprintf(ofp, "Type 0 DAP k = %.2f  tau = %.4f\n", kDAP[0], tauDAP[0]);
+		fprintf(ofp, "Type 1 DAP k = %.2f  tau = %.4f\n", kDAP[1], tauDAP[1]);
 		fprintf(ofp, "memtau = %.2f\n", memtau);
 		fprintf(ofp, "EPSP rate = %.2f   ISP ratio = %.2f\n", ire, iratio);
 		//fprintf(ofp, "revpots = %d  newVth = %d   memtau = %.4f\n", revpots, newVth, memtau);
@@ -1031,7 +1035,7 @@ void VMNMod::spikegen(int nstart, int nstop, int *activity)
 
 			vmhneuron[i].tB = vmhneuron[i].tB - hstep * vmhneuron[i].tB / tauB;  
 
-			if(vmndiag && nettime < 1000 && i == 0) {
+			if(vmndiag && nettime < 1000 && (i == 0 || i == 1)) {
 				fprintf(tofp, "neuron %d  time %.1f  input0 %.2f  input1 %.2f  waveinput %.2f  sinput %.2f  v %.2f  thresh %.2f\n", 
 					i, nettime, input0, input1, waveinput, sinput, vmhneuron[i].v, vmhneuron[i].th); 
 

@@ -41,7 +41,7 @@ VMNNetBox::VMNNetBox(VMNModel *vmnmodel, const wxString& title, const wxPoint& p
 	InitMenu();
 
 	if(mod->basicmode) PanelPLoS();
-	else PanelPLoS();      //   PanelFull();
+	else PanelFull();      //   PanelFull();
 }
 
 
@@ -454,7 +454,7 @@ void VMNNetBox::PanelFull()
 	wxBoxSizer *storebox = StoreBoxSync();
 
 	wxBoxSizer *rightbox = new wxBoxSizer(wxVERTICAL);
-	//rightbox->Add(netbox, 0, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 5);
+	rightbox->Add(netbox, 0, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 5);
 	rightbox->AddStretchSpacer(10);
 	rightbox->Add(buttonbox, 0, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 5);
 	rightbox->Add(runbox, 0, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 5);
