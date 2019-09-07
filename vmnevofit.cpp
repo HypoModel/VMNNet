@@ -100,12 +100,12 @@ void EvoFitVMN::Evaluate(int start, int popcount, double dualfit)
 		if(fitbox->evodata->spikecount > 16384) fitbox->evodata->spikecount = 16384;
 		for(j=0; j<fitbox->evodata->spikecount; j++) fitbox->evodata->times[j] = fitbox->spikefitdata->Ints[j+32*512*i];
 
-		fitbox->evodata->FitScoreOxy(fitbox->expdata, (*chromepop)[i + start].fitdata, fitbox->fitset, fitbox->fitconset);
-		(*chromepop)[i + start].fitness = (*chromepop)[i + start].fitdata->score;
-		(*chromepop)[i + start].fithead = (*chromepop)[i + start].fitdata->RMSFirstNBins;
-		(*chromepop)[i + start].fittail = (*chromepop)[i + start].fitdata->RMSBinRange;
-		(*chromepop)[i + start].fithaz = (*chromepop)[i + start].fitdata->RMSHaz;
-		(*chromepop)[i + start].fitIoD = (*chromepop)[i + start].fitdata->RMSIoD;
+		fitbox->evodata->FitScoreOxy(fitbox->expdata, &(*chromepop)[i + start].fitdata, fitbox->fitset, fitbox->fitconset);
+		(*chromepop)[i + start].fitness = (*chromepop)[i + start].fitdata.score;
+		(*chromepop)[i + start].fithead = (*chromepop)[i + start].fitdata.RMSFirstNBins;
+		(*chromepop)[i + start].fittail = (*chromepop)[i + start].fitdata.RMSBinRange;
+		(*chromepop)[i + start].fithaz = (*chromepop)[i + start].fitdata.RMSHaz;
+		(*chromepop)[i + start].fitIoD = (*chromepop)[i + start].fitdata.RMSIoD;
 		(*chromepop)[i + start].index = i;
 
 		//if(i%32 == 0) diagbox->Write(text.Format("Chrome %d  Spikes %.0f  Score %.2f\n", i, fitbox->spikefitdata->SpikeCounts[i * 128], (*chromepop)[i + start].fitness)); 
