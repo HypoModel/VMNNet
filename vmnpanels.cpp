@@ -508,11 +508,13 @@ void VMNNeuroBox::PanelBasic()
 void VMNNeuroBox::OnBox(wxCommandEvent& event)
 {
 	int id = event.GetId();
-	ToolBox *box;
+	ToolBox *box = NULL;
 
 	if(id == ID_Signal) box = mod->signalbox;
 	if(id == ID_Protocol) box = mod->protobox;
 
-	if(box->IsShown()) box->Show(false);
-	else box->Show(true);
+    if(box) {
+        if(box->IsShown()) box->Show(false);
+        else box->Show(true);
+    }
 }

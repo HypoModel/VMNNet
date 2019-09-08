@@ -319,7 +319,7 @@ void VMNMod::initialise()
 		fprintf(ofp, "DAP k = %.2f  tau = %.4f\n", kDAP[0], tauDAP[0]);
 		fprintf(ofp, "EPSP rate = %.2f   ISP ratio = %.2f\n", ire, iratio);
 		fprintf(ofp, "vrest = %.2f, th0 = %.2f\n", vrest[0], vthre[0]); 
-		fprintf(ofp, "ae %.2f  ai %.2f  ve %.2f  vi %.2f\n\n", ae, ai, ve, vi);
+		fprintf(ofp, "ae %.2f  ai %.2f  ve %.2f  vi %.2f\n\n", ae[0], ai[0], ve, vi);
 		fprintf(ofp, "vmhconnect %.2f synweight %.2f\n", vmhconnect, esynweightL2);
 		fprintf(ofp, "esynL2 %.2f  esynweightL2 %.2f\n", esynL2, esynweightL2);
 		fprintf(ofp, "esynL12 %.2f  esynweightL12 %.2f\n", esynL12, esynweightL12);

@@ -14,6 +14,30 @@
 #include "hypodef.h"
 
 
+// CUDA GPU function - takes a chrome population and runs the model with each chrome generating spike times and a quad binned ISI histogram
+
+#ifndef NOCUDA
+
+extern void EvoFitVMN_GPU(int netmode, int numcells, float *chromepop, int gpuparams, int popsize, int blocksize, float runtime, float *Ints, float *ISIs, float *SpikeCounts);
+
+extern int GPU_Check(char *checkstring);
+
+#endif
+
+
+#ifdef NOCUDA
+
+void EvoFitVMN_GPU(int netmode, int numcells, float *chromepop, int gpuparams, int popsize, int blocksize, float runtime, float *Ints, float *ISIs, float *SpikeCounts)
+{
+};
+
+int GPU_Check(char *checkstring) {
+    return 0;
+};
+
+#endif
+
+
 EvoFitVMN::EvoFitVMN(VMNModel *model, EvoFitBox *fbox)
 	: EvoFit((Model *)model, fbox)
 {
@@ -156,7 +180,7 @@ void EvoFitVMN::InitPop()
 			for(j=0; j<chromeparams; j++) {
 				tag = fitchrome->tags[j];
 				(*chromeresult)[i].diagbox = mod->diagbox;
-				(*chromeresult)[i].AddParam(tag, fitchrome->cons[j], &fitchrome->GetParam(tag)); 
+				//(*chromeresult)[i].AddParam(tag, fitchrome->cons[j], &fitchrome->GetParam(tag));    // address of temp object error
 			}
 		}
 	}

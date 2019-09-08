@@ -95,11 +95,7 @@ public:
 };
 
 
-// CUDA GPU function - takes a chrome population and runs the model with each chrome generating spike times and a quad binned ISI histogram
 
-extern void EvoFitVMN_GPU(int netmode, int numcells, float *chromepop, int gpuparams, int popsize, int blocksize, float runtime, float *Ints, float *ISIs, float *SpikeCounts);
-
-extern int GPU_Check(char *checkstring);
 
 //extern void EvoFitVMN_CPU(int netmode, int numcells, float *chromepop, int gpuparams, int popsize, int blocksize, float runtime, float *Ints, float *ISIs, float *SpikeCounts);
 
