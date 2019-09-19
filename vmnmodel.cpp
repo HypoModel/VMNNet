@@ -24,7 +24,7 @@ VMNDat::VMNDat(int size)
 
 VMNNeuron::VMNNeuron()
 {
-	inputrec.setsize(100000);
+	inputrec.setsize(10000);
 	raterec.setsize(10000);
 
 	mag.resize(maxspikes);
@@ -69,7 +69,7 @@ VMNModel::VMNModel(int type, wxString name, HypoMain *main)
 	path = "VMN";
 	oldhist = false;
 
-	vmhneuron = new VMNNeuron[1101];   // 500   // 1101   // 201
+	vmhneuron = new VMNNeuron[201];   // 500   // 1101   // 201
 	numtypes = 3;
 	prototypes = 2;
 
