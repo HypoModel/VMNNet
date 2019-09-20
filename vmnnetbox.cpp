@@ -13,14 +13,14 @@
 
 // Network control box
 VMNNetBox::VMNNetBox(VMNModel *vmnmodel, const wxString& title, const wxPoint& pos, const wxSize& size)
-: ParamBox(vmnmodel, title, pos, size, "VMNNET")
+: ParamBox(vmnmodel, title, pos, size, "VMNNET", 0, 1)
 {
 	column = 0;
 	labelwidth = 70;
 
 	wxSize toolsize;
 	wxColour toolback, textcolour;
-	boxname = "VMN";
+	//boxtag = "VMN";
 	mod = vmnmodel;
 	mainwin = mod->mainwin;
 
@@ -1134,17 +1134,16 @@ void VMNNetBox::netcalcvmh(SpikeDat *currvmh)
 void VMNNetBox::OnParamLoad(wxCommandEvent& event)
 {
 	wxString filetag, filename;
+	bool compmode = false;
+
+	if(event.GetId() == ID_Compare) compmode = true;
 
 	if(synccheck->GetValue()) {
 		filetag = paramstoretag->GetValue();
-		mod->neurobox->paramstoretag->SetValue(filetag);
-		mod->neurobox->OnParamLoad(event);
-		mod->signalbox->paramstoretag->SetValue(filetag);
-		mod->signalbox->OnParamLoad(event);
-		mod->protobox->paramstoretag->SetValue(filetag);
-		mod->protobox->OnParamLoad(event);
-		mod->fitbox->paramstoretag->SetValue(filetag);
-		mod->fitbox->OnParamLoad(event);
+		mod->neurobox->ParamLoad(filetag, compmode);
+		mod->signalbox->ParamLoad(filetag, compmode);
+		mod->protobox->ParamLoad(filetag, compmode);
+		mod->fitbox->ParamLoad(filetag, compmode);
 	}
 	ParamBox::OnParamLoad(event);	
 }
@@ -1156,14 +1155,10 @@ void VMNNetBox::OnParamStore(wxCommandEvent& event)
 
 	if(synccheck->GetValue()) {
 		filetag = paramstoretag->GetValue();
-		mod->neurobox->paramstoretag->SetValue(filetag);
-		mod->neurobox->OnParamStore(event);
-		mod->signalbox->paramstoretag->SetValue(filetag);
-		mod->signalbox->OnParamStore(event);
-		mod->protobox->paramstoretag->SetValue(filetag);
-		mod->protobox->OnParamStore(event);
-		mod->fitbox->paramstoretag->SetValue(filetag);
-		mod->fitbox->OnParamStore(event);
+		mod->neurobox->StoreParam(filetag);
+		mod->signalbox->StoreParam(filetag);
+		mod->protobox->StoreParam(filetag);
+		mod->fitbox->StoreParam(filetag);
 	}
 	ParamBox::OnParamStore(event);	
 }

@@ -13,12 +13,12 @@
 
 // Input signal protocol box
 VMNProtoBox::VMNProtoBox(VMNModel *model, const wxString& title, const wxPoint& pos, const wxSize& size)
-	: ParamBox(model, title, pos, size, "PROTO", 1)
+	: ParamBox(model, title, pos, size, "PROTO", 1, 1)
 {
 	int pnum, inpnum, rampnum;
 	int pulsenum0, pulsenum1, rampnum0, rampnum1;
 	int numwidth;
-	boxname = "PROTO";
+	boxtag = "PROTO";
 	mod = model;
 	wxString tag;
 
@@ -239,7 +239,7 @@ SignalBox::SignalBox(VMNModel *vmnmodel, const wxString& title, const wxPoint& p
 	: ParamBox(vmnmodel, title, pos, size)
 {
 	column = 0;
-	boxname = "Signal";
+	boxtag = "Signal";
 	mod = vmnmodel;
 
 	InitMenu();
@@ -281,14 +281,14 @@ SignalBox::SignalBox(VMNModel *vmnmodel, const wxString& title, const wxPoint& p
 	defbutt = 0;
 	wxBoxSizer *runbox = RunBox();
 
-	wxSizer *paramfilebox = StoreBox("test1");
+	//wxSizer *paramfilebox = StoreBox("test1");
 
 	mainbox->AddSpacer(5);
 	mainbox->Add(parambox, 1, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 0);
 	mainbox->AddStretchSpacer();
 	mainbox->Add(runbox, 0, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 0);	
-	mainbox->AddSpacer(5);
-	mainbox->Add(paramfilebox, 0, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 0);	
+	//mainbox->AddSpacer(5);
+	//mainbox->Add(paramfilebox, 0, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 0);	
 	mainbox->AddSpacer(2);
 
 	panel->Layout();
@@ -315,7 +315,7 @@ VMNNeuroBox::VMNNeuroBox(VMNModel *vmnmodel, const wxString& title, const wxPoin
 {
 	column = 0;
 	mod = vmnmodel;
-	boxname = "VMNNeuro";
+	boxtag = "VMNNeuro";
 	buttonwidth = 50;
 
 	InitMenu();
@@ -385,7 +385,7 @@ void VMNNeuroBox::PanelFull()
 	runbox->AddSpacer(20);
 	runbox->Add(resetbutton);
 
-	wxSizer *paramfilebox = StoreBox("n0fitb8");
+	//wxSizer *paramfilebox = StoreBox("n0fitb8");
 
 	buttonbox = new wxBoxSizer(wxHORIZONTAL);
 
@@ -408,8 +408,8 @@ void VMNNeuroBox::PanelFull()
 	mainbox->AddStretchSpacer(5);
 	mainbox->Add(runbox, 1, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 5);	
 	mainbox->AddStretchSpacer(5);
-	mainbox->Add(paramfilebox, 1, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 0);	
-	mainbox->AddStretchSpacer(5);
+	//mainbox->Add(paramfilebox, 1, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 0);	
+	//mainbox->AddStretchSpacer(5);
 	mainbox->Add(buttonbox, 1, wxALIGN_CENTRE_HORIZONTAL | wxALIGN_CENTRE_VERTICAL | wxALL, 5);
 	mainbox->AddSpacer(2);
 
@@ -467,7 +467,7 @@ void VMNNeuroBox::PanelBasic()
 	runbox->AddSpacer(20);
 	runbox->Add(resetbutton);
 
-	wxSizer *paramfilebox = StoreBox("n0fitb8");
+	//wxSizer *paramfilebox = StoreBox("n0fitb8");
 
 	buttonbox = new wxBoxSizer(wxHORIZONTAL);
 
@@ -491,8 +491,8 @@ void VMNNeuroBox::PanelBasic()
 	mainbox->AddStretchSpacer(5);
 	mainbox->Add(runbox, 1, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 5);	
 	mainbox->AddStretchSpacer(5);
-	mainbox->Add(paramfilebox, 1, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 0);	
-	mainbox->AddStretchSpacer(5);
+	//mainbox->Add(paramfilebox, 1, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxALL, 0);	
+	//mainbox->AddStretchSpacer(5);
 	mainbox->Add(buttonbox, 1, wxALIGN_CENTRE_HORIZONTAL | wxALIGN_CENTRE_VERTICAL | wxALL, 5);
 	mainbox->AddSpacer(2);
 

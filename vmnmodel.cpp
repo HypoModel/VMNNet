@@ -95,16 +95,20 @@ VMNModel::VMNModel(int type, wxString name, HypoMain *main)
 	netbox = new VMNNetBox(this, "VMN Network", wxPoint(320, 0), wxSize(470, 610));
 	signalbox = new SignalBox(this, "Signal Box", wxPoint(0, 300), wxSize(400, 500));
 	protobox = new VMNProtoBox(this, "Protocol", wxPoint(0, 0), wxSize(320, 500));
-	outbox = new OutBox(this, "Data Output", wxPoint(0, 0), wxSize(320, 500), 2000, 200);
+	outbox = new OutBox(this, "Data Output", wxPoint(0, 0), wxSize(320, 500), 200, 20);
 	//cellbox = new CellBox(this, "Cell Data", wxPoint(0, 0), wxSize(320, 500));
 	neurobox = new VMNNeuroBox(this, "VMN Neuron", wxPoint(0, 0), wxSize(320, 700));
 	diagbox = mainwin->diagbox;
 	modbox = netbox;
 
+	diagbox->Write("\nBoxes OK, Tool load...\n");
+
 	(*toolflags)["spikebox"] = 1;		// Select universal model tools
 	mainwin->ToolLoad();				// Load universal model tools
 
+	diagbox->Write("\nEvoinit....\n");
 	EvoInit();
+	diagbox->Write("Evoinit OK\n\n");
 
 	//fitchrome->Output("chrometext.txt");
 	
@@ -312,19 +316,18 @@ void VMNModel::RunModel()
 
 VMNModel::~VMNModel()
 {
-	
-	delete vmndata;
+	/*delete vmndata;
 	delete[] vmhneuron;
 	delete currvmn; 
-	//delete netdat;
+	delete netdat;
 	delete netdat1; 
 	delete netdat2;
 	delete netdat3;
 	delete analysisdata; 
-	delete neurodata;
+	delete neurodata;*/
 
-	if(spikefitdata) delete spikefitdata;
-	if(fitboxdata) delete fitboxdata;
+	//if(spikefitdata) delete spikefitdata;
+	//if(fitboxdata) delete fitboxdata;
 	//if(evodata) delete evodata;
 	//delete fitchrome;
 }
@@ -352,7 +355,7 @@ void VMNModel::GraphData()
 	graphset->Add(graphbase->tagindex["net1rate1s"], 10);
 	graphset->Add(graphbase->tagindex["net1spikes1ms"], 11);
 	graphset->Add("vmnrate10s", 100);
-	if(diagbox) diagbox->textbox->AppendText(graphset->Display());
+	//if(diagbox) diagbox->textbox->AppendText(graphset->Display());
 
 	graphset = graphbase->NewSet("VMN Intervals", "vmnintervals");
 	graphset->AddFlag("nettog", 100);
@@ -371,13 +374,13 @@ void VMNModel::GraphData()
 	graphset->Add("net1haz5ms", 111);
 	graphset->Add("vmnnormhist1ms", 1000);
 	graphset->Add("vmnnormhist5ms", 1001);
-	if(diagbox) diagbox->textbox->AppendText(graphset->Display());
+	//if(diagbox) diagbox->textbox->AppendText(graphset->Display());
 
 	graphset = graphbase->NewSet("L2 Spikes", "l2spikes");
 	graphset->AddFlag("timeres", 1);
 	graphset->Add("net2rate1s", 0);
 	graphset->Add("net2spikes1ms", 1);
-	if(diagbox) diagbox->textbox->AppendText(graphset->Display());
+	//if(diagbox) diagbox->textbox->AppendText(graphset->Display());
 
 	graphset = graphbase->NewSet("L2 Intervals", "l2intervals");
 	graphset->AddFlag("hazmode1", 10);
@@ -386,7 +389,7 @@ void VMNModel::GraphData()
 	graphset->Add("net2haz1ms", 10);
 	graphset->Add("net2hist5ms", 1);
 	graphset->Add("net2haz5ms", 11);
-	if(diagbox) diagbox->textbox->AppendText(graphset->Display());
+	//if(diagbox) diagbox->textbox->AppendText(graphset->Display());
 
 	graphbase->Add(GraphDat(&netdat1->synsim, 0, 1, -80, 20, "L1 Syn Sim", 4, 0.001, green), "l1synsim");
 	graphbase->Add(GraphDat(&netdat2->synsim, 0, 1, -80, 20, "L2 Syn Sim", 4, 0.001, lightblue), "l2synsim");
