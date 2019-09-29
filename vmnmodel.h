@@ -111,6 +111,8 @@ class VMNNetBox: public ParamBox
 {
 public:
 	VMNNeuron *neurons;
+	//vector<VMNNeuron> *neurons;
+
 	SpikeDat *netdat;
 	VMNModel *mod;
 	
@@ -253,6 +255,7 @@ public:
 	
 	VMNModel *mod;
 	VMNNeuron *vmhneuron;
+	//vector<VMNNeuron> *vmnneuron;
 	VMNNeuroBox *neurobox;
 	VMNNetBox *netbox;
 	VMNProtoBox *protobox;
@@ -424,7 +427,8 @@ public:
 	SpikeFitDat *spikefitdata;
 	SpikeDat *fitboxdata;
 
-	VMNNeuron *vmhneuron;
+	//VMNNeuron *vmhneuron;
+	vector<VMNNeuron> vmhneuron;
 	SpikeDat *currvmn, *netdat;
 	SpikeDat *netdat1, *netdat2, *netdat3;
 	AnaDat *analysisdata;

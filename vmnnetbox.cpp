@@ -33,7 +33,7 @@ VMNNetBox::VMNNetBox(VMNModel *vmnmodel, const wxString& title, const wxPoint& p
 	toolback.Set("#ddddff");       // 8080ff light blue
 	textcolour.Set("#000000");
 
-	neurons = mod->vmhneuron;
+	neurons = mod->vmhneuron.data();
 	netdat = mod->netdat;
 	wxFont boxfont(8, wxFONTFAMILY_SWISS, wxNORMAL, wxNORMAL, false, "Tahoma");
 	panel->SetFont(boxfont);

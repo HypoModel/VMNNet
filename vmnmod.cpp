@@ -24,7 +24,7 @@ VMNMod::VMNMod(VMNModel *vmnmodel)
 	scalebox = mod->mainwin->scalebox;
 	protobox = mod->protobox;
 
-	vmhneuron = mod->vmhneuron;
+	vmhneuron = mod->vmhneuron.data();
 
 	vmndiag = false;
 	queuelength = 100;
@@ -35,7 +35,7 @@ VMNMod::VMNMod(VMNModel *vmnmodel)
 
 VMNMod::~VMNMod()
 {
-	delete []active;
+	delete[] active;
 }
 
 
