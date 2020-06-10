@@ -37,18 +37,18 @@ VMNProtoBox::VMNProtoBox(VMNModel *model, const wxString& title, const wxPoint& 
 	rangepanel->SetSizer(rangesizer);
 
 	activepanel = rangepanel;
-	paramset->panel = activepanel;
+	paramset.panel = activepanel;
 
 	labelwidth = 50;
 	numwidth = 45;
 
-	paramset->AddNum("rangestart", "Start", 200, 0, labelwidth, numwidth); 
-	paramset->AddNum("rangestop", "Stop", 200, 0, labelwidth, numwidth); 
-	paramset->AddNum("rangestep", "Step", 300, 0, labelwidth, numwidth); 
+	paramset.AddNum("rangestart", "Start", 200, 0, labelwidth, numwidth); 
+	paramset.AddNum("rangestop", "Stop", 200, 0, labelwidth, numwidth); 
+	paramset.AddNum("rangestep", "Step", 300, 0, labelwidth, numwidth); 
 
 	wxStaticBoxSizer *rangebox0 = new wxStaticBoxSizer(wxVERTICAL, rangepanel, "Range Input L1");
-	for(pnum=pnum; pnum<paramset->numparams; pnum++) {
-		rangebox0->Add(paramset->con[pnum], 1, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxRIGHT|wxLEFT, 5);
+	for(pnum=pnum; pnum<paramset.numparams; pnum++) {
+		rangebox0->Add(paramset.con[pnum], 1, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxRIGHT|wxLEFT, 5);
 	}
 
 	wxBoxSizer *rangerunbox = new wxBoxSizer(wxHORIZONTAL);
@@ -77,24 +77,24 @@ VMNProtoBox::VMNProtoBox(VMNModel *model, const wxString& title, const wxPoint& 
 	pulsepanel->SetSizer(pulsesizer);
 
 	activepanel = pulsepanel;
-	paramset->panel = activepanel;
+	paramset.panel = activepanel;
 
 	labelwidth = 50;
 	numwidth = 45;
 
-	paramset->AddNum("pulsebase0", "Base", 200, 0, labelwidth, numwidth); 
-	paramset->AddNum("pulsestart0", "Start", 200, 0, labelwidth, numwidth); 
-	paramset->AddNum("pulsestop0", "Stop", 300, 0, labelwidth, numwidth); 
-	paramset->AddNum("pulseinit0", "Initial", 200, 0, labelwidth, numwidth); 
-	paramset->AddNum("pulsehl0", "Halflife", 0.1, 2, labelwidth, numwidth); 
-	//paramset->SetMinMax("rampstep0", -1000, 1000);
-	pulsenum0 = paramset->numparams;
+	paramset.AddNum("pulsebase0", "Base", 200, 0, labelwidth, numwidth); 
+	paramset.AddNum("pulsestart0", "Start", 200, 0, labelwidth, numwidth); 
+	paramset.AddNum("pulsestop0", "Stop", 300, 0, labelwidth, numwidth); 
+	paramset.AddNum("pulseinit0", "Initial", 200, 0, labelwidth, numwidth); 
+	paramset.AddNum("pulsehl0", "Halflife", 0.1, 2, labelwidth, numwidth); 
+	//paramset.SetMinMax("rampstep0", -1000, 1000);
+	pulsenum0 = paramset.numparams;
 
-	paramset->GetCon("pulseinit0")->SetMinMax(-10000, 10000);
+	paramset.GetCon("pulseinit0")->SetMinMax(-10000, 10000);
 
 	wxStaticBoxSizer *pulsebox0 = new wxStaticBoxSizer(wxVERTICAL, pulsepanel, "Pulse Input L1");
-	for(pnum=pnum; pnum<paramset->numparams; pnum++) {
-		pulsebox0->Add(paramset->con[pnum], 1, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxRIGHT|wxLEFT, 5);
+	for(pnum=pnum; pnum<paramset.numparams; pnum++) {
+		pulsebox0->Add(paramset.con[pnum], 1, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxRIGHT|wxLEFT, 5);
 	}
 	wxBoxSizer *pulserunbox = new wxBoxSizer(wxHORIZONTAL);
 
@@ -107,18 +107,18 @@ VMNProtoBox::VMNProtoBox(VMNModel *model, const wxString& title, const wxPoint& 
 	pulsebox0->AddSpacer(10);
 	AddButton(ID_Pulse, "Run", 50, pulsebox0);
 
-	paramset->AddNum("pulsebase1", "Base", 200, 0, labelwidth, numwidth); 
-	paramset->AddNum("pulsestart1", "Start", 200, 0, labelwidth, numwidth); 
-	paramset->AddNum("pulsestop1", "Stop", 300, 0, labelwidth, numwidth); 
-	paramset->AddNum("pulseinit1", "Initial", 200, 0, labelwidth, numwidth); 
-	paramset->AddNum("pulsehl1", "Halflife", 0.1, 2, labelwidth, numwidth); 
+	paramset.AddNum("pulsebase1", "Base", 200, 0, labelwidth, numwidth); 
+	paramset.AddNum("pulsestart1", "Start", 200, 0, labelwidth, numwidth); 
+	paramset.AddNum("pulsestop1", "Stop", 300, 0, labelwidth, numwidth); 
+	paramset.AddNum("pulseinit1", "Initial", 200, 0, labelwidth, numwidth); 
+	paramset.AddNum("pulsehl1", "Halflife", 0.1, 2, labelwidth, numwidth); 
 
-	paramset->GetCon("pulseinit1")->SetMinMax(-10000, 10000);
-	//paramset->SetMinMax("rampstep0", -1000, 1000);
+	paramset.GetCon("pulseinit1")->SetMinMax(-10000, 10000);
+	//paramset.SetMinMax("rampstep0", -1000, 1000);
 
 	wxStaticBoxSizer *pulsebox1 = new wxStaticBoxSizer(wxVERTICAL, pulsepanel, "Pulse Input L2");
-	for(pnum=pnum; pnum<paramset->numparams; pnum++) {
-		pulsebox1->Add(paramset->con[pnum], 1, wxALIGN_CENTRE_HORIZONTAL|wxRIGHT|wxLEFT, 5);
+	for(pnum=pnum; pnum<paramset.numparams; pnum++) {
+		pulsebox1->Add(paramset.con[pnum], 1, wxALIGN_CENTRE_HORIZONTAL|wxRIGHT|wxLEFT, 5);
 	}
 
 	pulsebox1->AddSpacer(10);
@@ -141,22 +141,22 @@ VMNProtoBox::VMNProtoBox(VMNModel *model, const wxString& title, const wxPoint& 
 	ramppanel->SetSizer(rampsizer);
 
 	activepanel = ramppanel;
-	paramset->panel = activepanel;
+	paramset.panel = activepanel;
 
 	labelwidth = 50;
 	numwidth = 45;
 
-	paramset->AddNum("rampbase0", "Base", 200, 0, labelwidth, numwidth); 
-	paramset->AddNum("rampstart0", "Start", 200, 0, labelwidth, numwidth); 
-	paramset->AddNum("rampstop0", "Stop", 300, 0, labelwidth, numwidth); 
-	paramset->AddNum("rampinit0", "Initial", 200, 0, labelwidth, numwidth); 
-	paramset->AddNum("rampstep0", "1s Step", 0.1, 2, labelwidth, numwidth); 
-	paramset->SetMinMax("rampstep0", -1000, 1000);
-	rampnum0 = paramset->numparams;
+	paramset.AddNum("rampbase0", "Base", 200, 0, labelwidth, numwidth); 
+	paramset.AddNum("rampstart0", "Start", 200, 0, labelwidth, numwidth); 
+	paramset.AddNum("rampstop0", "Stop", 300, 0, labelwidth, numwidth); 
+	paramset.AddNum("rampinit0", "Initial", 200, 0, labelwidth, numwidth); 
+	paramset.AddNum("rampstep0", "1s Step", 0.1, 2, labelwidth, numwidth); 
+	paramset.SetMinMax("rampstep0", -1000, 1000);
+	rampnum0 = paramset.numparams;
 
 	wxStaticBoxSizer *rampbox0 = new wxStaticBoxSizer(wxVERTICAL, ramppanel, "Input Ramp L1");
-	for(pnum=pnum; pnum<paramset->numparams; pnum++) {
-		rampbox0->Add(paramset->con[pnum], 1, wxALIGN_CENTRE_HORIZONTAL|wxRIGHT|wxLEFT, 5);
+	for(pnum=pnum; pnum<paramset.numparams; pnum++) {
+		rampbox0->Add(paramset.con[pnum], 1, wxALIGN_CENTRE_HORIZONTAL|wxRIGHT|wxLEFT, 5);
 	}
 	wxBoxSizer *inputrunbox = new wxBoxSizer(wxHORIZONTAL);
 
@@ -169,18 +169,18 @@ VMNProtoBox::VMNProtoBox(VMNModel *model, const wxString& title, const wxPoint& 
 	rampbox0->AddSpacer(10);
 	AddButton(ID_Ramp, "Run", 50, rampbox0);
 
-	paramset->AddNum("rampbase1", "Base", 200, 0, labelwidth, numwidth); 
-	paramset->AddNum("rampstart1", "Start", 200, 0, labelwidth, numwidth); 
-	paramset->AddNum("rampstop1", "Stop", 300, 0, labelwidth, numwidth); 
-	paramset->AddNum("rampinit1", "Initial", 200, 0, labelwidth, numwidth); 
-	paramset->AddNum("rampstep1", "1s Step", 0.1, 2, labelwidth, numwidth); 
+	paramset.AddNum("rampbase1", "Base", 200, 0, labelwidth, numwidth); 
+	paramset.AddNum("rampstart1", "Start", 200, 0, labelwidth, numwidth); 
+	paramset.AddNum("rampstop1", "Stop", 300, 0, labelwidth, numwidth); 
+	paramset.AddNum("rampinit1", "Initial", 200, 0, labelwidth, numwidth); 
+	paramset.AddNum("rampstep1", "1s Step", 0.1, 2, labelwidth, numwidth); 
 
-	paramset->SetMinMax("rampstep1", -1000, 1000);
-	rampnum1 = paramset->numparams;
+	paramset.SetMinMax("rampstep1", -1000, 1000);
+	rampnum1 = paramset.numparams;
 
 	wxStaticBoxSizer *rampbox1 = new wxStaticBoxSizer(wxVERTICAL, ramppanel, "Input Ramp L2");
-	for(pnum=pnum; pnum<paramset->numparams; pnum++) {
-		rampbox1->Add(paramset->con[pnum], 1, wxALIGN_CENTRE_HORIZONTAL|wxRIGHT|wxLEFT, 5);
+	for(pnum=pnum; pnum<paramset.numparams; pnum++) {
+		rampbox1->Add(paramset.con[pnum], 1, wxALIGN_CENTRE_HORIZONTAL|wxRIGHT|wxLEFT, 5);
 	}
 	rampbox1->AddSpacer(10);
 	AddButton(ID_Ramp, "Run", 50, rampbox1);
@@ -254,24 +254,24 @@ SignalBox::SignalBox(VMNModel *vmnmodel, const wxString& title, const wxPoint& p
 	// AddCon(tag string, display string, initial value, click increment, decimal places)
 	// ----------------------------------------------------------------------------------
 
-	paramset->AddCon("vrest", "V Rest", -62, 0.1, 2);
-	paramset->AddCon("pspheight", "PSP mag", 4, 0.1, 2);
-	paramset->AddCon("psphalflife", "PSP halflife", 7.5, 0.01, 3);
+	paramset.AddCon("vrest", "V Rest", -62, 0.1, 2);
+	paramset.AddCon("pspheight", "PSP mag", 4, 0.1, 2);
+	paramset.AddCon("psphalflife", "PSP halflife", 7.5, 0.01, 3);
 
-	paramset->AddCon("noimean", "Noise Mean", 300, 1, 2);
-	paramset->AddCon("noitau", "Noise Tau", 1000, 1, 2);
-	paramset->AddCon("noiamp", "Noise Amp", 1, 0.1, 2);
+	paramset.AddCon("noimean", "Noise Mean", 300, 1, 2);
+	paramset.AddCon("noitau", "Noise Tau", 1000, 1, 2);
+	paramset.AddCon("noiamp", "Noise Amp", 1, 0.1, 2);
 	
-	paramset->AddCon("sigIratio", "Iratio", 0, 0.1, 2);
+	paramset.AddCon("sigIratio", "Iratio", 0, 0.1, 2);
 
 	if(!mod->basicmode) {
-		paramset->AddCon("synwaveamp", "Wave Amp", 0, 1, 2);
-		paramset->AddCon("synwavecycle", "Wave Cycle", 1000, 1, 2);
-		paramset->AddCon("synwaveshift", "Wave Shift", 0, 0.1, 2);
+		paramset.AddCon("synwaveamp", "Wave Amp", 0, 1, 2);
+		paramset.AddCon("synwavecycle", "Wave Cycle", 1000, 1, 2);
+		paramset.AddCon("synwaveshift", "Wave Shift", 0, 0.1, 2);
 
-		paramset->AddCon("kB", "kB", 0, 1, 4);
-		paramset->AddCon("halflifeB", "halflifeB", 100, 1, 2);
-		paramset->AddCon("timerange", "timerange", 100, 1, 0);
+		paramset.AddCon("kB", "kB", 0, 1, 4);
+		paramset.AddCon("halflifeB", "halflifeB", 100, 1, 2);
+		paramset.AddCon("timerange", "timerange", 100, 1, 0);
 	}
 
 	ParamLayout(2);
@@ -339,37 +339,37 @@ void VMNNeuroBox::PanelFull()
 	SetModFlag(ID_Iratio, "Iratioflag", "Use Iratio", 1); 
 	SetModFlag(ID_artspikes, "artspikesflag", "Artificial Spikes", 0); 
 
-	paramset->AddCon("numspikes", "Num Spikes", 1000, 1, 0);
-	paramset->AddCon("hstep", "h Step", 1, 0.1, 1);
-	paramset->AddCon("vthre", "V Threshold", -50, 0.1, 2);
-	paramset->AddCon("vrest", "V Rest", -62, 0.1, 2);
-	paramset->AddCon("absref", "Abs Ref", 5, 1, 1);
-	paramset->AddCon("pspmag", "PSP mag", 4, 0.1, 2);
-	paramset->AddCon("ve", "EPSP ve", 20, 1, 2);
-	paramset->AddCon("vi", "IPSP vi", -110, 1, 2);
-	paramset->AddCon("iratio", "IPSP ratio", 1, 0.1, 2);
-	paramset->AddCon("ire", "EPSP freq", 300, 10, 1);
-	paramset->AddCon("halflife", "half-life", 7.5, 0.1, 2);
-	paramset->AddCon("emax", "EPSP max", 0, 0.1, 2);
+	paramset.AddCon("numspikes", "Num Spikes", 1000, 1, 0);
+	paramset.AddCon("hstep", "h Step", 1, 0.1, 1);
+	paramset.AddCon("vthre", "V Threshold", -50, 0.1, 2);
+	paramset.AddCon("vrest", "V Rest", -62, 0.1, 2);
+	paramset.AddCon("absref", "Abs Ref", 5, 1, 1);
+	paramset.AddCon("pspmag", "PSP mag", 4, 0.1, 2);
+	paramset.AddCon("ve", "EPSP ve", 20, 1, 2);
+	paramset.AddCon("vi", "IPSP vi", -110, 1, 2);
+	paramset.AddCon("iratio", "IPSP ratio", 1, 0.1, 2);
+	paramset.AddCon("ire", "EPSP freq", 300, 10, 1);
+	paramset.AddCon("halflife", "half-life", 7.5, 0.1, 2);
+	paramset.AddCon("emax", "EPSP max", 0, 0.1, 2);
 
-	paramset->AddCon("kHAP", "HAP k", 60, 1, 2);
-	paramset->AddCon("halflifeHAP", "HAP HL", 7, 0.1, 2);
-	paramset->AddCon("kAHP", "AHP k", 0.0, 1, 2);
-	paramset->AddCon("halflifeAHP", "AHP HL", 350, 1, 2);
-	paramset->AddCon("kDAP", "DAP k", 0, 1, 2);
-	paramset->AddCon("halflifeDAP", "DAP HL", 150, 1, 2);
-	paramset->AddCon("iri", "IPSP freq", 300, 10, 1);
+	paramset.AddCon("kHAP", "HAP k", 60, 1, 2);
+	paramset.AddCon("halflifeHAP", "HAP HL", 7, 0.1, 2);
+	paramset.AddCon("kAHP", "AHP k", 0.0, 1, 2);
+	paramset.AddCon("halflifeAHP", "AHP HL", 350, 1, 2);
+	paramset.AddCon("kDAP", "DAP k", 0, 1, 2);
+	paramset.AddCon("halflifeDAP", "DAP HL", 150, 1, 2);
+	paramset.AddCon("iri", "IPSP freq", 300, 10, 1);
 
 	SetVBox(2);
-	if(!column) column = paramset->numparams / 2 + paramset->numparams % 2;
+	if(!column) column = paramset.numparams / 2 + paramset.numparams % 2;
 
 	for(i=0; i<column; i++) {
-		vbox[0]->Add(paramset->con[i], 1, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxRIGHT|wxLEFT, 5);
+		vbox[0]->Add(paramset.con[i], 1, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxRIGHT|wxLEFT, 5);
 		vbox[0]->AddSpacer(5);
 	}
 
-	for(i=column; i<paramset->numparams; i++) {
-		vbox[1]->Add(paramset->con[i], 1, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxRIGHT|wxLEFT, 5);
+	for(i=column; i<paramset.numparams; i++) {
+		vbox[1]->Add(paramset.con[i], 1, wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxRIGHT|wxLEFT, 5);
 		vbox[1]->AddSpacer(5);
 	}
 
@@ -398,7 +398,7 @@ void VMNNeuroBox::PanelFull()
 	buttonbox->AddStretchSpacer();
 
 	AddButton(ID_Output, "OUTPUT", 55, buttonbox);
-	SetPanel(ID_Output, mod->outbox); 
+	SetPanel(ID_Output, mod->gridbox); 
 
 	AddButton(ID_EvoFit, "FIT", 55, buttonbox);
 	SetPanel(ID_EvoFit, mod->fitbox); 
@@ -437,24 +437,24 @@ void VMNNeuroBox::PanelBasic()
 	SetModFlag(ID_Iratio, "Iratioflag", "Use Iratio", 1); 
 	//SetModFlag(ID_artspikes, "artspikesflag", "Artificial Spikes", 0); 
 
-	paramset->AddCon("numspikes", "Run Time", 1000, 1, 0);
-	paramset->AddCon("hstep", "h Step", 1, 0.1, 1);
-	paramset->AddCon("vthre", "V Threshold", -50, 0.1, 2);
-	paramset->AddCon("vrest", "V Rest", -62, 0.1, 2);
-	paramset->AddCon("absref", "Abs Ref", 2, 1, 1);
-	paramset->AddCon("pspmag", "PSP mag", 4, 0.1, 2);
-	paramset->AddCon("iratio", "IPSP ratio", 1, 0.1, 2);
-	//paramset->AddCon("ire", "EPSP freq", 300, 10, 1);
-	paramset->AddCon("halflife", "PSP HL", 7.5, 0.1, 2);
-	//if(mod->revisionmode) paramset->AddCon("emax", "EPSP max", 0, 0.1, 2);
+	paramset.AddCon("numspikes", "Run Time", 1000, 1, 0);
+	paramset.AddCon("hstep", "h Step", 1, 0.1, 1);
+	paramset.AddCon("vthre", "V Threshold", -50, 0.1, 2);
+	paramset.AddCon("vrest", "V Rest", -62, 0.1, 2);
+	paramset.AddCon("absref", "Abs Ref", 2, 1, 1);
+	paramset.AddCon("pspmag", "PSP mag", 4, 0.1, 2);
+	paramset.AddCon("iratio", "IPSP ratio", 1, 0.1, 2);
+	//paramset.AddCon("ire", "EPSP freq", 300, 10, 1);
+	paramset.AddCon("halflife", "PSP HL", 7.5, 0.1, 2);
+	//if(mod->revisionmode) paramset.AddCon("emax", "EPSP max", 0, 0.1, 2);
 
-	paramset->AddCon("kHAP", "HAP k", 60, 1, 2);
-	paramset->AddCon("halflifeHAP", "HAP HL", 7, 0.1, 2);
-	paramset->AddCon("kAHP", "AHP k", 0.0, 1, 2);
-	paramset->AddCon("halflifeAHP", "AHP HL", 350, 1, 2);
-	paramset->AddCon("kDAP", "DAP k", 0, 1, 2);
-	paramset->AddCon("halflifeDAP", "DAP HL", 150, 1, 2);
-	//paramset->AddCon("iri", "IPSP freq", 300, 10, 1);
+	paramset.AddCon("kHAP", "HAP k", 60, 1, 2);
+	paramset.AddCon("halflifeHAP", "HAP HL", 7, 0.1, 2);
+	paramset.AddCon("kAHP", "AHP k", 0.0, 1, 2);
+	paramset.AddCon("halflifeAHP", "AHP HL", 350, 1, 2);
+	paramset.AddCon("kDAP", "DAP k", 0, 1, 2);
+	paramset.AddCon("halflifeDAP", "DAP HL", 150, 1, 2);
+	//paramset.AddCon("iri", "IPSP freq", 300, 10, 1);
 
 	ParamLayout(2);
 
@@ -480,7 +480,7 @@ void VMNNeuroBox::PanelBasic()
 	buttonbox->AddStretchSpacer();
 
 	AddButton(ID_Output, "OUTPUT", 55, buttonbox);
-	SetPanel(ID_Output, mod->outbox); 
+	SetPanel(ID_Output, mod->gridbox); 
 	buttonbox->AddSpacer(5);
 	buttonbox->AddStretchSpacer();
 

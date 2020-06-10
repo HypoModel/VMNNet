@@ -15,6 +15,7 @@
 #include "wx/wx.h"
 #include <hypomodel.h>
 #include "evofitbasic.h"
+#include "hyponeuro.h"
 
 
 enum {
@@ -404,8 +405,6 @@ public:
 	void networkdisp2();
 	void inputoutput(int);
 };
-
-
 
 
 class VMNModel : public NeuroMod

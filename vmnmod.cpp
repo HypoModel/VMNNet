@@ -302,7 +302,7 @@ void VMNMod::initialise()
 	// Network generation
 
 	if(seedgen) modseed = (unsigned)(time(NULL));
-	netbox->paramset->GetCon("modseed")->SetValue(modseed);
+	netbox->paramset.GetCon("modseed")->SetValue(modseed);
 	init_mrand(modseed);
 	
 	if(netgen) networkgen2();

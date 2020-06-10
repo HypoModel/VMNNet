@@ -56,44 +56,44 @@ void VMNNetBox::PanelPLoS()
 	SetModFlag(ID_Diag, "GPUdiagnostic", "GPU Diagnostic", 0); 
 	SetModFlag(ID_formfilter, "formfilter", "Mean Spike Filter", 0); 
 
-	paramset->AddCon("neuronsL1", "Neurons L1", vmhneurons, 1, 0, labelwidth);
-	paramset->AddCon("vmhinput1", "Input L1", 300, 1, 1, labelwidth);
-	paramset->AddCon("synweightL1", "Synaptic L1", 1.0, 1, 2, labelwidth);
-	//paramset->AddCon("absref", "Abs Ref", 5, 1, 1, labelwidth);
-	//paramset->AddCon("inputcycle", "Inp Cycle", 0, 1, 1, labelwidth);
-	//paramset->AddCon("waveamp", "Inp Amp", 0, 1, 1, labelwidth);
-	paramset->AddCon("syndelay", "Syn Delay", 3, 1, 1, labelwidth);
-	paramset->AddCon("syndelrange", "Syn Range", 0, 1, 1, labelwidth);
-	paramset->AddCon("esynL1", "E Syn L1", 0.7, 0.01, 2, labelwidth);
-	paramset->AddCon("esynsd", "E Syn L1 SD", 0, 0.01, 2, labelwidth);
-	//paramset->AddCon("isynL1", "I Syn L1", 0, 0.01, 2, labelwidth);
-	//paramset->AddCon("vrestsd", "Vrest SD", 0, 0.1, 2, labelwidth);
-	//paramset->AddCon("kHAPsd", "kHAP SD", 0, 0.1, 2, labelwidth);
-	paramset->AddCon("tauHAPsd", "tauHAP SD", 0, 0.1, 2, labelwidth);
-	paramset->AddCon("maxsyn", "Max Syn", 0, 1, 0, labelwidth);
-	paramset->AddCon("esyntrans", "E Syn Trans", 0.5, 0.01, 2, labelwidth);
-	paramset->AddCon("inputsd", "Input L1 SD", 0, 0.01, 2, labelwidth);
+	paramset.AddCon("neuronsL1", "Neurons L1", vmhneurons, 1, 0, labelwidth);
+	paramset.AddCon("vmhinput1", "Input L1", 300, 1, 1, labelwidth);
+	paramset.AddCon("synweightL1", "Synaptic L1", 1.0, 1, 2, labelwidth);
+	//paramset.AddCon("absref", "Abs Ref", 5, 1, 1, labelwidth);
+	//paramset.AddCon("inputcycle", "Inp Cycle", 0, 1, 1, labelwidth);
+	//paramset.AddCon("waveamp", "Inp Amp", 0, 1, 1, labelwidth);
+	paramset.AddCon("syndelay", "Syn Delay", 3, 1, 1, labelwidth);
+	paramset.AddCon("syndelrange", "Syn Range", 0, 1, 1, labelwidth);
+	paramset.AddCon("esynL1", "E Syn L1", 0.7, 0.01, 2, labelwidth);
+	paramset.AddCon("esynsd", "E Syn L1 SD", 0, 0.01, 2, labelwidth);
+	//paramset.AddCon("isynL1", "I Syn L1", 0, 0.01, 2, labelwidth);
+	//paramset.AddCon("vrestsd", "Vrest SD", 0, 0.1, 2, labelwidth);
+	//paramset.AddCon("kHAPsd", "kHAP SD", 0, 0.1, 2, labelwidth);
+	paramset.AddCon("tauHAPsd", "tauHAP SD", 0, 0.1, 2, labelwidth);
+	paramset.AddCon("maxsyn", "Max Syn", 0, 1, 0, labelwidth);
+	paramset.AddCon("esyntrans", "E Syn Trans", 0.5, 0.01, 2, labelwidth);
+	paramset.AddCon("inputsd", "Input L1 SD", 0, 0.01, 2, labelwidth);
 
-	paramset->AddCon("neuronsL2", "Neurons L2", 0, 1, 0, labelwidth);
-	//paramset->AddCon("esynL2", "E Syn L2", 0.5, 0.01, 2, labelwidth);
-	//paramset->AddCon("esynL2sd", "E Syn L2 SD", 0, 0.01, 2, labelwidth);
-	//paramset->AddCon("synweightL2", "Synaptic L2", 1.0, 1, 1, labelwidth);
-	paramset->AddCon("esynL12", "E Syn L12", 0.35, 0.01, 2, labelwidth);
-	paramset->AddCon("esynL12sd", "E Syn L12 SD", 0, 0.01, 2, labelwidth);
-	paramset->AddCon("synweightL12", "Synap L12", 1, 0.1, 1, labelwidth);
-	//paramset->AddCon("esynL21", "E Syn L21", 0.5, 0.01, 2, labelwidth);
-	//paramset->AddCon("esynL21sd", "E Syn L21 SD", 0, 0.01, 2, labelwidth);
-	//paramset->AddCon("synweightL21", "Synap L21", 1.0, 0.1, 1, labelwidth);
+	paramset.AddCon("neuronsL2", "Neurons L2", 0, 1, 0, labelwidth);
+	//paramset.AddCon("esynL2", "E Syn L2", 0.5, 0.01, 2, labelwidth);
+	//paramset.AddCon("esynL2sd", "E Syn L2 SD", 0, 0.01, 2, labelwidth);
+	//paramset.AddCon("synweightL2", "Synaptic L2", 1.0, 1, 1, labelwidth);
+	paramset.AddCon("esynL12", "E Syn L12", 0.35, 0.01, 2, labelwidth);
+	paramset.AddCon("esynL12sd", "E Syn L12 SD", 0, 0.01, 2, labelwidth);
+	paramset.AddCon("synweightL12", "Synap L12", 1, 0.1, 1, labelwidth);
+	//paramset.AddCon("esynL21", "E Syn L21", 0.5, 0.01, 2, labelwidth);
+	//paramset.AddCon("esynL21sd", "E Syn L21 SD", 0, 0.01, 2, labelwidth);
+	//paramset.AddCon("synweightL21", "Synap L21", 1.0, 0.1, 1, labelwidth);
 	
-	paramset->AddCon("vmhinput2", "Input L2", 100, 1, 1, labelwidth);
-	paramset->AddCon("vrest2", "V Rest L2", -62, 0.1, 2, labelwidth);
-	paramset->AddCon("kHAP2", "HAP k L2", 60, 0.1, 2, labelwidth);
-	paramset->AddCon("halflifeHAP2", "HAP HL L2", 5, 0.1, 2, labelwidth);
-	paramset->AddCon("tauHAP2sd", "tauHAP L2 SD", 0, 0.1, 2, labelwidth);
-	//paramset->AddCon("kDAP2", "L2 DAP k", 0, 0.1, 2, labelwidth);
-	//paramset->AddCon("halflifeDAP2", "L2 DAP HL", 500, 10, 2, labelwidth);
-	paramset->AddCon("synhl", "Syn HL", 2.5, 0.1, 2, labelwidth);
-	paramset->AddCon("synmag", "Syn Mag", 4, 0.1, 2, labelwidth);
+	paramset.AddCon("vmhinput2", "Input L2", 100, 1, 1, labelwidth);
+	paramset.AddCon("vrest2", "V Rest L2", -62, 0.1, 2, labelwidth);
+	paramset.AddCon("kHAP2", "HAP k L2", 60, 0.1, 2, labelwidth);
+	paramset.AddCon("halflifeHAP2", "HAP HL L2", 5, 0.1, 2, labelwidth);
+	paramset.AddCon("tauHAP2sd", "tauHAP L2 SD", 0, 0.1, 2, labelwidth);
+	//paramset.AddCon("kDAP2", "L2 DAP k", 0, 0.1, 2, labelwidth);
+	//paramset.AddCon("halflifeDAP2", "L2 DAP HL", 500, 10, 2, labelwidth);
+	paramset.AddCon("synhl", "Syn HL", 2.5, 0.1, 2, labelwidth);
+	paramset.AddCon("synmag", "Syn Mag", 4, 0.1, 2, labelwidth);
 
 	ParamLayout(2);
 
@@ -164,9 +164,9 @@ void VMNNetBox::PanelPLoS()
 	//buttonbox->Add(prunbutton);
 
 	wxBoxSizer *seedbox = new wxBoxSizer(wxHORIZONTAL);
-	paramset->AddNum("modseed", "", 0, 0, 0, 80);
-	paramset->GetCon("modseed")->SetMinMax(0, 1000000000000);
-	seedbox->Add(paramset->GetCon("modseed"), 0, wxALIGN_CENTRE_VERTICAL);
+	paramset.AddNum("modseed", "", 0, 0, 0, 80);
+	paramset.GetCon("modseed")->SetMinMax(0, 1000000000000);
+	seedbox->Add(paramset.GetCon("modseed"), 0, wxALIGN_CENTRE_VERTICAL);
 	seedcheck = SetModCheck(ID_seedcheck, "seedgen", "Seed", true);
 	seedbox->Add(seedcheck, 0, wxALIGN_CENTRE_VERTICAL|wxLEFT, 5);
 
@@ -301,50 +301,50 @@ void VMNNetBox::PanelFull()
 	SetModFlag(ID_Diag, "GPUdiagnostic", "GPU Diagnostic", 0); 
 	SetModFlag(ID_formfilter, "formfilter", "Mean Spike Filter", 0); 
 
-	paramset->AddCon("neuronsL1", "Neurons L1", vmhneurons, 1, 0, labelwidth);
-	//paramset->AddCon("vmhconnect", "Synapse", 0, 1, 0, labelwidth);
-	paramset->AddCon("vmhinput1", "Input L1", 300, 1, 1, labelwidth);
-	paramset->AddCon("synweightL1", "Synaptic L1", 1.0, 1, 2, labelwidth);
-	paramset->AddCon("absref", "Abs Ref", 5, 1, 1, labelwidth);
-	paramset->AddCon("inputcycle", "Inp Cycle", 0, 1, 1, labelwidth);
-	paramset->AddCon("waveamp", "Inp Amp", 0, 1, 1, labelwidth);
-	paramset->AddCon("syndelay", "Syn Delay", 3, 1, 1, labelwidth);
-	paramset->AddCon("syndelrange", "Syn Range", 0, 1, 1, labelwidth);
-	paramset->AddCon("esynL1", "E Syn L1", 0.7, 0.01, 2, labelwidth);
-	paramset->AddCon("esynsd", "E Syn SD", 0, 0.01, 2, labelwidth);
-	paramset->AddCon("isynL1", "I Syn L1", 0, 0.01, 2, labelwidth);
-	paramset->AddCon("vrestsd", "Vrest SD", 0, 0.1, 2, labelwidth);
-	paramset->AddCon("kHAPsd", "kHAP SD", 0, 0.1, 2, labelwidth);
-	paramset->AddCon("tauHAPsd", "tauHAP SD", 0, 0.1, 2, labelwidth);
-	paramset->AddCon("maxsyn", "Max Syn", 0, 1, 0, labelwidth);
-	paramset->AddCon("esyntrans", "E Syn Trans", 0.5, 0.01, 2, labelwidth);
-	paramset->AddCon("inputsd", "Input SD", 0, 0.01, 2, labelwidth);
+	paramset.AddCon("neuronsL1", "Neurons L1", vmhneurons, 1, 0, labelwidth);
+	//paramset.AddCon("vmhconnect", "Synapse", 0, 1, 0, labelwidth);
+	paramset.AddCon("vmhinput1", "Input L1", 300, 1, 1, labelwidth);
+	paramset.AddCon("synweightL1", "Synaptic L1", 1.0, 1, 2, labelwidth);
+	paramset.AddCon("absref", "Abs Ref", 5, 1, 1, labelwidth);
+	paramset.AddCon("inputcycle", "Inp Cycle", 0, 1, 1, labelwidth);
+	paramset.AddCon("waveamp", "Inp Amp", 0, 1, 1, labelwidth);
+	paramset.AddCon("syndelay", "Syn Delay", 3, 1, 1, labelwidth);
+	paramset.AddCon("syndelrange", "Syn Range", 0, 1, 1, labelwidth);
+	paramset.AddCon("esynL1", "E Syn L1", 0.7, 0.01, 2, labelwidth);
+	paramset.AddCon("esynsd", "E Syn SD", 0, 0.01, 2, labelwidth);
+	paramset.AddCon("isynL1", "I Syn L1", 0, 0.01, 2, labelwidth);
+	paramset.AddCon("vrestsd", "Vrest SD", 0, 0.1, 2, labelwidth);
+	paramset.AddCon("kHAPsd", "kHAP SD", 0, 0.1, 2, labelwidth);
+	paramset.AddCon("tauHAPsd", "tauHAP SD", 0, 0.1, 2, labelwidth);
+	paramset.AddCon("maxsyn", "Max Syn", 0, 1, 0, labelwidth);
+	paramset.AddCon("esyntrans", "E Syn Trans", 0.5, 0.01, 2, labelwidth);
+	paramset.AddCon("inputsd", "Input SD", 0, 0.01, 2, labelwidth);
 
-	paramset->AddCon("neuronsL2", "Neurons L2", 0, 1, 0, labelwidth);
-	paramset->AddCon("esynL2", "E Syn L2", 0.5, 0.01, 2, labelwidth);
-	paramset->AddCon("synweightL2", "Synaptic L2", 1.0, 1, 1, labelwidth);
-	paramset->AddCon("esynL12", "E Syn L12", 0.35, 0.01, 2, labelwidth);
-	paramset->AddCon("synweightL12", "Synap L12", 1, 0.1, 1, labelwidth);
-	paramset->AddCon("esynL21", "E Syn L21", 0.5, 0.01, 2, labelwidth);
-	paramset->AddCon("synweightL21", "Synap L21", 1.0, 0.1, 1, labelwidth);
-	paramset->AddCon("vmhinput2", "Input L2", 100, 1, 1, labelwidth);
-	paramset->AddCon("vrest2", "V Rest L2", -62, 0.1, 2, labelwidth);
-	paramset->AddCon("kHAP2", "HAP k L2", 60, 0.1, 2, labelwidth);
-	paramset->AddCon("halflifeHAP2", "HAP HL L2", 5, 0.1, 2, labelwidth);
-	paramset->AddCon("kDAP2", "L2 DAP k", 0, 0.1, 2, labelwidth);
-	paramset->AddCon("halflifeDAP2", "L2 DAP HL", 500, 10, 2, labelwidth);
-	paramset->AddCon("synhl", "Syn HL", 2.5, 0.1, 2, labelwidth);
-	paramset->AddCon("synmag", "Syn Mag", 4, 0.1, 2, labelwidth);
+	paramset.AddCon("neuronsL2", "Neurons L2", 0, 1, 0, labelwidth);
+	paramset.AddCon("esynL2", "E Syn L2", 0.5, 0.01, 2, labelwidth);
+	paramset.AddCon("synweightL2", "Synaptic L2", 1.0, 1, 1, labelwidth);
+	paramset.AddCon("esynL12", "E Syn L12", 0.35, 0.01, 2, labelwidth);
+	paramset.AddCon("synweightL12", "Synap L12", 1, 0.1, 1, labelwidth);
+	paramset.AddCon("esynL21", "E Syn L21", 0.5, 0.01, 2, labelwidth);
+	paramset.AddCon("synweightL21", "Synap L21", 1.0, 0.1, 1, labelwidth);
+	paramset.AddCon("vmhinput2", "Input L2", 100, 1, 1, labelwidth);
+	paramset.AddCon("vrest2", "V Rest L2", -62, 0.1, 2, labelwidth);
+	paramset.AddCon("kHAP2", "HAP k L2", 60, 0.1, 2, labelwidth);
+	paramset.AddCon("halflifeHAP2", "HAP HL L2", 5, 0.1, 2, labelwidth);
+	paramset.AddCon("kDAP2", "L2 DAP k", 0, 0.1, 2, labelwidth);
+	paramset.AddCon("halflifeDAP2", "L2 DAP HL", 500, 10, 2, labelwidth);
+	paramset.AddCon("synhl", "Syn HL", 2.5, 0.1, 2, labelwidth);
+	paramset.AddCon("synmag", "Syn Mag", 4, 0.1, 2, labelwidth);
 
-	paramset->AddCon("neuronsL3", "Neurons L3", 0, 1, 0, labelwidth);
-	paramset->AddCon("esynL3", "E Syn L3", 0.5, 0.01, 2, labelwidth);
-	paramset->AddCon("synweightL3", "Synaptic L3", 1.0, 1, 1, labelwidth);
-	paramset->AddCon("esynL23", "E Syn L23", 0.35, 0.01, 2, labelwidth);
-	paramset->AddCon("synweightL23", "Synap L23", 1, 0.1, 1, labelwidth);
-	paramset->AddCon("vmhinput3", "Input L3", 100, 1, 1, labelwidth);
-	paramset->AddCon("vrest3", "V Rest L3", -62, 0.1, 2, labelwidth);
-	paramset->AddCon("kHAP3", "HAP k L3", 60, 0.1, 2, labelwidth);
-	paramset->AddCon("halflifeHAP3", "HAP HL L3", 5, 0.1, 2, labelwidth);
+	paramset.AddCon("neuronsL3", "Neurons L3", 0, 1, 0, labelwidth);
+	paramset.AddCon("esynL3", "E Syn L3", 0.5, 0.01, 2, labelwidth);
+	paramset.AddCon("synweightL3", "Synaptic L3", 1.0, 1, 1, labelwidth);
+	paramset.AddCon("esynL23", "E Syn L23", 0.35, 0.01, 2, labelwidth);
+	paramset.AddCon("synweightL23", "Synap L23", 1, 0.1, 1, labelwidth);
+	paramset.AddCon("vmhinput3", "Input L3", 100, 1, 1, labelwidth);
+	paramset.AddCon("vrest3", "V Rest L3", -62, 0.1, 2, labelwidth);
+	paramset.AddCon("kHAP3", "HAP k L3", 60, 0.1, 2, labelwidth);
+	paramset.AddCon("halflifeHAP3", "HAP HL L3", 5, 0.1, 2, labelwidth);
 
 	ParamLayout(2);
 
@@ -415,9 +415,9 @@ void VMNNetBox::PanelFull()
 	//buttonbox->Add(prunbutton);
 
 	wxBoxSizer *seedbox = new wxBoxSizer(wxHORIZONTAL);
-	paramset->AddNum("modseed", "", 0, 0, 0, 80);
-	paramset->GetCon("modseed")->SetMinMax(0, 1000000000000);
-	seedbox->Add(paramset->GetCon("modseed"), 0, wxALIGN_CENTRE_VERTICAL);
+	paramset.AddNum("modseed", "", 0, 0, 0, 80);
+	paramset.GetCon("modseed")->SetMinMax(0, 1000000000000);
+	seedbox->Add(paramset.GetCon("modseed"), 0, wxALIGN_CENTRE_VERTICAL);
 	seedcheck = SetModCheck(ID_seedcheck, "seedgen", "Seed", true);
 	seedbox->Add(seedcheck, 0, wxALIGN_CENTRE_VERTICAL|wxLEFT, 5);
 
@@ -553,55 +553,55 @@ void VMNNetBox::PanelBasic()
 	SetModFlag(ID_formfilter, "formfilter", "Mean Spike Filter", 0); 
 	SetModFlag(ID_fixeddelay, "fixeddelay", "Fixed Connect Delay", 0);
 
-	paramset->AddCon("neuronsL1", "Neurons L1", vmhneurons, 1, 0, labelwidth);
-	//paramset->AddCon("vmhconnect", "Synapse", 0, 1, 0, labelwidth);
-	paramset->AddCon("vmhinput1", "Input L1", 300, 1, 1, labelwidth);
-	paramset->AddCon("synweightL1", "Synaptic L1", 1.0, 1, 2, labelwidth);
-	//paramset->AddCon("inputcycle", "Inp Cycle", 0, 1, 1, labelwidth);
-	//paramset->AddCon("waveamp", "Inp Amp", 0, 1, 1, labelwidth);
-	paramset->AddCon("syndelay", "Syn Delay", 3, 1, 1, labelwidth);
-	paramset->AddCon("syndelrange", "Syn Range", 0, 1, 1, labelwidth);
-	paramset->AddCon("esynL1", "E Syn L1", 0.7, 0.01, 2, labelwidth);
-	//paramset->AddCon("esynsd", "E Syn SD", 0, 0.01, 2, labelwidth);
-	//paramset->AddCon("isynL1", "I Syn L1", 0, 0.01, 2, labelwidth);
-	//paramset->AddCon("vrestsd", "Vrest SD", 0, 0.1, 2, labelwidth);
+	paramset.AddCon("neuronsL1", "Neurons L1", vmhneurons, 1, 0, labelwidth);
+	//paramset.AddCon("vmhconnect", "Synapse", 0, 1, 0, labelwidth);
+	paramset.AddCon("vmhinput1", "Input L1", 300, 1, 1, labelwidth);
+	paramset.AddCon("synweightL1", "Synaptic L1", 1.0, 1, 2, labelwidth);
+	//paramset.AddCon("inputcycle", "Inp Cycle", 0, 1, 1, labelwidth);
+	//paramset.AddCon("waveamp", "Inp Amp", 0, 1, 1, labelwidth);
+	paramset.AddCon("syndelay", "Syn Delay", 3, 1, 1, labelwidth);
+	paramset.AddCon("syndelrange", "Syn Range", 0, 1, 1, labelwidth);
+	paramset.AddCon("esynL1", "E Syn L1", 0.7, 0.01, 2, labelwidth);
+	//paramset.AddCon("esynsd", "E Syn SD", 0, 0.01, 2, labelwidth);
+	//paramset.AddCon("isynL1", "I Syn L1", 0, 0.01, 2, labelwidth);
+	//paramset.AddCon("vrestsd", "Vrest SD", 0, 0.1, 2, labelwidth);
 	if(mod->revisionmode) {
-		paramset->AddCon("kHAPsd", "kHAP SD", 0, 0.1, 2, labelwidth);
-		paramset->AddCon("tauHAPsd", "tauHAP SD", 0, 0.1, 2, labelwidth);
+		paramset.AddCon("kHAPsd", "kHAP SD", 0, 0.1, 2, labelwidth);
+		paramset.AddCon("tauHAPsd", "tauHAP SD", 0, 0.1, 2, labelwidth);
 	}
-	//paramset->AddCon("maxsyn", "Max Syn", 0, 1, 0, labelwidth);
-	paramset->AddCon("esyntrans", "E Syn Trans", 0.5, 0.01, 2, labelwidth);
-	//paramset->AddCon("inputsd", "Input SD", 0, 0.01, 2, labelwidth);
+	//paramset.AddCon("maxsyn", "Max Syn", 0, 1, 0, labelwidth);
+	paramset.AddCon("esyntrans", "E Syn Trans", 0.5, 0.01, 2, labelwidth);
+	//paramset.AddCon("inputsd", "Input SD", 0, 0.01, 2, labelwidth);
 
-	paramset->AddCon("neuronsL2", "Neurons L2", 10, 1, 0, labelwidth);
+	paramset.AddCon("neuronsL2", "Neurons L2", 10, 1, 0, labelwidth);
 	if(mod->revisionmode) {
-		paramset->AddCon("esynL2", "E Syn L2", 0, 0.01, 2, labelwidth);
-		paramset->AddCon("synweightL2", "Synaptic L2", 1.0, 1, 1, labelwidth);
+		paramset.AddCon("esynL2", "E Syn L2", 0, 0.01, 2, labelwidth);
+		paramset.AddCon("synweightL2", "Synaptic L2", 1.0, 1, 1, labelwidth);
 	}
-	paramset->AddCon("esynL12", "E Syn L12", 0.35, 0.01, 2, labelwidth);
-	paramset->AddCon("synweightL12", "Synap L12", 1, 0.1, 1, labelwidth);
+	paramset.AddCon("esynL12", "E Syn L12", 0.35, 0.01, 2, labelwidth);
+	paramset.AddCon("synweightL12", "Synap L12", 1, 0.1, 1, labelwidth);
 	if(mod->revisionmode) {
-		paramset->AddCon("esynL21", "E Syn L21", 0, 0.01, 2, labelwidth);
-		paramset->AddCon("synweightL21", "Synap L21", 1.0, 0.1, 1, labelwidth);
+		paramset.AddCon("esynL21", "E Syn L21", 0, 0.01, 2, labelwidth);
+		paramset.AddCon("synweightL21", "Synap L21", 1.0, 0.1, 1, labelwidth);
 	}
-	paramset->AddCon("vmhinput2", "Input L2", 100, 1, 1, labelwidth);
-	paramset->AddCon("vrest2", "V Rest L2", -62, 0.1, 2, labelwidth);
-	paramset->AddCon("kHAP2", "HAP k L2", 60, 0.1, 2, labelwidth);
-	paramset->AddCon("halflifeHAP2", "HAP HL L2", 5, 0.1, 2, labelwidth);
-	paramset->AddCon("kDAP2", "DAP k L2", 0, 0.1, 2, labelwidth);
-	paramset->AddCon("halflifeDAP2", "DAP HL L2", 500, 10, 2, labelwidth);
-	paramset->AddCon("synhl", "Syn HL", 2.5, 0.1, 2, labelwidth);
-	paramset->AddCon("synmag", "Syn Mag", 4, 0.1, 2, labelwidth);
+	paramset.AddCon("vmhinput2", "Input L2", 100, 1, 1, labelwidth);
+	paramset.AddCon("vrest2", "V Rest L2", -62, 0.1, 2, labelwidth);
+	paramset.AddCon("kHAP2", "HAP k L2", 60, 0.1, 2, labelwidth);
+	paramset.AddCon("halflifeHAP2", "HAP HL L2", 5, 0.1, 2, labelwidth);
+	paramset.AddCon("kDAP2", "DAP k L2", 0, 0.1, 2, labelwidth);
+	paramset.AddCon("halflifeDAP2", "DAP HL L2", 500, 10, 2, labelwidth);
+	paramset.AddCon("synhl", "Syn HL", 2.5, 0.1, 2, labelwidth);
+	paramset.AddCon("synmag", "Syn Mag", 4, 0.1, 2, labelwidth);
 
-	//paramset->AddCon("neuronsL3", "Neurons L3", 10, 1, 0, labelwidth);
-	//paramset->AddCon("esynL3", "E Syn L3", 0.5, 0.01, 2, labelwidth);
-	//paramset->AddCon("synweightL3", "Synaptic L3", 1.0, 1, 1, labelwidth);
-	//paramset->AddCon("esynL23", "E Syn L23", 0.35, 0.01, 2, labelwidth);
-	//paramset->AddCon("synweightL23", "Synap L23", 1, 0.1, 1, labelwidth);
-	//paramset->AddCon("vmhinput3", "Input L3", 100, 1, 1, labelwidth);
-	//paramset->AddCon("vrest3", "V Rest L3", -62, 0.1, 2, labelwidth);
-	//paramset->AddCon("kHAP3", "HAP k L3", 60, 0.1, 2, labelwidth);
-	//paramset->AddCon("halflifeHAP3", "HAP HL L3", 5, 0.1, 2, labelwidth);
+	//paramset.AddCon("neuronsL3", "Neurons L3", 10, 1, 0, labelwidth);
+	//paramset.AddCon("esynL3", "E Syn L3", 0.5, 0.01, 2, labelwidth);
+	//paramset.AddCon("synweightL3", "Synaptic L3", 1.0, 1, 1, labelwidth);
+	//paramset.AddCon("esynL23", "E Syn L23", 0.35, 0.01, 2, labelwidth);
+	//paramset.AddCon("synweightL23", "Synap L23", 1, 0.1, 1, labelwidth);
+	//paramset.AddCon("vmhinput3", "Input L3", 100, 1, 1, labelwidth);
+	//paramset.AddCon("vrest3", "V Rest L3", -62, 0.1, 2, labelwidth);
+	//paramset.AddCon("kHAP3", "HAP k L3", 60, 0.1, 2, labelwidth);
+	//paramset.AddCon("halflifeHAP3", "HAP HL L3", 5, 0.1, 2, labelwidth);
 
 	ParamLayout(2);
 
@@ -669,9 +669,9 @@ void VMNNetBox::PanelBasic()
 	//buttonbox->Add(prunbutton);
 
 	wxBoxSizer *seedbox = new wxBoxSizer(wxHORIZONTAL);
-	paramset->AddNum("modseed", "", 0, 0, 0, 80);
-	paramset->GetCon("modseed")->SetMinMax(0, 1000000000000);
-	seedbox->Add(paramset->GetCon("modseed"), 0, wxALIGN_CENTRE_VERTICAL);
+	paramset.AddNum("modseed", "", 0, 0, 0, 80);
+	paramset.GetCon("modseed")->SetMinMax(0, 1000000000000);
+	seedbox->Add(paramset.GetCon("modseed"), 0, wxALIGN_CENTRE_VERTICAL);
 	seedcheck = SetModCheck(ID_seedcheck, "seedgen", "Seed", true);
 	seedbox->Add(seedcheck, 0, wxALIGN_CENTRE_VERTICAL|wxLEFT, 5);
 

@@ -94,7 +94,7 @@ void EvoFitVMN::Evaluate(int start, int popcount, double dualfit)
 		float *Temp = new float[popcount * 512];
 		for(i=0; i<popcount; i++) {
 			chromethread[i] = new EvoFitVMN_CPU(numcells, i, chromearray, gpuparams, popcount, 1, runtime*1000, 
-				fitbox->spikefitdata->Ints.data(), fitbox->spikefitdata->ISIs, Temp, fitbox->spikefitdata->SpikeCounts);
+				fitbox->spikefitdata->Ints.data(), fitbox->spikefitdata->ISIs.data(), Temp, fitbox->spikefitdata->SpikeCounts.data());
 			chromethread[i]->diagbox = diagbox;
 			chromethread[i]->Create();
 		}
@@ -107,7 +107,7 @@ void EvoFitVMN::Evaluate(int start, int popcount, double dualfit)
 	else {
 		diagbox->Write("Running GPU Fit " + text.Format("%.0f steps\n", runtime));
 		EvoFitVMN_GPU(runmode, numcells, chromearray, gpuparams, popcount, blocksize, runtime*1000, 
-			fitbox->spikefitdata->Ints.data(), fitbox->spikefitdata->ISIs, fitbox->spikefitdata->SpikeCounts);
+			fitbox->spikefitdata->Ints.data(), fitbox->spikefitdata->ISIs.data(), fitbox->spikefitdata->SpikeCounts.data());
 		diagbox->Write(text.Format("GPU Fit OK, POP %d to %d\n", start, popcount + start));
 	}
 
@@ -230,7 +230,7 @@ void *EvoFitVMN::Entry()
 	seedgen = (*evoflags)["seedgen"];
 	if(seedgen) {
 		evoseed = (unsigned)(time(NULL));
-		fitbox->paramset->GetCon("evoseed")->SetValue(evoseed);
+		fitbox->paramset.GetCon("evoseed")->SetValue(evoseed);
 	}
 	init_mrand(evoseed);
 
@@ -248,10 +248,10 @@ void *EvoFitVMN::Entry()
 		fitbox->spikefitdata->DeAllocate();
 		//fitbox->spikefitdata->Ints = new float[popsize * 512 * 32];
 		fitbox->spikefitdata->Ints.resize(popsize * 512 * 32);
-		fitbox->spikefitdata->ISIs = new float[popsize * 512];
+		fitbox->spikefitdata->ISIs.resize(popsize * 512);
 		//fitbox->spikefitdata->IntraFreq = new float[popsize];
 		//fitbox->spikefitdata->ExtraFreq = new float[popsize];
-		fitbox->spikefitdata->SpikeCounts = new float[popsize * 128];
+		fitbox->spikefitdata->SpikeCounts.resize(popsize * 128);
 		fitbox->spikefitdata->chromecount = popsize;
 	}
 

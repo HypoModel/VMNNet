@@ -96,7 +96,7 @@ VMNModel::VMNModel(int type, wxString name, HypoMain *main)
 	netbox = new VMNNetBox(this, "VMN Network", wxPoint(320, 0), wxSize(470, 610));
 	signalbox = new SignalBox(this, "Signal Box", wxPoint(0, 300), wxSize(400, 500));
 	protobox = new VMNProtoBox(this, "Protocol", wxPoint(0, 0), wxSize(320, 500));
-	outbox = new OutBox(this, "Data Output", wxPoint(0, 0), wxSize(320, 500), 200, 20);
+	gridbox = new GridBox(this, "Data Output", wxPoint(0, 0), wxSize(320, 500), 200, 20);
 	//cellbox = new CellBox(this, "Cell Data", wxPoint(0, 0), wxSize(320, 500));
 	neurobox = new VMNNeuroBox(this, "VMN Neuron", wxPoint(0, 0), wxSize(320, 700));
 	diagbox = mainwin->diagbox;
@@ -117,7 +117,7 @@ VMNModel::VMNModel(int type, wxString name, HypoMain *main)
 	modtools.AddBox(netbox);
 	modtools.AddBox(signalbox, true);
 	modtools.AddBox(protobox, true);
-	modtools.AddBox(outbox, true);
+	modtools.AddBox(gridbox, true);
 	//modtools.AddBox(cellbox, true);
 	modtools.AddBox(diagbox, false, true);
 	modtools.AddBox(fitbox, true);
@@ -225,10 +225,10 @@ void VMNModel::Output()
 	outdir = mainwin->outpath + "/output";
 
 	for(i=0; i<netbox->vmhneurons; i++) {
-		outbox->textgrid->SetCell(0, i, text.Format("m%d", i));
+		gridbox->textgrid->SetCell(0, i, text.Format("m%d", i));
 		diagbox->Write(text.Format("grid row %d : %d spikes\n", i, vmhneuron[i].spikecount));
 		for(j=0; j<vmhneuron[i].spikecount; j++) {
-			outbox->textgrid->SetCell(j+1, i, text.Format("%.5f", vmhneuron[i].times[j] / 1000));
+			gridbox->textgrid->SetCell(j+1, i, text.Format("%.5f", vmhneuron[i].times[j] / 1000));
 		}
 	}
 }
@@ -343,9 +343,9 @@ void VMNModel::GraphData()
 	// GraphDat(data pointer, xfrom, xto, yfrom, yto, label string, graph type, bin size, colour)
 	// ----------------------------------------------------------------------------------
 	
-	currvmn->GraphSet(graphbase, "VMN ", blue, 1, "vmn");
-	netdat1->GraphSet(graphbase, "Net L1 ", blue, 1, "net1");
-	netdat2->GraphSet(graphbase, "Net L2 ", green, 1, "net2");
+	currvmn->PlotSet(graphbase, "VMN ", blue, 1, "vmn");
+	netdat1->PlotSet(graphbase, "Net L1 ", blue, 1, "net1");
+	netdat2->PlotSet(graphbase, "Net L2 ", green, 1, "net2");
 
 	graphset = graphbase->NewSet("VMN Spikes", "vmnspikes");
 	graphset->AddFlag("timeres", 1);
