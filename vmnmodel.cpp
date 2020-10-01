@@ -225,10 +225,10 @@ void VMNModel::Output()
 	outdir = mainwin->outpath + "/output";
 
 	for(i=0; i<netbox->vmhneurons; i++) {
-		gridbox->textgrid->SetCell(0, i, text.Format("m%d", i));
+		gridbox->textgrid[0]->SetCell(0, i, text.Format("m%d", i));
 		diagbox->Write(text.Format("grid row %d : %d spikes\n", i, vmhneuron[i].spikecount));
 		for(j=0; j<vmhneuron[i].spikecount; j++) {
-			gridbox->textgrid->SetCell(j+1, i, text.Format("%.5f", vmhneuron[i].times[j] / 1000));
+			gridbox->textgrid[0]->SetCell(j+1, i, text.Format("%.5f", vmhneuron[i].times[j] / 1000));
 		}
 	}
 }
