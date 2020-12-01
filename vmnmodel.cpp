@@ -454,7 +454,7 @@ void VMNModel::GSwitch(GraphDisp *gpos, ParamStore *gflags)
 
 	for(i=0; i<gcount; i++) {
 		graphset = graphbase->GetSet(gcodes[i]);
-		gdex = graphset->GetPlot(gflags);
+		gdex = graphset->GetPlot(i, gflags);
 		if(diagbox) diagbox->textbox->AppendText(text.Format("gpos %d   gcode %s   set %s   plot %d   modesum %d   sdex %d\n", 
 			i, gcodes[i], graphset->tag, gdex, graphset->modesum, graphset->sdex));
 		gpos[i].Front((*graphbase)[gdex]);
