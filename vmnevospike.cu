@@ -906,7 +906,7 @@ void spikevmnnetCPU(
 	float Factorial = 1;
 	float CumulativeE = 0;
 	float CumulativeI = 0;
-	for(i=0; i<8; i++)
+	for(float i=0; i<8; i++)
 	{
 		Factorial = 1;
 		for(j=1; j<i+1; j++)
