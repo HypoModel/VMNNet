@@ -1061,7 +1061,7 @@ void VMNNetBox::netcalcvmn(SpikeDat *spikedata, int layer)
 
 	// fix stepmax
 
-	for(i=0; i<=stepmax; i++) spikedata->srate[i] = 0;
+	for(i=0; i<=stepmax; i++) spikedata->srate1s[i] = 0;
 	for(i=0; i<1000000; i++) spikedata->srate1[i] = 0;
 	for(i=0; i<10000; i++) spikedata->hist1[i] = 0;
 	for(i=0; i<10000; i++) spikedata->hist5[i] = 0;
@@ -1072,7 +1072,7 @@ void VMNNetBox::netcalcvmn(SpikeDat *spikedata, int layer)
 		netdat->neurocalc(&(neurons[i]));
 		neurons[vmhneurons].meanisi = neurons[vmhneurons].meanisi + neurons[i].meanisi/numcells;
 		neurons[vmhneurons].count = neurons[vmhneurons].count + neurons[i].count;	
-		for(step=0; step<=stepmax; step++) spikedata->srate[step] += netdat->srate[step];
+		for(step=0; step<=stepmax; step++) spikedata->srate1s[step] += netdat->srate1s[step];
 
 		//tB = 0;
 		for(step=0; step<1000000; step++) {
@@ -1106,7 +1106,7 @@ void VMNNetBox::netcalcvmh(SpikeDat *currvmh)
 	neurons[vmhneurons].count = 0;
 	neurons[vmhneurons].netflag = 1;
 
-	for(i=0; i<=stepmax; i++) currvmh->srate.data[i] = 0;
+	for(i=0; i<=stepmax; i++) currvmh->srate1s.data[i] = 0;
 	for(i=0; i<1000000; i++) currvmh->srate1.data[i] = 0;
 	for(i=0; i<10000; i++) currvmh->hist1.data[i] = 0;
 	for(i=0; i<10000; i++) currvmh->hist5.data[i] = 0;
@@ -1117,7 +1117,7 @@ void VMNNetBox::netcalcvmh(SpikeDat *currvmh)
 		netdat->neurocalc(&(neurons[i]));
 		neurons[vmhneurons].meanisi = neurons[vmhneurons].meanisi + neurons[i].meanisi/vmhneurons;
 		neurons[vmhneurons].count = neurons[vmhneurons].count + neurons[i].count;	
-		for(step=0; step<=stepmax; step++) currvmh->srate.data[step] = currvmh->srate.data[step] + netdat->srate.data[step];
+		for(step=0; step<=stepmax; step++) currvmh->srate1s.data[step] = currvmh->srate1s.data[step] + netdat->srate1s.data[step];
 		for(step=0; step<1000000; step++) currvmh->srate1.data[step] = currvmh->srate1.data[step] + netdat->srate1.data[step];
 		for(step=0; step<10000;step++) {
 			currvmh->hist1.data[step] = currvmh->hist1.data[step] + netdat->hist1.data[step];
