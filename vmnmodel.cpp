@@ -105,7 +105,7 @@ VMNModel::VMNModel(int type, wxString name, HypoMain *main)
 	diagbox->Write("\nBoxes OK, Tool load...\n");
 
 	(*toolflags)["spikebox"] = 1;		// Select universal model tools
-	mainwin->ToolLoad();				// Load universal model tools
+	mainwin->ToolLoad(this);				// Load universal model tools
 
 	diagbox->Write("\nEvoinit....\n");
 	EvoInit();
