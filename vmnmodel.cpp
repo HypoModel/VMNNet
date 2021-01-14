@@ -348,7 +348,7 @@ void VMNModel::GraphData()
 	netdat2->PlotSet(graphbase, "Net L2 ", green, 1, "net2");
 
 	graphset = graphbase->NewSet("VMN Spikes", "vmnspikes");
-	graphset->AddFlag("timeres", 1);
+	graphset->AddFlag("spikeres", 1);
 	graphset->AddFlag("nettog", 10);
 	graphset->AddFlag("rateres", 100);
 	graphset->Add(graphbase->tagindex["vmnrate1s"], 0);
@@ -378,7 +378,7 @@ void VMNModel::GraphData()
 	//if(diagbox) diagbox->textbox->AppendText(graphset->Display());
 
 	graphset = graphbase->NewSet("L2 Spikes", "l2spikes");
-	graphset->AddFlag("timeres", 1);
+	graphset->AddFlag("spikeres", 1);
 	graphset->Add("net2rate1s", 0);
 	graphset->Add("net2spikes1ms", 1);
 	//if(diagbox) diagbox->textbox->AppendText(graphset->Display());
