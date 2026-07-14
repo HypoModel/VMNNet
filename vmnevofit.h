@@ -33,6 +33,7 @@ public:
 	float *SpikeCounts;
 
 	DiagBox *diagbox;
+	HypoRand rng;
 
 	EvoFitVMN_CPU(int numcells, int index, float *chromepop, int paramcount, int threadcount, int blocksize, int runtime, float *Ints, float *ISIs, float *Temp, float *SpikeCounts);
 
@@ -86,6 +87,8 @@ public:
 
 	EvoFitVMN(VMNModel *, EvoFitBox *);
 	//~EvoFitNet();
+
+	HypoRand rng;
 
 	void InitPop();
 	void Evaluate(int start, int pop, double dual=0);

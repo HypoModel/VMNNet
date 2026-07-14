@@ -204,7 +204,7 @@ void EvoFitVMN_CPU::SpikeGen()
 	for(i=0; i<numcells; i++) {
 		econnect[i] = 0;
 		for(j=0; j<numcells; j++) {
-			float d = mrand01(); // curand_uniform(&randstate);
+			float d = rng.uniform01(); // curand_uniform(&randstate);
 			if(d <= esynL1 && i != j) enetwork[i][econnect[i]++] = j;
 		}
 		for(j=0; j<20; j++) esynqueue[i][j] = 0;       // queue max length fixed at 20
@@ -220,7 +220,7 @@ void EvoFitVMN_CPU::SpikeGen()
 			// Add network activity to input queue
 			for(int c=0; c<econnect[i]; c++) 
 				if(activity[enetwork[i][c]] == 1) {
-					float synrand = mrand01(); //curand_uniform(&randstate);
+					float synrand = rng.uniform01(); //curand_uniform(&randstate);
 					if(esyntrans >= synrand) { 
 						float syndel = (syndelay - 1) + (syndelrange + 1) * (synrand * (1/esyntrans));
 						esynqueue[i][(int)syndel] = esynqueue[i][(int)syndel] + esynweight;	

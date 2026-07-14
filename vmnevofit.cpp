@@ -39,7 +39,7 @@ int GPU_Check(char *checkstring) {
 
 
 EvoFitVMN::EvoFitVMN(VMNModel *model, EvoFitBox *fbox)
-	: EvoFit((Model *)model, fbox)
+	: EvoFit((Mod*)model, fbox)
 {
 	mod = model;
 	fitbox = fbox;
@@ -232,7 +232,8 @@ void *EvoFitVMN::Entry()
 		evoseed = (unsigned)(time(NULL));
 		fitbox->paramset.GetCon("evoseed")->SetValue(evoseed);
 	}
-	init_mrand(evoseed);
+	//init_mrand(evoseed);
+	rng.seed(evoseed);
 
 	chromepop = &(fitbox->chromepop);
 	chromeresult = &(fitbox->chromeresult);
@@ -370,18 +371,18 @@ void EvoFitVMN::Evolve()
 		// Generate new generation
 
 		for(i=0; i<popsize; i++) {
-			pA = (int)(mrand01() * parentrange); 
-			pB = (int)(mrand01() * parentrange); 
+			pA = (int)(rng.uniform01() * parentrange); 
+			pB = (int)(rng.uniform01() * parentrange); 
 			parentA = (*chromepop)[pA]; 
 			parentB = (*chromepop)[pB]; 
-			crossA = ((int)(mrand01() * (chromeparams - 3)) + 1);
-			crossB = ((int)(mrand01() * (chromeparams - 2)) + crossA);
-			if(mrand01() > 0.5) orient = false; else orient = true;
+			crossA = ((int)(rng.uniform01() * (chromeparams - 3)) + 1);
+			crossB = ((int)(rng.uniform01() * (chromeparams - 2)) + crossA);
+			if(rng.uniform01() > 0.5) orient = false; else orient = true;
 
 			for(j=0; j<chromeparams; j++) {
 				newparam = temp.params[j];
 				if(temp.params[j].adapt) {
-					if(mrand01() < mutateprob) {
+					if(rng.uniform01() < mutateprob) {
 						newparam.Generate();            // Mutate
 						if(diagfile && genmon) ofp.WriteLine("mutate");
 					}
@@ -395,8 +396,8 @@ void EvoFitVMN::Evolve()
 							if(orient) newparam = parentB.params[j];
 							else newparam = parentA.params[j];
 						}
-						muteA = mrand01();
-						muteB = mrand01();
+						muteA = rng.uniform01();
+						muteB = rng.uniform01();
 						offset = (muteA - muteB) * 0.5;
 						offset = offset * (parentA.params[j].value - parentB.params[j].value);
 						newparam.value += offset;

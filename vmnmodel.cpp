@@ -197,7 +197,7 @@ void VMNModel::EvoInit()
 
 	fitchrome->Diagnostic();
 	
-	fitbox = new EvoFitBox((Model *)this, fitchrome, "Evo Spike Fit", wxPoint(320, 455), wxSize(320, 430));
+	fitbox = new EvoFitBox((Mod *)this, fitchrome, "Evo Spike Fit", wxPoint(320, 455), wxSize(320, 430));
 	fitbox->expdata = mainwin->expdata;
 	fitbox->moddata = currvmn;
 	fitbox->loaddata = fitboxdata; 

@@ -13,7 +13,7 @@
 
 
 #include "wx/wx.h"
-#include <hypomodel.h>
+#include <hypomain.h>
 #include "evofitbasic.h"
 #include "hyponeuro.h"
 
@@ -396,6 +396,7 @@ public:
 	VMNMod(VMNModel *);
 	~VMNMod();
 	virtual void *Entry();
+	HypoRand rng;
 	
 	void spikegen(int, int, int *);
 	void initialise();
