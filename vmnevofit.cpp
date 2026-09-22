@@ -246,7 +246,7 @@ void *EvoFitVMN::Entry()
 
 	// Allocate fit data storage arrays for GPU output
 	if(fitbox->spikefitdata->chromecount < popsize) {
-		fitbox->spikefitdata->DeAllocate();
+		//fitbox->spikefitdata->DeAllocate();
 		//fitbox->spikefitdata->Ints = new float[popsize * 512 * 32];
 		fitbox->spikefitdata->Ints.resize(popsize * 512 * 32);
 		fitbox->spikefitdata->ISIs.resize(popsize * 512);

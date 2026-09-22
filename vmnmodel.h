@@ -428,7 +428,7 @@ public:
 	SpikeDat *fitboxdata;
 
 	//VMNNeuron *vmhneuron;
-	vector<VMNNeuron> vmhneuron;
+	std::vector<VMNNeuron> vmhneuron;
 	SpikeDat *currvmn, *netdat;
 	SpikeDat *netdat1, *netdat2, *netdat3;
 	AnaDat *analysisdata;

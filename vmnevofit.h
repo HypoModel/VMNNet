@@ -49,8 +49,8 @@ public:
 	EvoFitBox *fitbox;
 	DiagBox *diagbox;
 
-	vector<EvoChrome> *chromepop;
-	vector<EvoChrome> *chromeresult;
+	std::vector<EvoChrome> *chromepop;
+	std::vector<EvoChrome> *chromeresult;
 	EvoChrome *nextgen;
 	float *chromearray;
 	EvoChrome *chrome;
