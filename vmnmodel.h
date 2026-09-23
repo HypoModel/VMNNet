@@ -16,6 +16,7 @@
 #include <hypomain.h>
 #include "evofitbasic.h"
 #include "hyponeuro.h"
+#include "hypogrid.h"
 
 
 enum {
